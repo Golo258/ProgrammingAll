@@ -69,10 +69,10 @@ int main(){
     // namespaces_runner();
     // structures_runner();
     // memory_runner();
-    // classes_runner()
     // playing_with_vector();
-    playing_with_map();
-    playing_with_set();
+    // playing_with_map();
+    // playing_with_set();
+    classes_runner();
     return 0;
 }
 

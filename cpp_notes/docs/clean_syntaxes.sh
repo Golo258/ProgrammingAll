@@ -120,3 +120,8 @@ Różnice referencja i pointer:
             pr = &b; // zmieniamy obiekt
             
 
+This: - co to jest 
+    - każda metoda, (funkcja w klasie)
+        ma ukryty arumgnet -> wskąźnik do obiektu
+        na którym ta metoda działa
+    

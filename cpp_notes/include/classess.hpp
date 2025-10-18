@@ -1,5 +1,5 @@
 // =============================
-// classes.hpp
+// classess.hpp
 // =============================
 
 /*-------------- IMPORTS ----------------------*/
@@ -7,6 +7,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
+#include <stdexcept>
 
 /*-------------- DECLARATIONS ----------------------*/
 
@@ -41,13 +43,12 @@
     static alive:
         - oznacza że należy do klasy, nie do konkretnego obiektu
         - alive(0) -zmiena wspólna dla wszystkich obiektów
-    
+
     friend - przyjaciel klasy,
         możę dostać sie do pól prywatnych
         operator == - pozwala porównywać obiekty
 */
-class Dog
-{
+class Dog {
 private:
     std::string _name;
     int _age{0};
@@ -57,19 +58,19 @@ private:
 
 public:
     Dog() = default;                // domyślny
-    explicit Dog(std::string name); //
+    explicit Dog(std::string name);
     Dog(std::string, int age);
-    explicit Dog(const Dog &other) = default;
+    Dog(const Dog &other) = default;
     Dog &operator=(const Dog &other) = default;
-    ~Dog() = default;
+    ~Dog() {
+        --_alive;
+    }
 
     // Getters
-    const std::string &name() const noexcept
-    {
+    const std::string &name() const noexcept {
         return _name;
     }
-    int age() const noexcept
-    {
+    int age() const noexcept{
         return _age;
     }
     // Settery
@@ -79,7 +80,6 @@ public:
     // Metody
     void bark() const;
     void birthday();
-    Dog &rename(std::string new_name);
 
     // Statyczne
     static int alive_count();
@@ -94,19 +94,44 @@ public:
 
     Kernel add - kopiuje obiekt do wetkora
 */
-class Kennel
-{
+class Animals {
 private:
     std::vector<Dog> _dogs;
 
 public:
-    Kennel() = default;
-    Kennel &add(const Dog &new_dog);
-    Kennel &add(Dog &&dog); // przeniesienie
-    Kennel &emplace(std::string name, int age);
+    Animals() = default;
+    void add(const Dog& new_dog);
+    void add(std::string name, int age);
 
     void list() const;
-    bool contains_name(const std::string &name) const;
+    bool contains_name(const std::string& name) const;
 };
 
 void classes_runner();
+/*
+    Co to jest this:
+    - każda metoda, (funkcja w klasie)
+        ma ukryty arumgnet -> wskąźnik do obiektu
+        na którym ta metoda działa
+    czyli
+    class Dog {
+        public:
+            void bark() {
+                std::cout << "woof\n";
+            }
+    }; kiedy wywołujesz
+    Dog rex; rex.bark();
+    kopmilator robi:
+        Dog::bark(&rex);
+        -- wywołuje metode jakby statyczną 
+        która należy do klasy
+        i przekazuje do niej adres obiektu jako this
+
+    W środku metodY:
+        this - ma typ Dog*
+        *this ma typ Dog& - czyli sam obiekt
+
+    > wskaźnik na obiekt klasy 
+    this->message -- odwołujesz sie do atrybutu obiektu klasy
+    this->show - odwołujesz sie do metody klasy 
+*/

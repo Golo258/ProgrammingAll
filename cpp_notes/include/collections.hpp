@@ -29,50 +29,52 @@ using namespace std;
 */
 
 /*
-Vector: dynamiczna tablica O(1)
-dostep po indeksie, szybka iteracja 
-Tworzenie
-std::vector<int> v;
-std::vector<int> v(n); // n default-owanych elementów
-std::vector<int> v(n, 5); // n razy 5
-std::vector<int> v = {1,2,3};
-z zakresu: std::vector<int> v(first, last);
+    Vector: dynamiczna tablica O(1)
+        dostep po indeksie, szybka iteracja 
+        Tworzenie
+            std::vector<int> v;
+            std::vector<int> v(n); // n default-owanych elementów
+            std::vector<int> v(n, 5); // n razy 5
+            std::vector<int> v = {1,2,3};
+        z zakresu: std::vector<int> v(first, last);
 
-Rozmiar/pamieć:
-v.size() , v.empty()
-v.capacity(), v.reseve(n) - docelowa ilość elementów
-v.resize(n) - zmienia rozmiar
-v.shrink_to_fit() - ściecie nadmiaru capacity
-Dostęp:
-v[i] - bez sprawdzania
-v.at(i) z wyjątkiem jak nie znajdzie
-v.front()  / back() / data() - wskaźnik do bufora
+    Rozmiar/pamieć:
+        v.size() , v.empty()
+        v.capacity(), v.reseve(n) - docelowa ilość elementów
+        v.resize(n) - zmienia rozmiar
+        v.shrink_to_fit() - ściecie nadmiaru capacity
+        Dostęp:
+            v[i] - bez sprawdzania
+            v.at(i) z wyjątkiem jak nie znajdzie
+            v.front()  / back() / data() - wskaźnik do bufora
 
-Modyfikacje:
-v.push-back(x) | emplace-back(args..) element na miejscu
-v.insert(it, x) | erase(it) | clear
-assign, swap(other)
+    Modyfikacje:
+        v.push-back(x) | emplace-back(args..) element na miejscu
+        v.insert(it, x) | erase(it) | clear
+        assign, swap(other)
 
-Iteracja
-for (auto& x: vector){}
-for (auto it = v.begin(); it != v.end(); it++) {}
-std::ranges - aglorightm od C++20
+    Iteracja
+        for (auto& x: vector){}
+        for (auto it = v.begin(); it != v.end(); it++) {}
+        std::ranges - aglorightm od C++20
+
+        any_of() -- se obczaj -filtruje i sprawdza warunek
 */
 void show_vector(vector<int> numbers);
 
 void playing_with_vector();
 
 /*
-Mapa:
-asocjacyjnykontener - para klucz wartosc
-dict w pythonie, hashmap w javie 
-Cechy:
-- klucze są unikalne  
-- dane sa posortowane po kluczu - rosnąco domyslnie 
-- złożonowść O(log n)
-- stabilne iteraory
-            po zmianie nie zwala iteracji
-        - zachowuje kolejnosc kluczy 
+    Mapa:
+        asocjacyjny kontener - para klucz wartosc
+        dict w pythonie, hashmap w javie 
+    Cechy:
+    - klucze są unikalne  
+    - dane sa posortowane po kluczu - rosnąco domyslnie 
+    - złożonowść O(log n)
+    - stabilne iteraory
+                po zmianie nie zwala iteracji
+            - zachowuje kolejnosc kluczy 
     Tworzenie:
         map<typ_klucza, typ_wartosci> nazwa;
             nazwa.insert 
