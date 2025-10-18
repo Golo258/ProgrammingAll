@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 using namespace std;
 
 /*-------------- DECLARATIONS ----------------------*/
@@ -122,3 +123,25 @@ Cechy:
 */
 void show_map(map<string, int> scores);
 void playing_with_map();
+
+/*
+    set:
+        zbiór unikalnych wartości
+            set to po prostu mapa bez wartości
+        tylko z unikalnymi kluczami
+        trzyma posortowane elementy, bez duplikatów
+        set() w pythonie i Jaie TreeSet()
+    Dodawanie:
+        insert(klucz);
+        count - sprawdza istnienie
+        find - tak jak zawsze
+        lower_bound(x),
+            znajdź pierwszy >=x,
+        
+        upper_bound(x)
+            znajdź pierwszy >x
+        
+
+*/
+void show_set(set<int> scores);
+void playing_with_set();

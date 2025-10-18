@@ -72,6 +72,7 @@ int main(){
     // classes_runner()
     // playing_with_vector();
     playing_with_map();
+    playing_with_set();
     return 0;
 }
 

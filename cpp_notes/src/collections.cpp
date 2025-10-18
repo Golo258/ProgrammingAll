@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include "utility" // std::pair
 #include <algorithm> // remove_if
 using namespace std;
@@ -127,4 +128,19 @@ void playing_with_map(){
     pair<string, int> single_score = {"Bob", 561};
     cout << single_score.first << endl;
     cout << single_score.second << endl;
+}
+
+void show_set(set<int> s){
+    cout << "\nSets: \t";
+    for (int x : s) 
+        cout << x << " "; 
+}
+
+void playing_with_set(){
+    set<int> s1; // empty
+    set<int> s2= {5,2,6,7,7,12}; // usunie duplikat
+    show_set(s2);
+    if(s2.count(6)){
+        cout << "\n6 is in set\n";
+    }
 }
