@@ -69,7 +69,9 @@ int main(){
     // namespaces_runner();
     // structures_runner();
     // memory_runner();
-    classes_runner()
+    // classes_runner()
+    // playing_with_vector();
+    playing_with_map();
     return 0;
 }
 
