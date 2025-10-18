@@ -65,6 +65,13 @@ void memory_runner(){
     Group group{"C++", "Many"};
 }
 
+void streaming(){
+    greet(std::cout);
+    //  funkcja zwracająca 
+    label(std::cout, "INFO") << "Program started" << endl;
+    log_info(std::cout) << "Program started successfully" << endl;
+}
+
 int main(){
     // namespaces_runner();
     // structures_runner();
@@ -72,7 +79,8 @@ int main(){
     // playing_with_vector();
     // playing_with_map();
     // playing_with_set();
-    classes_runner();
+    // classes_runner();
+    streaming();
     return 0;
 }
 

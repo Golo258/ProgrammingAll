@@ -116,3 +116,20 @@ void classes_runner(){
     std::cout << "Contains burek: " << std::boolalpha << shelter.contains_name("Burek") << std::endl;
     std::cout << "Alive: " << Dog::alive_count() << "\n";
 }
+
+
+void greet(std::ostream& os){
+    os << "Whats up\n"; 
+}
+
+//  funkcja zwracająca ostream
+std::ostream& label(std::ostream& os, const char* text)
+{
+    os << "[" << text  << "]\n";
+    return os;
+}
+// logger
+std::ostream& log_info(std::ostream& os)
+{
+    return os << "[INFO] ";
+}

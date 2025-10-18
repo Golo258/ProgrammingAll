@@ -135,3 +135,28 @@ void classes_runner();
     this->message -- odwołujesz sie do atrybutu obiektu klasy
     this->show - odwołujesz sie do metody klasy 
 */
+
+/*
+    Strumienie danych:
+        std::ostream
+            klasa reprezentujaca dowolny strumień wejściow
+                std::cout - konsola
+                std::ofstream -plik
+                std::ostringstream - bufor stringowy
+        Kiedy unfkjca przyjmuje ostream& os 
+            że możę pisać dane w dowolne miejsce 
+    void greet(std::ostream& os);
+        argument, czyli ostream gdzie chcemy wysłać to
+
+    std::ostream& label(std::ostream& os, const char* text);
+        przez to że zwracamy sobie ten strumien
+            to możemy potem pociągnąc << 
+
+*/
+void greet(std::ostream& os);
+
+std::ostream& label(std::ostream& os, const char* text);
+/*
+    Przez to że mamy zwracany ten 
+*/
+std::ostream& log_info(std::ostream& os);
