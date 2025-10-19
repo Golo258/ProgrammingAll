@@ -2,6 +2,7 @@
 // classes.cpp
 // =============================
 #include "classess.hpp"
+#include "logger.hpp"
 #include <string>
 #include <iostream>
 #include <stdexcept>
@@ -103,7 +104,11 @@ bool Animals::contains_name(const std::string& name) const
 }
 
 void classes_runner(){
-    std::cout << "=== Classes Playground ===\n";
+    using namespace std;
+    Logger log;
+    log.set_min_level(LogLevel::Debug);
+
+    log.info() << "=== Classes Playground ===\n";
     Dog rex{"Rex", 12};
     rex.bark();
     rex.birthday();
@@ -113,8 +118,37 @@ void classes_runner(){
     shelter.add(rex);
     shelter.add("Burek", 5);
     shelter.list();
-    std::cout << "Contains burek: " << std::boolalpha << shelter.contains_name("Burek") << std::endl;
-    std::cout << "Alive: " << Dog::alive_count() << "\n";
+    log.debug() << "Contains burek: " << boolalpha << shelter.contains_name("Burek") << endl;
+    log.debug() << "Alive: " << Dog::alive_count() << "\n";
+    //  enum usage
+    TaskStatus status = TaskStatus::InProgress;
+    string status_name = get_string_from_status(status);
+    log.debug() << "Status name: " << status_name << endl;
+    optional<TaskStatus> from_string_status = get_task_from_string("Done");
+    if (from_string_status){
+        log.debug() << "Status from string by value "
+            << get_string_from_status(from_string_status.value())
+            << endl;
+        log.debug() << "Status from string by derefence "
+            << get_string_from_status(from_string_status.value())
+            << endl;
+    
+    }
+    else{
+        log.error() << "Unknown type provided \n";
+    }
+
+    // Task in class 
+    Task create_fun("Create function with nullptr");
+    create_fun.show_task();
+    create_fun.start_task();
+    create_fun.show_task();
+    // create_fun.cancel_task();
+    create_fun.finish_task();
+    create_fun.show_task();
+    if (create_fun.is_done()){
+        log.info() << "Task finished successfully\n";
+    }
 }
 
 

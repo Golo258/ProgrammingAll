@@ -9,7 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <stdexcept>
-
+#include "logger.hpp"
 /*-------------- DECLARATIONS ----------------------*/
 
 /*
@@ -48,6 +48,9 @@
         możę dostać sie do pól prywatnych
         operator == - pozwala porównywać obiekty
 */
+inline Logger log(std::clog, LogLevel::Debug, true);
+
+
 class Dog {
 private:
     std::string _name;
@@ -160,3 +163,107 @@ std::ostream& label(std::ostream& os, const char* text);
     Przez to że mamy zwracany ten 
 */
 std::ostream& log_info(std::ostream& os);
+
+//--------------------------------------------------
+/*
+    Enum:
+        typ wyliczeniowy
+    Enum class 
+        -bezpieczniejszy, nie wycieka do global scope 
+    
+        Używamy gdy jest skończony zbiór wartości
+            (statusy / poziomy itp)
+        wartości są w zasięgu danego typu enumowego
+            typ jest bezpieczny, nie miesza sie z intem
+    Można wybrać określić typ bazowy (rozmiar)
+        domyślnie jest to:
+            enum class nazwa :std::uint8_t {};
+
+*/
+
+#include <optional>
+#include <type_traits>
+#include <cstdint>
+using namespace std;
+enum class TaskStatus : std::uint8_t {
+    Todo, 
+    InProgress,
+    Done,
+    Cancelled
+};
+
+inline std::string get_string_from_status(TaskStatus status) noexcept {
+    switch(status) {
+        case TaskStatus::Todo:          return "Todo";
+        case TaskStatus::InProgress:    return "In Progress";
+        case TaskStatus::Done:          return "Done";
+        case TaskStatus::Cancelled:     return "Cancelled";
+    }
+    return "Unknown";
+}
+/*
+    Optional<T>
+        konener - opakowanie które może 
+            mieć wartośc Typu T
+            albo nie mieć wartości wcale, pusty, std::nullopt
+        albo typ  | albo nullopt
+
+        potem aby dostać sie do wartości wewnątrz używamy:
+            typ nazwa = *optional_value; // dereferencja, wyciagniecie
+            lub poprzez
+                optional_variable.value()
+
+    Czesto używamy enuma w klasie 
+        aby opisać stan obiektu
+*/
+// optional co to jest 
+inline optional<TaskStatus> get_task_from_string(
+    const string& status_name
+){
+   if (status_name == "Todo")  return TaskStatus::Todo;
+   if (status_name == "In Progress")  return TaskStatus::InProgress;
+   if (status_name == "Done")  return TaskStatus::Done;
+   if (status_name == "Cancelled")  return TaskStatus::Cancelled;
+   return std::nullopt;
+}
+
+class Task {
+private:
+    string _name;
+    TaskStatus _status{TaskStatus::Todo};
+
+public:
+    explicit Task(const string& task_name)
+        : _name(task_name) {}
+    
+    void start_task() {
+        _status = TaskStatus::InProgress;
+    }
+    
+    void finish_task(){
+        if (_status != TaskStatus::Cancelled){
+            _status = TaskStatus::Done;
+        }
+        else{
+            log.error() << "Cannot finish cancelled task\n";
+            throw "Cannot finish cancelled task";
+        }
+    }
+    
+    void cancel_task(){
+        _status = TaskStatus::Cancelled;
+    }
+
+    bool is_done() const {
+        return _status == TaskStatus::Done;
+    }
+    bool is_active() const {
+        return _status == TaskStatus::Todo || 
+            _status == TaskStatus::InProgress;
+    }
+
+    void show_task() const{
+        log.debug() << "Task \"" << _name << "\" ["
+                  << "Status: " << get_string_from_status(_status) << "]\n";
+    }
+};

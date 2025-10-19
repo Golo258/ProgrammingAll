@@ -4,14 +4,21 @@ Etap 1 — Fundamenty języka i własne typy
         ogarnąć podstawy pisania kodu i prostych typów w C++, czyli to, co musisz znać, żeby cokolwiek ruszyło.
 
     Tematy:
-        Struktura pliku .hpp i .cpp
+        Struktura pliku .hpp i .cpp -- to już umiem to na chuj sie mam uczyć
         Tworzenie własnych typów (struct, class, enum)
+            enum - chciałem tylko przerobić, 
+            struktury umiem, wiec tylko klasy bardziej szczerzej
         Hermetyzacja (private, public, protected)
+            - to mi mocniej wytłumacz
         Gettery, settery, metody
+            - też mi wytłumacz
         const i noexcept
+            - też 
         Statyczne pola i metody (static)
+            - też
         this i fluent API (return *this;)
-
+            - jak nie jest to czesto używane to tylko
+            - do czego i kiedy to wykorzystywać
 Ćwiczenia:
     Stworzyć klasę Dog, Car lub User z metodami, polami, walidacją danych.
     Napisać metody bark(), birthday(), rename() itp.
