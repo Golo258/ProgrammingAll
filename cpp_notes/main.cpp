@@ -3,6 +3,7 @@
 #include "structures.hpp"
 #include "classess.hpp"
 #include "collections.hpp"
+#include "logger.hpp"
 /* 
     Main function to execute notes functions and classes methods
 */
@@ -72,6 +73,19 @@ void streaming(){
     log_info(std::cout) << "Program started successfully" << endl;
 }
 
+void logger_settings(){
+    Logger log;
+    log.set_min_level(LogLevel::Debug);
+    log.info() << "Start programu" << std::endl;
+    log.debug() << "Debuging program";
+
+    //  to file
+    std::ofstream file("app.log");
+    Logger fileLog(file, LogLevel::Debug);
+    fileLog.warn() << "Warning in file \n";
+    fileLog.error() << "Error occured in file" << std::endl;
+}
+
 int main(){
     // namespaces_runner();
     // structures_runner();
@@ -79,8 +93,9 @@ int main(){
     // playing_with_vector();
     // playing_with_map();
     // playing_with_set();
-    // classes_runner();
-    streaming();
+    // streaming();
+    // logger_settings();
+    classes_runner();
     return 0;
 }
 
