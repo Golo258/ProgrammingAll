@@ -149,6 +149,15 @@ void classes_runner(){
     if (create_fun.is_done()){
         log.info() << "Task finished successfully\n";
     }
+
+    // Dziedziczenie
+    Employee stared("Adam", 2000);
+    stared.info();
+    stared.work();
+
+    Manager highest("Kasia", 7000, 5);
+    highest.info();
+    highest.work();
 }
 
 

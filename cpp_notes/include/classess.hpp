@@ -10,6 +10,7 @@
 #include <algorithm>
 #include <stdexcept>
 #include "logger.hpp"
+using namespace std;
 /*-------------- DECLARATIONS ----------------------*/
 
 /*
@@ -48,12 +49,12 @@
         możę dostać sie do pól prywatnych
         operator == - pozwala porównywać obiekty
 */
-inline Logger log(std::clog, LogLevel::Debug, true);
+inline Logger log(clog, LogLevel::Debug, true);
 
 
 class Dog {
 private:
-    std::string _name;
+    string _name;
     int _age{0};
     static inline int _alive{0}; // statyczne pole
 
@@ -61,8 +62,8 @@ private:
 
 public:
     Dog() = default;                // domyślny
-    explicit Dog(std::string name);
-    Dog(std::string, int age);
+    explicit Dog(string name);
+    Dog(string, int age);
     Dog(const Dog &other) = default;
     Dog &operator=(const Dog &other) = default;
     ~Dog() {
@@ -70,14 +71,14 @@ public:
     }
 
     // Getters
-    const std::string &name() const noexcept {
+    const string &name() const noexcept {
         return _name;
     }
     int age() const noexcept{
         return _age;
     }
     // Settery
-    Dog &set_name(const std::string &new_name);
+    Dog &set_name(const string &new_name);
     Dog &set_age(int new_age);
 
     // Metody
@@ -99,15 +100,15 @@ public:
 */
 class Animals {
 private:
-    std::vector<Dog> _dogs;
+    vector<Dog> _dogs;
 
 public:
     Animals() = default;
     void add(const Dog& new_dog);
-    void add(std::string name, int age);
+    void add(string name, int age);
 
     void list() const;
-    bool contains_name(const std::string& name) const;
+    bool contains_name(const string& name) const;
 };
 
 void classes_runner();
@@ -120,7 +121,7 @@ void classes_runner();
     class Dog {
         public:
             void bark() {
-                std::cout << "woof\n";
+                cout << "woof\n";
             }
     }; kiedy wywołujesz
     Dog rex; rex.bark();
@@ -141,28 +142,28 @@ void classes_runner();
 
 /*
     Strumienie danych:
-        std::ostream
+        ostream
             klasa reprezentujaca dowolny strumień wejściow
-                std::cout - konsola
-                std::ofstream -plik
-                std::ostringstream - bufor stringowy
+                cout - konsola
+                ofstream -plik
+                ostringstream - bufor stringowy
         Kiedy unfkjca przyjmuje ostream& os 
             że możę pisać dane w dowolne miejsce 
-    void greet(std::ostream& os);
+    void greet(ostream& os);
         argument, czyli ostream gdzie chcemy wysłać to
 
-    std::ostream& label(std::ostream& os, const char* text);
+    ostream& label(ostream& os, const char* text);
         przez to że zwracamy sobie ten strumien
             to możemy potem pociągnąc << 
 
 */
-void greet(std::ostream& os);
+void greet(ostream& os);
 
-std::ostream& label(std::ostream& os, const char* text);
+ostream& label(ostream& os, const char* text);
 /*
     Przez to że mamy zwracany ten 
 */
-std::ostream& log_info(std::ostream& os);
+ostream& log_info(ostream& os);
 
 //--------------------------------------------------
 /*
@@ -177,7 +178,7 @@ std::ostream& log_info(std::ostream& os);
             typ jest bezpieczny, nie miesza sie z intem
     Można wybrać określić typ bazowy (rozmiar)
         domyślnie jest to:
-            enum class nazwa :std::uint8_t {};
+            enum class nazwa :uint8_t {};
 
 */
 
@@ -185,14 +186,14 @@ std::ostream& log_info(std::ostream& os);
 #include <type_traits>
 #include <cstdint>
 using namespace std;
-enum class TaskStatus : std::uint8_t {
+enum class TaskStatus : uint8_t {
     Todo, 
     InProgress,
     Done,
     Cancelled
 };
 
-inline std::string get_string_from_status(TaskStatus status) noexcept {
+inline string get_string_from_status(TaskStatus status) noexcept {
     switch(status) {
         case TaskStatus::Todo:          return "Todo";
         case TaskStatus::InProgress:    return "In Progress";
@@ -205,7 +206,7 @@ inline std::string get_string_from_status(TaskStatus status) noexcept {
     Optional<T>
         konener - opakowanie które może 
             mieć wartośc Typu T
-            albo nie mieć wartości wcale, pusty, std::nullopt
+            albo nie mieć wartości wcale, pusty, nullopt
         albo typ  | albo nullopt
 
         potem aby dostać sie do wartości wewnątrz używamy:
@@ -224,8 +225,15 @@ inline optional<TaskStatus> get_task_from_string(
    if (status_name == "In Progress")  return TaskStatus::InProgress;
    if (status_name == "Done")  return TaskStatus::Done;
    if (status_name == "Cancelled")  return TaskStatus::Cancelled;
-   return std::nullopt;
+   return nullopt;
 }
+/*
+    Hermetyzacja
+        - ukrywamy pola- przy private
+        - udostępniamy pola/metody - public
+
+*/
+
 
 class Task {
 private:
@@ -265,5 +273,58 @@ public:
     void show_task() const{
         log.debug() << "Task \"" << _name << "\" ["
                   << "Status: " << get_string_from_status(_status) << "]\n";
+    }
+};
+
+
+/*
+    Dziedziczenie:
+        mechanizm, który pozwala jednej klasie 
+        rozszerzyć lub nadpisać funkcjoonalnośc 
+        innej klasy rodzica 
+        Rodzic (base class) - definiuje wspólne rzeczy
+        Dziecko (dertived class) - moze z nich korzystac / zmieniac
+    
+*/
+class Employee{
+protected:
+    string _name;
+    double _salary;
+
+public:
+    Employee(string name, double salary)
+        : _name(name), _salary(salary) {}
+    
+    virtual ~Employee() = default; // IMPORTANT
+    void info() const {
+        log.debug() << "Employee: " << _name
+                  << ", salary: " << _salary << endl;
+    }
+
+    virtual void work() const {
+        log.info() << _name << " is doing regular work \n";
+    }
+};
+
+class Manager : public Employee{
+private:
+    int _team_size;
+
+public:
+    Manager(string name, double salary, int team)
+        : Employee(name, salary){
+        _team_size = team;
+    }   
+
+    void info() const
+    {
+        log.info() << "Manager: " << _name
+                << ", salary: " << _salary
+                << ", team size: " << _team_size << endl;
+    }
+
+    void work() const override {
+        log.info()  << _name << " is managing a team of "
+                  << _team_size << " people." << endl;
     }
 };
