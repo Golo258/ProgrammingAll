@@ -101,6 +101,9 @@ def LINUX:
             -v - logi
             -z - kompresja
 
+        # Kopiowanie plików z wykluczeniem
+        rsync -a --exclude='.git' ./src/ ./dest/
+        
         lub 
         rsync -azP ./folder ute@adres:/docelowy 
             - z progressem 
@@ -418,4 +421,89 @@ def LINUX:
         while; do something; done;
         np:
             while; do curl link > link.log; sleep 1; done;
-#---------------------------------------------------------------------------------------------------------------------------------
+    # wyszukiwanie zainstalowanych aplikacji
+        dpkg -l | grep vnc - na przykłąd vnc 
+
+Ustawianie terminali:
+    xterm -geometry 88x47+1000+10 -fa 'Monospace' -fs 10 -bg black -fg yellow -T "Terminal 1" &
+    xterm -geometry 95x28+30+10 -fa 'Monospace' -fs 10 -bg black -fg yellow -T "Terminal 2" &
+    xterm -geometry 95x18+30+577 -fa 'Monospace' -fs 10 -bg black -fg yellow -T "Terminal 3" &
+
+    alias res_vnc="xrandr --newmode '1904x990_60.00'  155.75  1904 2016 2216 2528  990 993 1003 1027 -hsync +vsync; xrandr --addmode Virtual-1 '1904x990_60.00'; xrandr --output Virtual-1 --mode '1904x990_60.00';"
+    res_vnc
+#--------------------------------------------------
+    #Debian wirtulaka ustawienia
+    Dodawanie kopiowania VM -> Windows
+    VBox -> urzadzenia - > zamontuj 
+    sudo mkdir -p /mnt/cdrom
+    sudo mount /dev/cdrom /mnt/cdrom
+    cd /mnt/cdrom
+    sudo ./VBoxLinuxAdditions.run
+#--------------------------------------------------
+NEOVIM CONFIG:
+    sudo apt update 
+    sudo apt install neovim -y
+    nvim --version
+
+    source % -- załaduj plik jakbyś go uruchamił 
+     % -- akutalnie otwarty plik 
+
+    < < cofnięcie o jeden tab 
+    >> -- dodanie tabu
+
+    Esc $ - przeniesienie na koniec linii
+    Esc 0 - przeniesienie na poczatek linii
+    Esc Shift 6 -- do pierwszego stringa
+    
+    # dodawanie pluginu -- wstęp
+        dodajesz rzecz do plugins {}
+        potem :w i :Lazy reload albo :Lazy sync
+
+    Kopiowanie:
+        V - virtual | potem albo dd -- usuwanie i sie kopiuje
+            albo V  -> y (yank) -- przejscie w miejsce i p (put)
+
+    # usuwanie danego słowa
+        escp dw - delete word
+
+    Neotree manewrowanie:
+        struktura:
+            j - dół 
+            k - góra
+            enter - wejdz do pliku
+
+        pliki:
+            a - nowy  a file   a folder/
+            d - usuń
+            r - rename
+            y - skopiuj
+            x - wynij
+            p - wklej
+            c - kopiuj ścieżke 
+
+        # ustawianie okien
+            przechodzisz do neotree
+                -> wyszukujesz plik i dajesz 
+                    -S na dole 
+                    -s z prawej
+                Jak chcesz zakmnąc dane okno to jak jesteś w oknie to :close
+    Jak cos zjebiesz to dajesz u -- undo
+        a jak za dużo cofnąłeś to ctrl + r 
+
+    # szukanie po pliku przechodzenie dalej
+        :/something -> enter
+            n - nastepne wystapienie
+            N - poprzednie  
+
+#--------------------------------------------------
+tcpdmp -ni  interface_name --obczaj tą komende TODO
+
+    name interface
+
+#----------------------
+Add interface eth3:SGW8 with address 10.0.1.108 and mask 21
+dodawanie adresu jako aliasu:
+    ip addr add ipczek/maska dev interfgace  labelka interface:alias
+    np:
+        sudo ip addr add 10.0.1.108/21 dev eth3 label eth3:SGW8
+        label alias -- używana do odróznienia aliasów 

@@ -742,3 +742,38 @@ Informacje telekomunikacjyjne:
         przez pakiety danych przychdzace na określony port
     aktywacja bearera pojawia sie gdy zacznie sie trafik na danym porcie
     NW-init inicjalizacja połączenia bearerra pochodzi od sieci a nie od UE
+
+
+2_7:
+    dla TDD - Time Division Duplex
+        - jedno pasmo, uplink i downlink, w różnych odstępach czasowych
+    2 - frame config (numer od 0 do 6)
+        ile subframów (slotów czasu) przypada na downlink, uplink i specjalny subframe
+        np układ: DL-DL-DL-S-UL-UL-UL-DL-DL-S
+
+    7 - special subframe config (numer od 0 do 9) 
+        określa jak wygląda ten subframe - przejscie z DL na UL
+        Dzieli sie go na:
+            DwPTS (Downlink Pilot Time Slot) -- początek przesyłu
+            GP (Guard Period - bufor, żeby się nie zakłócały) 
+            UpPTS (Uplink Pilot Time Slot) - końcowy uplink, krótki
+            np 9 3 1 - dużo downlink, buffor - 1 uplink
+
+    Ustawienie na eNB: tddFrameConf
+
+Liczenie pakietów:
+    packetSize = 1300 bajtów - rozmiar pakietu
+    packetRate = 12600 pakietów na sekundę
+    Czas transmisji = 10 minut = 600 sekund
+
+    Liczenie dla Mbps- megabity na sekunde
+    1bajt = 8 bitów
+    1 megabit -= 1000000 bitów 
+
+
+    2 UEki = 2 * 12600 (pakietów) = 25200 pakietow na sekunde
+
+    Ile bajtów na sekunde -  25200 pak/s * 1300 bajtów (rozmiar)= 32 760 000 bajtów /s 
+    32 760 000 bajtów/s  * 8 = 262 080 000 bitów/s
+    x : 1 000 000 = 262.08 Mbps
+    

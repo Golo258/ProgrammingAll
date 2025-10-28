@@ -222,3 +222,20 @@
     this.class.getResource(".")
     def dummy = this.class.getResourceAsStream("../resources/dummy_artifacts.json")
     Opis: Używane w testach, by znaleźć zasoby (.json, .txt) w folderach resources.
+
+14. Ubijanie jobów na Jenkinsie
+    def q = Jenkins.instance.queue
+    q.items.findAll.each { q.cancel(it.task) }
+
+15. Sprawdzanie zmienynch środwiskowych jenkins
+env.getEnvironment().each { k, v ->
+    println "${k} = ${v}"
+}
+
+16. Hakowanie jenkinsa jak chcesz sie dostać do zmiennej z credentaiala
+    withCredentials([string(credentialsId: 'IHT_UTE_TOKEN', variable: 'UTE_TOKEN')]){
+        debug_issue_only(UTE_TOKEN)
+    }
+    def debug_issue_only(token){
+        sh "echo '${token}' | ssh ute@10-7-UTE4G5SK333.p05.ska-lab.nsn-rdnet.net  'cat > /tmp/to PGW-8: [PDN=8;Dir=DL] Destination unreachable for received SGi packet: 1 packets. Print
+    }

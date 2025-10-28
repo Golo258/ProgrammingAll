@@ -1,0 +1,201 @@
+
+def GIT:
+    #Dodanie zewnętrznego brancha do robotlte
+        git remote add gitlab https://wrgitlab.int.net.nokia.com/RAN/robotlte
+        git pull gitlab master
+        git fetch gitlab ggolonka/fix_CBO11066_test
+        git checkout ggolonka/fix_CBO11066_test
+        # dodatkowo mozesz
+        git config --global remote.gitlab.url "https://wrgitlab.int.net.nokia.com/RAN/robotlte"
+        git config --global remote.gitlab.url "https://ca_ltewts_ci:CoNWgPqx27mcMjUzHtTm@wrgitlab.int.net.nokia.com/RAN/robotlte"
+
+    # ustawienia 
+    thr
+
+        git status; git add . ; git commit --amend --no-edit ; git push --force origin user/ggolonka/generating_jobs_dsl 
+
+        git rm --cached pliczek -- usuwanie z histori śledzenia danego pliczku
+
+    # ignorowanie danego pliku bez dodawania do .gitignore
+        vim repo/.git/info/exclude
+            dodajesz np .vscode/
+            
+    #Mergowanie commita z gerrita:
+        wchodzisz na TL, klonujesz repo git clone <link>
+            git branch master 
+            git pull origin master -- najnowsza wersja mastera
+            git merge --sqash "origin/nazwa_branha" -- tutaj przy okazji rozwiazujesz konflikty
+            git commit 
+            dodajesz hooki id
+                gitdir=$(git rev-parse --git-dir)
+                curl -o ${gitdir}/hooks/commit-msg https://gerrit.ext.net.nokia.com/gerrit/static/commit-msg
+                chmod +x ${gitdir}/hooks/commit-msg
+           q
+            git log - patrszysz czy jest id
+            git push origin HEAD:refs/for/master
+
+
+            alias gerrit-hook='gitdir=$(git rev-parse --git-dir) && curl -o ${gitdir}/hooks/commit-msg https://gerrit.ext.net.nokia.com/gerrit/static/commit-msg && chmod +x ${gitdir}/hooks/commit-msg'
+
+        przy każdej zmianie 
+            dodajesz zmiane 
+            git add . ; git commit --amend --no-edit 
+            dodajesz hooki id
+                gitdir=$(git rev-parse --git-dir);
+                curl -o ${gitdir}/hooks/commit-msg https://gerrit.ext.net.nokia.com/gerrit/static/commit-msg;
+                chmod +x ${gitdir}/hooks/commit-msg
+            git commit --amend --no-edit
+            git log - patrszysz czy jest id
+            git push origin HEAD:refs/for/master
+             
+        Zmiana credentiali i configu:
+            rm  ~/.git-credentials
+            git config --global --edit
+            git credential-cache exit -- usuwanie z cashu 
+            git config --global --unset credential.helper
+
+    # ustawianie zdalnego środowiska gita
+        git remove -v - patrzysz jakie masz 
+        -- zamiana z https na git 
+        git remote set-url origin git@your-git-server.com:yourgroup/yourrepo.git
+        
+
+    #dodawanie submodułów
+        cd /sciezka_do_repo
+        git submodule add <URL_DO_REPOZYTORIUM> nazwa_odnośnika_do_sub_repo
+        git status
+        git diff --staged
+        -- dodało sie .gitmodules i sub_repo_dir
+
+        git commit  | push
+
+        # momencie jak usuniesz repo i sklonujesz to musisz zreprodukować submodułu
+            w głównym repo to wykonujesz
+        git clone --recurse-submodules <URL_SUPERREPO>
+        lub 
+        git submodule update --init --recursive
+
+
+    # usuwanie branchy
+        git branch -D <nazwa>
+        git push origin --delete <nazwa> # zewnętrznie 
+    
+    # sprawdznie listy configuracyjnej
+        git config --list  # z global/ local można 
+
+
+    # jak wrzucasz zmiany z ammendem  
+        git commit --amend
+        git push --force origin <branch>
+
+    #to na innej VMce żeby zaciagnąć zmiany to dajesz
+        git fetch origin
+        git pull --rebase origin <branch>
+    
+    # stashowanie tylko danych plików
+        git stash push -m " command" pliki
+
+
+    super_push    
+        git status; git add .; git commit --amend --no-edit ; git push --force origin  branch 
+
+    # cofniecie zmian zkommitowanych
+        git reset --soft HEAD@{1}
+
+    # zobaczenie wszystkich branchy na repo 
+        git fetch --all
+        git branch -r  # możesz zajebać z grepem
+
+    # obczajenie kto w danej lini dał kod
+        git blame -L start,end    pliczek
+            np: -L 50m100    albo ile lini tylko 50,+100
+
+    # gerri patchowanie
+        fetch + checkout
+        git fetch https://ggolonka@gerrit.ext.net.nokia.com/gerrit/a/MN/LTE/IHT/iht-e2e-ci refs/changes/25/8669425/3 && git checkout FETCH_HEAD
+
+    # delta
+        # mount_rotta2.sh 
+        git config --global user.email "grzegorz.1.golonka@nokia.com"
+        git config --global user.name "Grzegorz Golonka"
+        git config --global core.editor "vim"
+
+        bash /home/ute/test_repository/resources/DevKr/mount_rotta2.sh
+        sudo apt install -f /home/ute/rotta2/ggolonka/delta/git-delta_0.18.2_amd64.deb
+        git config --global core.pager "delta"
+        git config --global interactive.diffFilter "delta --color-only"
+        git config --global delta.navigate true
+        git config --global delta.side-by-side true
+        git config --global delta.line-numbers true
+        git config --global delta.syntax-theme "Monokai Extended"
+        git config --global delta.features "side-by-side line-numbers decorations"
+        git config --global delta.decorations.commit-decoration-style "bold yellow box"
+        git config --global delta.decorations.file-style "bold cyan"
+        git config --global delta.decorations.hunk-header-style "red"
+
+    # rozwiazywanie konfliktów MR gerrit:
+        git fetch & checkout -- zabrać z MRa z gerrita
+        potem robisz brancha na podstawie tego detacha:
+            git checkout -b user/ggolonka/rebase-ID_MR
+        git fetch origin master
+        git rebase origin/master 
+        rozwiazujesz sobie konflikty 
+        git add .
+        git rebase --continue 
+
+        git commit --amend --no-edit
+        hooki
+        git push origin HEAD:refs/for/master
+
+    # stashowanie nietrakowanych plików 
+        git stash push -m "data changes" -u data/ ( cały katalog)
+
+    # stashowanei tylko rzeczy na zielono w stagingu 
+        git stash push --keep-index
+
+    # gearsy dodanie
+    git remote add gitlab https://ggolonka:Fws6cLk-Zv1d9qboPXaF@wrgitlab.int.net.nokia.com/RAN/gears/krakow.iht.git
+
+    # testowanie gearsów na branch jenkins
+    sh "git clone https://gerrit.ext.net.nokia.com/gerrit/MN/UTE/gears/gears.krakow.iht"
+    sh "cd /home/ute/MN/UTE/gears/gears.krakow.iht; git remote add gitlab https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git; git pull gitlab main"
+    sh "cd /home/ute/MN/UTE/gears/gears.krakow.iht; git fetch --all; git checkout ggolonka/listener_dependency_update"
+
+    Ustawianie ignorowania danych plików bez dodania ich do gitignora
+        git update-index --assume-unchanged .vscode/
+            przy tym musi być śledzony
+
+        echo ".vscode/" >> .git/info/exclude -- to jest lepsze 
+
+
+    gears env create
+    eval $(gears env activate) 
+    gears env update 
+    #linkowanie 
+    cd  ~/MN/UTE/gears/gears.krakow.iht/.gears_cache/virtualenvs/cus-py3.10/lib/python3.10/site-packages/taf/ul
+    rm -rf cus_monitoring
+    ln -sfn /home/ute/MN/UTE/taf.ul.cus_monitoring/taf/ul/cus_monitoring cus_monitoring
+
+
+
+    # sprawdzenie akutalnej kofiguracji .gitconifg
+    git config --list --show-origin
+
+    # diff z określeniem pliku i lini
+    gitt diff 
+
+    # dodawanie submodułów
+        Jeśli chcemy mieć repo w repo
+        to jak mamy repo A, wchodzimy do niego i robimy 
+        git submodule add <REPO_URL> folder_jak_sie_ma_nazywac_repo
+        np:
+            git submodule add  https://github.com/Golo258/PythonAndALittleBitOfFun.git Notes/python
+                sklonuje nam i doda submodul repo w Notes/python
+                stworzy też plik .gitmodule 
+                
+    # 
+    # podląganiecie jakie są różnice zmian w danym pliku wzgledem danego brancha
+        git diff master -- sciezka/do/pliku
+        
+
+#-----------------------
