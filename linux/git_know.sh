@@ -258,9 +258,27 @@ def GIT:
       # nadpisujesz
       git push --force-with-lease
 
-    13. Bajdużenie przy zscalaniu kommitów przy pomocy rebasa:
+    13. Zscalaniu kommitów przy pomocy rebasa:
+      git rebase -i HEAD~3
+      #      dostajesz konsolke z 3 kommitami
+        pick A (najstarszy z wybranych)
+        pick B
+        pick C (najnowszy)
+#       Jeśli chcesz zscalić powiedzmy drugi z piewszym to
+#       Pierwszy na szczycie zostawiasz nie zmieniony, reszta, na squash
+      pick 1111111 Pierwszy
+      squash 2222222 Drugi
+      squash 3333333 Trzeci
+#       Zapisujesz i ci sie wyśietla okno ze zmianą wiadomości
+      Zmień, zapisz i git push --force-with-lease
 
-    14. Zamiana Autora commita
+    15. Cofniecie z rebasa albo kommita lokalnego
+#      Nie bój sie rebasa, bo zawsze można cofnąć
+      git rebase --abort
+      git reflog
+      git reset --hard <Hash_z_refloga>
+
+    16. Zamiana Autora commita
       git commit --amend --no-edit --author="Grzegorz Golonka <golon338@gmail.com>"
       GIT_COMMITTER_NAME="Grzegorz Golonka" GIT_COMMITTER_EMAIL="golon338@gmail.com" git commit --amend --no-edit
 
