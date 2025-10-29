@@ -134,12 +134,6 @@ export LESS=-Xr
 export TERM=xterm-256color
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 alias cdlogs='cd /home/cus/logs/; cd $(ls -td -- */ | head -n 1); cd $(ls -td -- */ | head -n 1);'
-alias sshiphy='sshpass -p "oZPS0POrRieRtu"  ssh toor4nsn@192.168.200.1 -oStrictHostKeyChecking=no'
-alias sshiphy1='sshpass -p "oZPS0POrRieRtu"  ssh toor4nsn@192.168.200.1 -oStrictHostKeyChecking=no'
-alias sshiphy2='sshpass -p "oZPS0POrRieRtu"  ssh toor4nsn@192.168.200.2 -oStrictHostKeyChecking=no'
-alias sshiphy3='sshpass -p "oZPS0POrRieRtu"  ssh toor4nsn@192.168.200.3 -oStrictHostKeyChecking=no'
-alias sshiphy4='sshpass -p "oZPS0POrRieRtu"  ssh toor4nsn@192.168.200.4 -oStrictHostKeyChecking=no'
-alias sshenb='sshpass -p "oZPS0POrRieRtu"  ssh toor4nsn@192.168.255.129 -oStrictHostKeyChecking=no'
 alias res_vnc="xrandr --newmode '1904x990_60.00'  155.75  1904 2016 2216 2528  990 993 1003 1027 -hsync +vsync; xrandr --addmode Virtual-1 '1904x990_60.00'; xrandr --output Virtual-1 --mode '1904x990_60.00';"
 
 alias rtt='/home/ute/test_repository/resources/DevKr/run_test_and_backup_results.sh'

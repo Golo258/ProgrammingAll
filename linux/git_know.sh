@@ -197,5 +197,21 @@ def GIT:
     # podląganiecie jakie są różnice zmian w danym pliku wzgledem danego brancha
         git diff master -- sciezka/do/pliku
         
+    # przywracanie zmian z brancha po revercie
+        git fetch origin
+        git switch master
+        git pull --ff-only
+        git switch -c bring-back-my-change 
+
+        # przeszukiwanie kommita któego chcesz przywrócić
+        git log --oneline --decorate --author="Grzegorz Golonka" --grep "cus-update"
+        52824d3  cus-update && verification script
+            # 52824d3 - to jest 7 pierwszych znaków z pełenego kommita
+            # dla gita nie ma różnicy czy jest to ten hash czy pęłny kommit hash
+        # robimy cherrypicka
+            git cherry-pick -x -e 52824d3
+            git diff --stat origin/master.. -- możemy zobaczyć jakie są statystyczki różnic miedzy masterem
+            git push -u origin bring-back-my-change
+        # 
 
 #-----------------------
