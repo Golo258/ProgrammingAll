@@ -212,6 +212,56 @@ def GIT:
             git cherry-pick -x -e 52824d3
             git diff --stat origin/master.. -- możemy zobaczyć jakie są statystyczki różnic miedzy masterem
             git push -u origin bring-back-my-change
-        # 
+        #
+  11. Ładne logowanie hashów
+    git log --oneline --graph --decorate --all
+
+  12. Zbawa w rebasowanie - zajebiste narzedzie, polecam cieplutko
+     //robisz tak, jeśli chcesz zmienić powiedzmy kilka ostatnich commitów to robisz
+        git rebase -i HEAD~3 - bierze x ilości ostatniach commitów
+     //  albo możesz sprecyzować od jakiego chcesz zmieniać
+        git rebase -i <hash_commita>^
+     //    lub od danego commita do dannego commita
+        git rebase -i
+
+      w momencie gdy wejdziesz wykonasz komende to otworzy ci sie konsolka
+      dostaniesz cos takiego np:
+      #-------------------------------------------------------------
+          pick adf78a3 first part of syntaxes
+          pick 3507fbf add inz project
+          pick a3a7761 cleanup a little bit
+
+          # Rebase c20f9d1..a3a7761 onto c20f9d1 (3 commands)
+          ....
+      #-------------------------------------------------------------
+    I teraz zmieniasz w zależności co chcesz zrobić z kommitem:
+      |-------------------------------------------------------------------|
+      | Komenda  | Znaczenie                                              |
+      | -------- | ------------------------------------------------------ |
+      | `pick`   | zostaw commit bez zmian                                |
+      | `reword` | zmień **tylko opis** commita                           |
+      | `edit`   | zmień zawartość commita (dodaj/usuń pliki, popraw kod) |
+      | `squash` | połącz z poprzednim commit’em                          |
+      | `drop`   | usuń commit                                            |
+      |-------------------------------------------------------------------|
+
+    Teraz jeśli zmienisz coś np na edit, zapiszesz i wyjdziesz
+    To masz komunikat:
+    #    Stopped at b2c3d4e... Second commit message
+    #    You can amend the commit now.
+    Zmieniasz pliki, albo coś robisz
+    i git add ; git commit --amend
+    zmieniasz nazwe, co tam wolisz
+    Kończysz rebase na
+      git rebase --continue
+      #i potem albo ci przejdzie do nastepnego commita którego chcesz zmienić, albo koniec
+      # nadpisujesz
+      git push --force-with-lease
+
+    13. Bajdużenie przy zscalaniu kommitów przy pomocy rebasa:
+
+    14. Zamiana Autora commita
+      git commit --amend --no-edit --author="Grzegorz Golonka <golon338@gmail.com>"
+      GIT_COMMITTER_NAME="Grzegorz Golonka" GIT_COMMITTER_EMAIL="golon338@gmail.com" git commit --amend --no-edit
 
 #-----------------------
