@@ -282,4 +282,8 @@ def GIT:
       git commit --amend --no-edit --author="Grzegorz Golonka <golon338@gmail.com>"
       GIT_COMMITTER_NAME="Grzegorz Golonka" GIT_COMMITTER_EMAIL="golon338@gmail.com" git commit --amend --no-edit
 
+    17: Zamiana daty
+    GIT_COMMITTER_DATE="2025-10-19T16:20:00 +0200" \
+    git commit --amend --no-edit --date="2025-10-19T16:20:00 +0200"
+
 #-----------------------
