@@ -1,130 +1,95 @@
 import logging
-from colorama import init, Fore, Style
-
-init(autoreset=True)
-
-
-class ColoredFormatter(logging.Formatter):
-    LEVEL_COLORS = {
-        logging.DEBUG: Fore.CYAN,
-        logging.INFO: Fore.GREEN,
-        logging.WARNING: Fore.YELLOW,
-        logging.ERROR: Fore.RED,
-        logging.CRITICAL: Fore.MAGENTA,
-    }
-
-    def format(self, record):
-        color = self.LEVEL_COLORS.get(record.levelno, Fore.WHITE)
-        formatted = super().format(record)
-        return f"{color}{formatted}{Style.RESET_ALL}"
-
-
-handler = logging.StreamHandler()
-handler.setFormatter(
-    ColoredFormatter("%(asctime)s [%(levelname)s] %(message)s")
-)
-
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logger.addHandler(handler)
-
-if __name__ == '__main__':
-    logger.info("Program started ")
-    logger.warning("Its a warning ")
-    logger.error("Something went wrong ")
-
-# 
-
-from typing import Optional
 import os
-import logging
-
-
-
-class _ConsoleOptInFilter(logging.Filter):
-    """
-    Filters log records so only those with `to_console=True`
-    (set via the `extra` dict) are shown in the console output.
-    """
-    def filter(self, record: logging.LogRecord) -> bool:
-        """Return True only if the log record has `to_console=True`."""
-        return bool(getattr(record, "to_console", False))
-
-
-#-------------------
-# Better one
+from logging.handlers import RotatingFileHandler
+from typing import Optional
 
 class LoggerManager:
     """
     Singleton logger manager that auto-initializes the logger upon first use.
     """
     _logger: Optional[logging.Logger] = None
-    _name: str = "auto_logger"
-    _output_dir: str = "/home/user/logs"
+    _name: str = "default_log"  # ustawiamy domyślną nazwę
+    _output_dir: str = os.path.join(os.environ.get("WORKSPACE", os.getcwd()), "UPDATE_RESULTS")
+
+    COLORS = {
+        'DEBUG': '\033[0;34m',    # blue
+        'INFO': '\033[0;32m',     # green
+        'WARNING': '\033[0;33m',  # yellow
+        'ERROR': '\033[0;31m',    # red
+        'CRITICAL': '\033[1;31m', # bold red
+        'RESET': '\033[0m'
+    }
 
     @classmethod
-    def configure(cls, name: str, output_dir: str) -> None:
+    def configure(cls, name: str | None = None, output_dir: str | None = None) -> None:
         """
-        Optionally sets the logger's name and output directory before the first log is written.
+        Configures the logger with the provided name and output directory.
+        If no name is provided, defaults to 'default_log'.
+        """
+        if name:
+            if cls._name != name:  # Jeśli nazwa się zmienia, resetujemy loggera
+                cls._logger = None
+            cls._name = name
+        if output_dir:
+            cls._output_dir = output_dir
+    
+        return cls.logger
 
-        :param name: Name of the logger.
-        :param output_dir: Directory to store log files.
-        """
-        cls._name = name
-        cls._output_dir = output_dir
+    # ==== INTERNAL HELPERS ======
+    @classmethod
+    def _create_base_logger(cls) -> logging.Logger:
+        """Create the base logger with the current name."""
+        logger = logging.getLogger(cls._name)
+        logger.setLevel(logging.DEBUG)  # Set to DEBUG to log everything
+        logger.propagate = False
+        return logger
+
+    @classmethod
+    def _add_file_handler(cls, logger: logging.Logger) -> None:
+        """Handler: write to file (DEBUG+)"""
+        path = os.path.join(cls._output_dir, f"{cls._name}.log")
+        fmt = logging.Formatter(
+            "[%(asctime)s] | %(name).25s | %(levelname)-7s | "
+            "%(message)s /// %(funcName)s::%(filename)s(%(lineno)d)"
+        )
+        fh = RotatingFileHandler(path, mode="a", encoding="utf-8",
+                                 maxBytes=10 * 1024 * 1024, backupCount=5)
+        fh.setLevel(logging.DEBUG)  # Log everything to the file
+        fh.setFormatter(fmt)
+        logger.addHandler(fh)
+    
+    @staticmethod
+    def _add_console_handler(logger: logging.Logger) -> None:
+        """Handler: console (INFO+), with colors."""
+        fmt = logging.Formatter("[%(levelname)s] %(message)s")
+        ch = logging.StreamHandler()
+        ch.setLevel(logging.INFO)
+        ch.setFormatter(fmt)
+        logger.addHandler(ch)
 
     @classmethod
     @property
     def logger(cls) -> logging.Logger:
-        """
-        Lazily creates and returns a singleton logger instance.
-        """
-        if cls._logger is None:
-            cls._logger = logging.getLogger(f"{cls._name}_logger")
-            cls._logger.setLevel(logging.DEBUG)
-            cls._logger.propagate = False
-
-            os.makedirs(cls._output_dir, exist_ok=True)
-
-            # === FILE handler: full format with date ----
-            file_format = (
-                "[LISTENER]"
-                "[%(asctime)s] | "
-                "%(name).25s | "
-                "%(levelname)-7s | "
-                "%(threadName).20s | "
-                "%(message)s /// "
-                "%(funcName)s::%(filename)s(%(lineno)d)"
-            )
-            file_handler = logging.FileHandler(
-                os.path.join(cls._output_dir, f"{cls._name}.log"),
-                mode="a",
-                encoding="utf-8",
-            )
-            file_handler.setLevel(logging.DEBUG)
-            file_handler.setFormatter(logging.Formatter(file_format))
-            cls._logger.addHandler(file_handler)
-
-            # === CONSOLE handler: short format, only INFO with to_console=True === #
-            console_format = "[LISTENER][%(levelname)s] %(message)s"
-            console_handler = logging.StreamHandler()
-            console_handler.setLevel(logging.INFO)  # filtr poziomu
-            console_handler.setFormatter(logging.Formatter(console_format))
-            console_handler.addFilter(_ConsoleOptInFilter())  # filtr 'to_console'
-            cls._logger.addHandler(console_handler)
-
+        if cls._logger:
+            return cls._logger
+        
+        logger = cls._create_base_logger()
+        logging.getLogger("paramiko").setLevel(logging.WARNING)
+        logging.getLogger("paramiko.transport").setLevel(logging.WARNING)
+        os.makedirs(cls._output_dir, exist_ok=True)
+        cls._add_file_handler(logger)
+        cls._add_console_handler(logger)
+        
+        cls._logger = logger
         return cls._logger
-
+                
     @classmethod
-    def log_msg(cls, msg: str, lvl: str = "INFO", to_console: bool = False) -> None:
-        """
-        Logs a message to file and optionally to Robot Framework console.
+    def log_msg(cls, msg: str, lvl: str = "INFO") -> None:
+        """Log message with colored output."""
+        log_color = cls.COLORS.get(lvl, cls.COLORS['RESET'])
+        reset_color = cls.COLORS['RESET']
+        
+        msg = f"{log_color}{msg}{reset_color}"
 
-        :param msg: Message to be logged.
-        :param lvl: Logging level (e.g., "INFO", "ERROR", "DEBUG").
-        :param to_console: Whether to also log to Robot Framework console.
-        """
         log_method = getattr(cls.logger, lvl.lower(), cls.logger.info)
-        log_method(msg, extra={"to_console": to_console})
-
-#-------------------
+        log_method(msg)

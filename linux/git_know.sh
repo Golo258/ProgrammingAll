@@ -132,6 +132,19 @@ def GIT:
         git config --global delta.decorations.commit-decoration-style "bold yellow box"
         git config --global delta.decorations.file-style "bold cyan"
         git config --global delta.decorations.hunk-header-style "red"
+        #aliasy
+        git config --global alias.ds "diff --staged"
+        git config --global alias.dc "diff --cached"
+        git config --global alias.dl "!git log -p -n 1"
+        git config --global alias.push-force '!bash -c "git status && git add . && git commit --amend --no-edit && git push --force-with-lease"'
+
+        git config --global alias.resetHard "reset --hard HEAD~5"
+        git config --global alias.nuke "!f() { branch=\"$1\"; git branch -D \"$branch\" && git push origin --delete \"$branch\"; }; f"
+        git config --global alias.setupHooks '!f() { gitdir=$(git rev-parse --git-dir); curl -s -o "$gitdir/hooks/commit-msg" https://gerrit.ext.net.nokia.com/gerrit/static/commit-msg && chmod +x "$gitdir/hooks/commit-msg" && echo "Hook commit-msg zainstalowany w $gitdir/hooks"; }; f'
+        git config --global alias.amend "commit --amend --no-edit"
+        git config --global alias.pushRef "! git push origin HEAD:refs/for/master"
+
+
 
     # rozwiazywanie konfliktów MR gerrit:
         git fetch & checkout -- zabrać z MRa z gerrita
