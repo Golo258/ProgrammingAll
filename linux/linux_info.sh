@@ -4,9 +4,7 @@
 def LINUX:
     1. xterms
     xterm -geometry 88x51+1000+10 -fa 'Monospace' -fs 10 -bg black -fg yellow -T "Terminal 1" &
-
     xterm -geometry 93x28+30+10 -fa 'Monospace' -fs 10 -bg black -fg yellow -T "Terminal 2" &
-
     xterm -geometry 93x19+30+640 -fa 'Monospace' -fs 10 -bg black -fg yellow -T "Terminal 3" &
 
     2. processes
@@ -20,9 +18,8 @@ def LINUX:
             dopasuj wzorzec do całej lini polecenia, nie tylko do nazwy
 
         pgrep -f "nazwa_processu"  # ex: python 
-
-        -x - exact match- dopasuj dokładnie cały ciag, nie tylko fragment
-        -c - count - zamiast wypisywać pid, wypisz liczbe znalezionych procesów
+            -x - exact match- dopasuj dokładnie cały ciag, nie tylko fragment
+            -c - count - zamiast wypisywać pid, wypisz liczbe znalezionych procesów
         
     # szukanie rekursywne w katalogach
         grep -rl "string" /path
@@ -507,3 +504,8 @@ dodawanie adresu jako aliasu:
     np:
         sudo ip addr add 10.0.1.108/21 dev eth3 label eth3:SGW8
         label alias -- używana do odróznienia aliasów 
+
+
+#-----------------
+    sprawdzenie dokłądne procesów
+    ps -eo pid,comm | grep nbio
