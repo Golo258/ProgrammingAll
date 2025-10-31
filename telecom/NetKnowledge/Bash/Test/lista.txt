@@ -1,0 +1,38 @@
+../
+├── commands.txt
+├── Concepts.txt
+├── Scripts
+│   ├── additional.txt
+│   ├── basics.sh
+│   ├── error.log
+│   ├── files.sh
+│   ├── other.sh
+│   ├── regex.sh
+│   └── Static
+│       ├── ArcExtract
+│       │   ├── additional.txt
+│       │   └── Static
+│       │       └── ArcFiles
+│       │           ├── five1
+│       │           ├── five2
+│       │           ├── four
+│       │           ├── one
+│       │           ├── three
+│       │           ├── to_remove.txt
+│       │           └── two
+│       ├── ArcFiles
+│       │   ├── five1
+│       │   ├── five2
+│       │   ├── four
+│       │   ├── one
+│       │   ├── three
+│       │   ├── to_remove.txt
+│       │   └── two
+│       ├── Archive
+│       │   └── files.tar
+│       ├── content2.txt
+│       └── content.txt
+└── Test
+    └── lista.txt
+
+9 directories, 27 files

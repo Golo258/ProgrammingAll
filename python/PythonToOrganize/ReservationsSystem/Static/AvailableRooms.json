@@ -1,0 +1,188 @@
+{
+  "AvailableRooms": [
+   {
+     "room_number": 123,
+     "description": "Pretty and cosy room",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 20,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 101,
+      "description": "Spacious room with sea view",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "area_sqm": 35,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 102,
+      "description": "Modern room with king-size bed",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 25,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 103,
+      "description": "Deluxe room with balcony",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 30,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 104,
+      "description": "Standard room with garden view",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 22,
+      "air_conditioning": false
+    },
+    {
+      "room_number": 105,
+      "description": "Room with two single beds",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 24,
+      "air_conditioning": false
+    },
+    {
+      "room_number": 106,
+      "description": "Suite with living area",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "area_sqm": 45,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 107,
+      "description": "Economy room with street view",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 18,
+      "air_conditioning": false
+    },
+    {
+      "room_number": 108,
+      "description": "Luxury room with private pool",
+      "bedrooms": 2,
+      "bathrooms": 2,
+      "area_sqm": 50,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 109,
+      "description": "Cozy attic room",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 20,
+      "air_conditioning": false
+    },
+    {
+      "room_number": 110,
+      "description": "Room with kitchenette",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 25,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 111,
+      "description": "Elegant room with fireplace",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 28,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 112,
+      "description": "Family room with bunk beds",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "area_sqm": 32,
+      "air_conditioning": false
+    },
+    {
+      "room_number": 113,
+      "description": "Pet-friendly room",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 22,
+      "air_conditioning": false
+    },
+    {
+      "room_number": 114,
+      "description": "Accessible room with roll-in shower",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 26,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 115,
+      "description": "Room with panoramic city view",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 30,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 116,
+      "description": "Quiet room with garden access",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 25,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 117,
+      "description": "Business room with desk",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 20,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 118,
+      "description": "Penthouse suite",
+      "bedrooms": 3,
+      "bathrooms": 2,
+      "area_sqm": 60,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 119,
+      "description": "Room with jacuzzi",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 28,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 120,
+      "description": "Single room with shared bathroom",
+      "bedrooms": 1,
+      "bathrooms": 0,
+      "area_sqm": 15,
+      "air_conditioning": false
+    },
+    {
+      "room_number": 121,
+      "description": "Double room with en-suite bathroom",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 22,
+      "air_conditioning": true
+    },
+    {
+      "room_number": 122,
+      "description": "Room with vintage decor",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "area_sqm": 20,
+      "air_conditioning": true
+    }
+  ]
+}
