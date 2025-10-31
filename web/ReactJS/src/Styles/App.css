@@ -1,0 +1,11 @@
+.App {
+  text-align: center;
+  display: block;
+}
+
+.users {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+}
