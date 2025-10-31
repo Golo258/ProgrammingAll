@@ -1,0 +1,12 @@
+{
+  "def": {
+    "prefix": "def",
+    "body": ["def ${1:name}(${2:args}) {", "  $0", "}"],
+    "description": "Groovy function"
+  },
+  "println": {
+    "prefix": "println",
+    "body": ["println ${1:message}"],
+    "description": "Print to console"
+  }
+}
