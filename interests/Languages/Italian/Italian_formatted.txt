@@ -1,0 +1,1447 @@
+#----------------
+Verbs:
+	mangiare - to eat
+	bevere - to drink
+	cucinare - to cook 
+	bollire - to boil - gotować
+	tagliare - to cut - kroić 
+	scrivere - to write 
+	leggere- to read
+	essere - to be
+	avere - to have
+	avere fame - to be hungry
+Nouns:
+	cuoco - the cook 
+	cibo - the food- jedzenie
+	pesce - the fish 
+	cioccolato - chocolate
+	manzo - the beef - wołowina  
+	biscotto - the cookie 
+	formaggio - the cheese
+	burro - the butter  
+	caffe- the coffee
+	fagiolo - the bean
+	latte - the milk
+	gelato - the ice cream 
+    frutta - the fruit 
+    bevanda - the beverage - napój 
+    tarta - the cake 
+    caramella - the candy - cukierek
+    carota - the carrot- marchewka
+    birra - the bear - piwko
+    una cosa- one thing
+    una bottiglia - the bottle 
+    il piatto - the e 
+    il bicchiere - the glass
+    la tazza - the cup
+    la ciotola - the bowl
+    la colazione- the breakfast
+    la cena - the dinner 
+
+    la bistecca - the steak
+    la limonata - lemonade
+    il panino- sandwich
+
+    Buonasera- good evening 
+    buonanotte - good night 
+    ciao - hello
+    Arrivederci - goodbye	
+    Buongiorno - goodmorning
+    Prego - you are welcome 
+    Per favore- please
+    Spiacente - sorry
+    serpente - the snake 
+    lupo - the wolf - wilk 
+    leone - the lion 
+    ragno- the spider / 
+    cane - the dog
+    gatto - the cat 
+    topo - the fly - mucha
+    cavallo - the horse
+    toro - the bull - byczek
+    pinguino - the penguin
+    mosca - the fly 
+    scimmia - the monkey 
+    tortaruga - the turtle - żółwik 
+    farfalla - the butterfly
+    balena - the whale - wieloryb
+    tigre - the tiger
+    mucca - the cow 
+    sale - salt 
+    gli animali - the animals 
+    uccello  - the bird 
+    animale- the animal
+    ape - the bee - pszczoła 
+    orso - the beer- niedzwieć 
+    elefante - the elephant 
+    lo zoo - the zoo 
+    Lo squalo - the shark
+
+Adjectives:
+    certi - certain / sure - pewnie 
+    in + il - nel - in the / w czymś, na czymś
+    in + lo - nello - in the 
+
+#----------------------------
+Verbs:
+    	cenare - to have/eat dinner 
+Nouns:
+        pasto - the meal 
+        pranzo - lunch
+        coltello - knife 
+        succo - juice
+        ghiaccio - ice 
+        pepe - paper - pieprz
+        maiale - pork - wieprzowina
+        beef - wołowina 
+        burro - butter 
+        limone - lemon
+        gusto - taste/ flavor - smak
+        te - tea 
+        arancia - the orange
+        bistecca - steak
+        gliglia - grill
+        cipolla - onion
+        patata - potato
+        ricetta - recipe - przepis
+        marmellata - jam 
+        limonata - lemonade
+        fragola - strawberry
+        zuppa - the soup 
+        tacchino - turkey - indyk
+        forchetta - fork 
+        olio - oil
+        ingrediente- ingredient
+        insalata - salad 
+
+Adjectives:
+    acido - acid/sour- kwaśny
+    dolce - sweet 
+
+#----------------------------
+Verbs:
+    comprare - to buy 
+Nouns:
+    capotto - coat 
+    portafoglio - wallet
+    abito - suit
+    sandalo - sandal
+    cuoio - leather - skóra
+    guanto  - glove - rękawiczka
+    capello - hat 
+    maglione - sweater xD
+    vestito - dress 
+    gonna - skirt - spódnica
+    camicia - shirt - koszula
+    cintura - belt 
+    borsa - bag 
+    gioielleria - jewelry store 
+    tasca - pocket - kieszeń
+        tasche - pockets 
+    giacca - jacket - kurtka 
+    maglia - sweater 
+    calza - the sock 
+        calze - socks
+    divisa - uniform
+    scarpa - shoe - but
+    abbigliamento - clothing 
+    orologio - clock
+    ombrello - umbrella 
+        stivale - boot 
+
+#----------------------------
+Verbs:
+    fare - to make/have
+    stare - to stay
+    andare - to go - iść
+    volere - to want  
+    avere - to have
+    potere -to can
+    venire - to come 
+    sapere - to know 
+    vedere - to see 
+    trovare - to find 
+    conoscere- to know sb
+    dire - to say 
+    dare - to give 
+    parlare - to speak 
+    pensare - to think 
+    chiedere- to ask for - prosić o 
+    prendere -to get/ take 
+    arrivare -to arrive
+    portare -to bring/wear
+    mettere - to put 
+    credere - to believe
+    sentire - to hear 
+    tenere - to hold/keep
+    capire - to understand
+    diventare - to become
+    rimanere - to remain- pozostawać gdzieś
+    lasciare - to leave sth - zostawić coś 
+    lavororare - to work - pracować
+    vivire - to live - mieszkać
+    ricordare -to remember- pamiętać
+    chiamare -to call - dzwonić
+    usare- to use -
+    entrare nel - to enter - wchodzić do czegoś
+    passare- to pass - podać coś 
+    decidire - to decide
+    morire - to die  
+    giardare - too look at sth / watch
+    seguire- to follow - trzymać się/ podążać
+    aprire- to open 
+    aspettare - to wait for 
+    piacere- to like 
+    finire - to finish 
+
+Adjectives:
+    Como stai ? - how are you - jak tam u ciebie
+    Come va ? - how it  going  - jak leci?
+
+#--------------------------------   
+Verbs:
+    fare - to make/have 
+    andare - to  go 
+    volere - to want 
+    avere - to have  
+    potere - to can   
+    venire - to come
+    sapere - to know
+    vedere - to see 
+    trovare - to find  
+    conoscere - to know 
+    dire - to say /tell 
+    dare - to give  
+    parlare - to speak -
+    pensare - to think -
+    chiedere - to ask for 
+    prendere - to take/get  
+    arrivare - to arrive - 
+    portare -to wear/bring -
+    mettere - to put 
+    credere -to believe 
+    sentire -to hear/feel 
+    tenere -to keep
+    capire -to understand 
+    diventare -to become/turn 
+    rimanere - to remain 
+    lasciare - to leave sth 
+    lavorare - to work
+    vivere -to live 
+    ricordare  - to remember 
+    chiamare - to call  
+    usare - to use 
+    morire -to die 
+    finire- to finish 
+
+Nouns:
+    La porta - the door
+    il maglione - the sweater 
+    il cucchiaio- the spoon 
+	rosa - pink  -> nie odmienia sie 
+	rosso - red 
+	bianco - white 
+	nero - black
+	azzurro - light blue 
+	giallo - yellow
+	grigio - gray 
+	marrono - brown
+	colorato- -colored -kolorowy 
+	verde - green
+	aranciono - orange 
+	viola - purple -> nie odmienia się 
+
+Nouns:
+	il cameriere - the waiter 
+	la gonna - the skirt 
+	la calza - the sock 
+	il cappello - the hat 
+	la maglia - the jersey -> sweter/ golf 
+
+#-------------------------------
+Verbs:
+	andare - to  go ->
+	venire - to come ->
+	Avere - to have 
+	sapere - to know ->
+	volere - to want ->  
+	potere - to can ->
+    prendere - to take
+	vedere - to see 
+	sapere di - taste like 
+	andare su - go up - iść na góre 
+	mettere de - put some 
+	
+Adjectives:
+	mentre - while - podczas
+	ma - but 
+	se - if - jeżeli
+	o / oppure - or 
+	e - and
+	but when there is vovel before e it becames -ed 
+		un ragazzo ed una ragazza 
+
+	perche - why / because 
+	neither .. nor -> non ne ne 
+	Lei non mangia ne pollo ne pesce 
+		She eats neither chicken nor fish
+	finche non - > until -> czyt finke non
+	finche - as son as -I am doing sth
+	bensi - but rather -raczej 
+	sia verdura che carne - both vegetables and meat  
+
+Verbs:
+    chiedere - to ask for 
+    arrivare - to arrive - 
+    prendere -to take 
+    aspettare - to wait 
+    piacere - to like
+    avere - to have 
+    entrere - to enter - wchodzić
+    andare - to  go 
+    vedere - to see 
+    venire - to come
+    volere - to want
+
+Nouns:
+    domani - tomorrow
+    domenica - sunday 
+    tra - between  / among / in
+    con - with / to też się odmienai
+    per - for - dla 
+    Fino a - until / as far as 
+    secondo - according - like segun 
+    lungo - along -  wzdłuż - 
+    contro di - agains - przeciwko komuś
+    di chi - whose - czyj 
+    fra - among 
+    in cucina - in the kitchen
+    il sale - the salt 
+    lungo - long  / along - długi / wzdłuż 
+    dopo - after - po czymś 
+    entro - before / by - przed czymś/ do czegoś 
+    tranne - except for - oprócz czegoś 
+    durante - during
+    nonostante - despite - pomimo 
+    verso - to / verso di - toward - w kierunku czegoś
+    carne di maiale - pork
+
+
+
+Verbs:
+    aspetare - to wait for 
+    aprire- to open 
+    estare di - you were born in month? 
+Nouns:
+    pepe - papper
+    gennaio - january
+    febbraio - february
+    marzo - march 
+    aprile - april - kwiecień 
+    maggio - may - maj
+    giugno - june - czerwiec
+    luglio - july - lipiec 
+    agosto - auguts - sierpien
+    settembre- septembre - wrzesień
+    novembre- novembre - paździenik
+    ottobre - october - listopad 
+    diciembre - december - grudzień
+    primavera - spring
+    autunno - autumn
+    estate - summer
+    inverno - winter
+    lunedi - monday
+    martedi - tuesday
+    mercoledi -wednesday
+    giovedi - thursday
+    venerdi - friday
+    sabato - saturday
+    domenica - sunday
+    oggi - today
+    domani - tomorrow
+    ieri - yesterday
+    stanotte - tonight 
+    stamattina - this morning
+    stassera- this evening
+    pomeriggio - afternoon
+
+#----------------------------
+
+Nouns:
+    vasca da bagno / vasca - bathtub
+    letto - bed
+    tappeto - carpet - dywan 
+    coperta -blanket - koc 
+    pavimento - floor - podłoga 
+    scrivania - desk - biurko 
+    sedia  / seggiola - chair 
+    frigorifero - refrigerator 
+    chiave - key 
+    al cancello - at gate - przy bramie  
+    lo specchio- mirror
+    tetto - roof - dach 	
+    stanza - room 
+    cuscino - pillow - poduszka 
+    sapone - soap - mydło 
+    tavolo - table - stół - gdy mówimy o rzeczy 
+        tavola - gdy mówimy o stole do jedzenia 
+    asciugamano- towel - rencznik 
+    scala - ladder - drabina 
+    doccia - shower 
+    forno - oven - piekarnik
+    finestra - window
+    il muro - wall - sciana 
+    spazzolino - brush - szkoteczka 
+    rasoio - razor - maszynka do golenai 
+    dentrifricio- toothpaste - pasta
+    lenzuola - sheet- pociel / nie odmienne 
+    scarpe - shoes - buty
+    stivali - boots -
+
+Adjectives:
+    limpida - clear  - jasny  
+    piccola - little - mała
+    pochino - a bit - mało / trochę 
+    po di  - little of - trochę 
+    acido - sour - kwasne
+    bello - pretty - ładne 
+    nuova - new 
+    vecchio / vecchie - old 
+    diversa - different - inna 
+    stesso - the same - to samo
+    alto - tall - wysokie
+    basso - short- niskie 
+    bravo / buon/ buoana - good - dobry 
+    gratuito - free 
+    libero - free - wolny 
+    ricca- rich - bogaty 
+    straniero - foreign - zagraniczne 
+    economico - cheap - tanie 
+    popolare - popular 
+    capace - capable - zdolny 
+    aperta - open - otwarta 
+    chiusa-  closed - zamknieta 
+    pericoloso - dangerous - niebezpieczne
+    forte - strong - silny 
+    strana - strange - dziwna 
+    presante  - heavy - cieżka
+    pieno - (lleno) - full - pełny
+    dura - hard /tough - trudny
+    prossima - next - następna
+    intero - whole 
+    sicura - sure  - pewna 
+    comune - common - pospolity / zwyczajny 
+    certo - certain - pewny 
+    giovane - young - młody
+    fredda - cold - zimna
+    caldo - hot - ciepłę 
+    breve- brief/ short - krótki
+
+Verbs:
+    chiedere - to ask - prosić o cos
+    prendere - to take - brać
+    lasciare - to leave - zostawić
+    portare - to wear/ to bring - nosić / przynosić
+    tenere - to keep - trzymać/ przytrzymać
+    vivire da sola - to live alone 
+    essere pronta - to be ready 
+    decidire - to decide 
+    fare una doccia - to take a shower 
+    cambiare - to change 
+    provare - to try 
+    giochare - to play 
+    unire - to unite - łaczyć 
+    sucedere - to happen - zdarzyć się
+    indicare - to indicate - wskazywać
+    aiutare  - to help 
+    chiudare - to close 
+    aggiungare - to add - dodawać -(skłdnik)
+    guidare - to drive -
+    scegliere - to choose -wybierać
+    ire / -ere
+    mancare - to be missing - brakować czegos / tęsknić za kim
+    dimostrare - to prove / demonstrate - 
+    ricevare - to receive 
+    cadere - to fall / drop - upasc/ spadać 
+    ascoltare - to listen to - słuchać
+    colpire - to hit - uderzać
+    incontrare - to meet- spotykać
+    spegiare - to explain - wyjasniac
+    girare - to turn 
+    fermare - to stop - zatrzymywać
+    ritornare - to return - 
+    controllare - to check - sprawdzić 
+    salvare -to save 
+    cerchiare - look for - szukać sth
+    attraversare - to cross  - przechodzić obok
+    stare - to stay - stać
+    stare bene - to be well
+
+Ajectives:
+    a dopo - see you later 
+    basta - enough - wystarczy
+    attraverso - through - przez 
+    poi - then 
+    qui / qua - here- tutaj
+    spesso - often - często
+    oltre - beyond / over - poza czyms
+    li - there - tam 
+    prima - earlier - wczesniej 
+    sempre- always - zawsze 
+    molto - a lot / very - bardzo
+    davvero - really 
+    bene - well 
+    meglio - better - lepszy/lepiej 
+    mai - never 
+    ovunque - everywhere - wszędzie 
+    anche - too / even / also - nawet / takżę 
+    troppo- too - za bardzo 
+    pure - too - także 
+    subito - right away / now / immediately- od razu  
+    quasi - almost - prawie 
+    veramente - trully /really - na prawde 
+    allora - so - więc 
+    cosi - so - bardzo 
+    ancora- still - nadal
+    appena- just / as soon as sth - 
+    insomma - well - 
+    interno - around - do okoła / wewnatrz 
+    gia - already - już 
+    puttosto - rather/ pretty  - raczej 
+    ovviamente- obviously - oczywiscie 
+    assolutamente - absolutely - absolutnie 
+    comunque - anyway - w kazdym razie 
+    almeno - at least - przynajmniej
+    tuttavia - nonetheless / however - jednakże 
+    adesso - now - teraz
+    insieme - together - 
+    soltanto - just/ only  - tylko 
+    neanche - not even - nawet nie 
+    proprio - just/ own/ trully/ really  - włanie / swój / naprawdę  
+    circa - about / around - o czyms/ około
+    forse - maybe - możę 
+    soprattutto - mostly - głownie 
+    pure - also - także
+
+Nouns:
+    l lbergo - the hotel 
+    edificio - building
+    ponte - bridge - most 
+    pasticceria - bakery - piekarnia
+    libreria - bookstore 
+    campo - field - pole 
+    citta - city -miasto 
+    l ngolo - corner - róg 
+    fattoria - farm - farma 
+    collina - hill - wzgórze 
+    parco - park 
+    piazza - the square - plac 
+    stadio - stadium 
+    prigione - prison - wiezienie 
+    posto - place - miejsce 
+    stazione - station - stacja
+    paese - town / village 
+    strada - street - ulica
+    negozio - store - sklep 
+    quartiere - neighborhood - sasiedztwo 
+
+-------------------------
+Verbs:
+    attraversare - to cross 
+    cercare - to look for - szukać 
+    impariare - to learn 
+    ascoltare - to listen - słuchać
+    dare - to give - dawać
+    prendere - to get - odbierać
+    costruir - to build 
+		
+Nouns:
+		il pattetine - the comb - grzebień
+		busta - envelope - koperta
+		scatola - box - pudełko 
+		gli occhiali - glasses - okulary 
+		la patente - driver  licence 
+		tastiera - keyboard - klawiatura 
+		forma - shape - kształt 
+		pezzo - piece - kawałek
+		ventilatore- fan 
+		schermo - screen - ekran 
+		oggetto - object 
+		foglio - sheet of paper 
+		ruota - wheel - 
+		macchina - car - samochód 
+		la nave- the ship - statek 
+		l lcol - alcohol
+		strumento - instrument 
+		benzina - gasoline - benzyna 
+
+Adjectives:
+    neanche - not event - nawet nie 
+    forse - maybe - możę 
+    ancora - still - nadal 
+    troppo - to much - za dużo
+    allora - then - wiec 
+    libera - free - wolna
+    davvero - really - powyżej czego /na prawde 
+    sopra - over / on - pod czyms / na czyms 
+    sotto - under - nad  
+    almeno - at least 
+    tuttavia - however - jednak 
+    anche - also - także / też 
+
+---------------------------------------------------
+Verbs:
+    guidare -to drive 
+    guardare - to look = patrzeć się  
+    stare - to fit in - nie miescic sie 
+    ti /mi stare - to fit  - pasować
+    dimenticare-  to forget - zapominać 
+    chiamare - to call
+Nouns:
+    each - ogni - każdy
+
+Adjectives:
+    altra - other 
+    un ltra- another 
+    tranne - except / besides 
+    nesunna - any - żadna 
+    certe- certain - pewna 
+    parecchio - many - sporo 
+    tutto - all - wszystko/ie
+    qualunque - whichever - dowolny
+    qualsiasi - any - jakikolwiek / każdy   
+    Qualche -some / a few 
+    ogni - every -nie odmienia sie 
+
+#---------------------------
+Verbs:
+    suonare - to ring / to play	
+    riposare - to rest 
+    chiamare - to call / to be name
+    cantare - to sing
+    insegnare - to teach 
+    spignere- to push 
+    ringraziare - to thank - dziekować
+    prestare - to lend - pożyczyć
+    dormire - to sleep - spac
+    ridere- to laugh - miac sie 
+    giudicare - to judge / to grade - oceniać 
+    sedersi - to sit - usiasc 
+    chiamarsi -  to be name
+    dispiaciarsi - to be sorry-
+    rompersi - to break - łamać się 
+    spostare - to move- wyjechać/ przeniesc
+    piangere - to cry - płakusiać 
+    ferire - to hurt / injure - krzywdzić
+    indossare - to wear
+    guadagnare - to earn - zarabiać
+    disegnare - to design - projektować 
+    camminare - to walk - chodzić / spacerować 
+    sorridere - to smile - umiechać się
+    viaggare - to travel
+    rubare - to steal - krasc  
+    ascendere- to turn on - właczać cos- encender
+    abbasare- to lower - obniżac 
+    bruciare - to burn - palić się / płonac - quemarse
+    fumare - to smoke - palic 
+    fallire - (isco) to fail - przegrywać 
+    mentire - to lie - kłać 
+    pulire - to clean - czyscic 
+    riposare - to rest- odpoczywać
+    riempiere - to fill - napełniać  
+    lavare - to wash 
+    baciare - to kiss each othe 
+    cultivare - to cultivate / grow - hodować
+    esploriare - to explore 
+    prenotare - to reserve / to book 
+    allenarsi - to train -trenować się 
+    supponare - to suppose / assume - przypuszczać 
+    gridare - to yell / shout - krzyczeć
+    nuotare - to swimm 
+    svuotare - to empty 
+    pianificare - to plan
+    parcheggiare - to park 
+    riparare - to fix 
+    partire - to leave - wychodzić
+    sembrare - to look like/ seems - wydawać się 
+    asciugare - to dry 
+    migliorare - to improve - ulepszać 
+    friggere - to fry 
+    accettare - - to accept
+    arrostire - to roast - piec na ruszcie   
+    volare - to fly 
+    pescare - to fish 
+    conoscersi - to meet with sb- spotkać się
+    portare - to take 
+    iniziare - to start 
+    permettere - to alow - pozwalać
+    vincere - to win 
+    recevere - to receive 
+    piovere - to rain 
+    fermarsi - to stop - zatrzymać się
+    riconoscere - recognize - rozpoznać
+    insistere - to insist 
+    produrre - to produce - produkować
+    esprimere - to express ourself
+    tentare - to try 
+    pagare - to pay 
+    cominciare -to start 
+
+Adjectives:
+    povere - poor
+    grave - serious 
+    superiore - superior / top - znakomity / górny 
+    semplici - easy 
+    cattivo  -bad
+    simile - similar - podobni
+    vicino- close - blisko
+    scorsa - last - ostatni 
+    leggere - light - lekkie 
+
+#---------------------------
+Verbs:
+    dare fare - to be busy
+    andare a trovare - to visit
+    fare piacare - to be glad 
+    prendere - to take - przedmioty
+    portare alguien - to take sb - osoby
+    portare - to bring - 
+    di dimonstrare - to prove - udowadniac
+    accendere - to turn on 
+    dissativare - to turn off
+    prenotare - to reserve
+    sederesi - to sit 
+    decidire di - decide to do sth
+    chiedere - to ask
+    sentire - to hear
+    avere- to have
+    andare - to go
+    tenere - to keep 
+    capire - to understand
+    diventare - to become 
+    guardare - to watch 
+    rimanere - to stay
+    fatto aspettare -made to wait- zmusić do czekania
+    venire - to come
+    ascoltare - to listen to 
+    scegliere - to chose  ( scelgo)
+    dire - to say
+    dare -  to give
+    mostrare - to show 
+    essere capace di - to be capable of sth
+    mancare - to miss - opuscic 
+    tirare - to get out / pull  - wyciagnac
+    essere pronto a  - to be ready to do sth  
+    svegliare - to wake up 
+    andare a fare - to be going to do sth 
+    noleggiare - to rent - wypożyczyć 
+    fare conoscere - to introduced sb
+    iniziare/ cominciare - to start sth
+    rimanere - to remain / stay
+    provare a qualcosa-  to try do sth 
+
+Adjectives:
+    vicino a me- close to me / near me 
+    particolare - peculiar - osobliwe
+    scorso - last - ostatni 
+    aperta - open
+    chiusa - closed
+    prima - before 
+    dopo - after 
+    cosi tanto tempo - that long - tak długo 
+
+
+#-------------------------
+Verbs:
+    indossare - to wear - nosić
+    pregare - to ask / to pray 
+    dire - to say 
+    dare - to give
+    perdere - to lost - zgubić
+    partire - to leave
+    fermarsi - to stop - zatrzymać sie 
+    finire - to finish 
+
+Nouns:
+    salve - hello
+    ancora - still - nadal
+    anche - even - nawet/ również / takżę 
+    l ngelo - the angel 
+    l ngolo - the corner 
+
+Adjectives:
+    entrambe - both 
+    qualcuno - anybody - ktos / ktokolwiek
+    qualcosa - something 
+    qualcos ltro - something else
+    qualsiasi - any - jakikolwiek / byle jaki
+    ognuna - each /everybody - każdy 
+    altri - others - inni
+    per niente - at all - w ogóle 
+    nulla - anything / nothing  - cokolwiek 
+    nessuno - anybody / nobodt - nikogo 
+    tranne - except - oprócz
+    alcuna - any /some 
+    ancora - still 
+    anche - even
+    allora - then
+    cio -that is / what is 
+    chiunque - anybody - kogokolwiek	
+    qualcuna - sobody / someone - kogo  
+    altra - other one - inny / innym
+    niente - nothing 
+    tutti - everybody 
+
+#-----------------------------------    
+Verbs:
+    stare attento - to be carefull
+    svegliarsi -to wake up
+    fare - to do
+    lasciare  - to leave / to let
+    seguire- 
+    fare colazione - to have breakfast
+    chiedere - to ask
+    dimenticare - to forget
+    lasciare perdere - to forget it 
+Nouns:
+    andiamo - let  go - chodźmy
+    foglio - piece of paper - kartka 
+
+Adjectives:
+    sotto - under - pod 
+    grave -serious 
+    subito - right now 
+
+#---------------------------------------
+Nouns:
+    lo studente - student 
+    insegnante - teacher 
+    principiante - begginer 
+    alunno - student / schoolkid 
+    aula - classroom
+    educazone - manners - maniery 
+    compagni di classe 
+    laurea / diploma - degree - stopień 
+    concetto- concept 
+    descrizione - description - opis 
+    esame - exam/ test
+    compito - homework /task 
+    tesi - thesis - teza 
+    esercizio - excercise 
+    spiegazione - explanation
+    voto - grade - ocena 
+    esempio - example - przykłd 
+    errore - mistake - bład
+    lingua - the language 
+    istituzione - institution 
+    matita - pencil - ołówek 
+    penna - pen - długopis
+    carta - paper 
+    professoressa - the professor ( female )
+    progetto - project / plan 
+    testo -text 
+    la prova - the evidence 
+    regola - rule 
+    titolo - title
+    storia - story 
+    livello - level
+    parola - word 
+    citadina - citizen 
+    cinese - chinese - hiński
+    inghilterra - England 
+    il tedesco - german 
+    il francese - french
+    spagnolo - spanish
+    Sposa - bride 
+    l sola - the island 
+    volo - flight
+    passegero - passenger 
+    aeroplano - airplane 
+    la valigia - the suitcase 
+    biglietto - ticket 
+    il viaggio - the trip
+    estero - abroad - za granice 
+    il conto - the check
+    la prenotazione - the reservation 
+
+Adjectives:
+    scorso - last 	
+    tranne - except - oprócz
+    migliore -better 
+    tra - among - wsrod 
+    ancora - yet /still - nadal
+    anche- even - nawet
+    va verso il palazzo 
+
+#---------------------------------
+Verbs:
+    iniziare - to start
+    cominciare - to start
+    dare da mangiare - to feed - karmić
+    lasciare -to leave / to let
+	Nouns:
+    uscita - exit - 
+    inizio - start - poczatek
+    la fine - the end
+    l ngresso - the entrance 
+    la distanza -the distance 
+    lontano - far away - daleko od czegos
+    quasi - almost 
+    aspettarsi - to expect - spodziewać się
+
+Adjectives:
+    a destra - right 
+    a sinistra - left
+    nord - north - północa - na 
+    est - east  - wschód - ekierce
+    sud - south - południe - siedzi 
+    ovest- west - zachód  - wrona 
+    veloce - fast 
+    di frente di - opposite us - naprzeciwko nas
+    davanti a casa - in front of - przed  domem
+    in fronte alla tua - in fron of your (house np )
+    dentro - inside 
+    cima - top 
+
+#-------------------------------------
+Verbs:
+    baciare - to kiss
+    dare un bacio - to give a kiss
+    sognare - to dream
+    odiare - to hate
+    Avere paura - to be afraid 
+    respettare - to respect sb
+    preocuparsi -to be worried - martwić się 
+    avere fatto - to made sb - spowodować żę 
+    spaventare - to scare - przestraszyć
+    confondere - to confused sb- zmieszac sie / pomylić 
+    essere stanca - to be tired
+    essere triste - to be sad
+    essere seria - to be serious 
+    essere sorpresa - to be surprised
+    aiutare - to help
+    sperare - to hope 
+    avere bisogno di - to need sth - potrzebowac czegos 
+    dare la colpa - to blame sb- winić kogos
+    durare - to last 
+Nouns:
+    sogno - dream
+    amore - love - miłosc
+    sentimento - feeling - uczycie 
+    pensiero - mind / thought - mysli
+    emozione - emotion 
+    paura - fear - strach 
+    felicita - happiness 
+    pazienca - patience - cierpliwosc 
+    sorriso - smile - usmiech 
+    fortuna - luck - fart 
+    risata - laugh- smiech 
+    gioia - joy - radosc / radosc kogos
+    allegria - fun -/ joy - radosc 
+    divertimento - fun -  zabawa
+    lacrime -tears - łzy
+    desiderio - wish - życzenie 
+    soddisfazione - satisfaction
+    aiuto - help - pomocy 
+    colpa - guilt / fault - wina 
+    coraggio - courage /brave - odwaga
+    amicizia - friendship  
+    senso - sence /meaning 
+    bugia - lie - kłamstwo
+    lato - side  
+    dieci in punto - ten on the dot - równa 10ta
+    piano- plan
+    forza - strengh - siła  
+    a caso - randomly - loso 
+    per caso - by chance -przez przypadek
+    una volta - once / una vez 
+    struttura - structure 
+    resultato - result 
+    azione - action 
+    presenza - presence - prezentacja 
+    proceso - trial
+    sicurezza - security - ochrona 
+    aspetto - appearance - wyglad 
+    necessita - necesity - koniecznosc 
+    movimento - movement - ruch
+    personaggio - character -  
+    orgin - pochodzenie 
+    lacrima - tear 
+    desidero - wish 
+    soddisfaziono- satisfaction 
+
+Adjectives:
+    arrabiata - angry 
+    imbarazzata - embarrassed -zawstydzony 
+    felice - happy - szczesliwy
+    tranquilo - calm - spokojny
+    stanca - tired - zmieczona
+    triste- sad- smutny 
+    sopreso- surprised- zaskoczony 
+
+Verbs:
+    nuotare - to swimm 
+    dimostrare - to show / demonstrate 
+    vincere - to win	
+    avere paura- to be afraid
+    fare una passegiata - to take a walk  
+Nouns:
+    calcio -soccer
+    coraggio- courage 
+    squadra - team 
+    premio - prize - nagroda 
+    campionato - championship
+    spettatore - spectator 
+    pallacanestro - basketball 
+    gioco - game 
+    pista - track/ path - sćieżka
+    capacita - ability- umiejętność 
+    allegria - fun/joy/ mirth 
+    passegiata - walk - spacer 
+    campione - champion 
+    palestra-  gym
+    rete-  net - sitka 
+
+Adjectives:
+    mondiale - world 
+    vicino - close 
+
+#------------------------------
+Verbs:
+    saltare - to jump
+    giocare - to play 
+    tirare - to throw 
+    vincere - to win 
+Nouns:
+    gara - race 
+    allenatore - couch - trener 
+    palestra - gym 
+    calcio - the soccer 
+    gioco - game 
+        gioco di parole - word game 
+Adjectives:
+    sopra - over
+    in fondo alla strada - at the end of the street 
+    non nuotare - dont swim
+    effettivamente - actually - właściwie
+    oltretutto - besides - po za tym (wszystkim)
+    neppure - not even
+    dapertutto - everywhere - wszędzie 
+    frequentemente - frequently /often 
+    possibilmente - prawdopodobnie  
+    invece - instead 
+    quindi - therefore - w związku z tym 
+    gravemente - seriously - poważnie
+    eppure - and yet / niemniej jednak 
+    magari - maybe 
+    altrimenti - otherwise 
+    infatatti - in fact 
+    anzi - in fact / actually 
+    particolarmente - especially - szczególnie 
+    chissa - who knows 
+    addiritura - really /even - naprawde p
+
+Verbs:
+    brucare - to burn out 
+    aspettare - to wait for 
+    portare - to take - przynosić
+    mettere - to put
+    prendere - to take / get / make- brać
+    lasciare - to leave - zostawić 
+    chiedere - to ask - pytać
+    credere - to believe - wierzyć	
+    chiedersi - to wonder - zastanawiać się
+    sentendo - to hear
+    diventando - to become - stawać się 
+    tenere - to keep / hold - trzymac
+    capire - to understand - rozumieć
+    vincere - to win - wygrać
+    perdere - to lose - przegrać
+    perdersi - to lose youself - zgubić się
+    guardare - to watch - oglądać
+    seguire - to follow - podążać
+    chiudere - to close
+    provare - to try - próbować
+    unire - to unite / to join- dołączać / łączyć
+    indicare  - pointing out - wskazywać
+    sucedre - to happen - dziać się
+    cercare - to look for - szukać
+    piovere - to rain - deszcz pada
+
+Adjectives:
+    lontano - far away - daleko / odległy 
+    qualcuno - somebody
+    qualcosa - something 
+    ancora - still 
+    anche - even 
+
+#--------------------------------
+Verbs:
+    ballare - to dance 
+    imparare - to learn 
+    filmare  - to film 
+    dipingere - to paint 
+    fotografare - to photograph 
+    andare via - to leave 
+
+Nouns:
+    complesso - band / complex
+    camere - rooms 
+    architettura - architecture 
+    ballo / danza - dance
+    disegno - drawing
+    tamburo - drum 
+    i film - movies 
+    chitarra - guitar 
+    esibizione / mostra - exhibition - wystawa 
+    fila - line / queue 
+    spettacolo - show / performance 
+    pianoforte - piano - pianino 
+    imaggini - pictures 
+    palco / palcoscenico - stage - scena 
+    stile - style 
+    fama - fame - sława 
+    pittore - painter 
+    romanzo - novel - romans 
+    macchina fotograficac- camera
+
+Adjectives:
+    entrambi - both
+
+
+#---------------------
+Verbs:
+    imparare - to learn
+    avere sonno - to be sleepy 
+    essere pronto a - to be ready to
+    avere a che fare - to have to deal 
+
+Nouns:
+    lombra - shade/ shadow - cień
+    rumore - noise 
+    sensazione - feeling - wrażenie / uczucie 
+    coda - tail / line - ogon
+    concorrenza - competition - konkurencja 
+    caduta - fall - spadek 
+    viso - face - wizerunek
+    timore - fear - strach
+    dignita - dignity -  godność 
+    ricchezza - wealth - bogactwo 
+    delitti - crimes - zbrodnie 
+    indipendentza - independence 
+    falimenti - failures -porażki 
+    guaio / guai - trouble/s
+    odore - smell 
+    abitudine - habit 
+    liberazione - libration - wyzwolenie  
+    sviluppo - development 
+    grido - scream 
+    egualianza - equality - równość 
+    ruolo / ruoli - role / roles 
+    falimento - failure 
+
+Adjectives:
+    cativo - bad 
+    a causa del - because of 
+    lontano - far away - daleko 
+
+#----------------------------
+Verbs:
+    essere - sia /siano 
+    avere - abbia / abbiate/ abbiano
+    venire - venga / veniate / vengano 
+    potere - possa / possiate / possano 
+    dire - dica  /dicano 
+    vedere - veda / vediate / vedano
+    andare - vada / andiate / vadano
+    lasciarsi - to leave / to let 
+    tenere - tenga / teniamo / tengano  
+    tenersi - to be keept - trzymać się
+    suonare - to play / suoni 
+    suppone - to assume 
+    stare - to be  / to stay 
+    dire - dicca / diciamo /diciate / dicano 
+    sapere - sappia / sappiamo ./.
+    sperare - to hope 
+    dimenticare - to forget 
+
+Nouns:
+    rischio - risk 
+    chitarra - guitar 
+    testa- head /mind
+    perdere la testa - to lose sb mind 
+    
+Adjectives:
+    per quanto - as far as 
+    di quanto - than 
+    un ltra parte - elsewhere 
+    bagnato - wet - mokry 
+
+#-----------------------	
+Verbs:
+    scoprire - to discover
+    significare - to mean
+    spiegare - to explain
+    ricercare - to research - posuzkiwanie 
+    avndare giu - to go down - spadać
+    abbassare- to decrease/ to downo
+
+Nouns:
+    campo - field -
+    compito - task 
+    scoperta - discovery 
+    definizione - definition
+    conoscenza - knowleadge/consciousness
+    scienza- science
+    scienziato - scientist 
+    chimica - chemistry 
+    infermiere - nurse 
+    ricerca - search - badanie 
+    modo - way
+    collegamenti - connections 
+    aero /aerei - airplanes 
+    riscaldamento - warming / heating 
+    vantaggio - advantage 
+    la plastica - plastic
+    meccanismo - mechanism  
+    laurea - degree 
+
+Adjectives:
+    bravo - good 
+    avanti - ahead - być do przodu 
+    avanzata - advanced 
+    pullita - clean - czysta 
+
+#-----------------------
+Verbs:
+    venire - verrei / verebbe
+    fare - farei / farebbe 
+    essere - sarei / sarebbe 
+    potere - potrei / potrebbe 
+    vedere - vedrei / vedrebbe 
+    dire - direi / direbbe 
+    andare - andrei / andrebbe -- go  
+    dare - darei / darebbe 
+    chiedere - chiderei / chiederebbe
+    portare - porterei / porterebbe- to take sb / to bring sth
+    prendere - prenderei / prenderebbe - to take sth 
+    parlare - parlerei / parlerebbe 
+    tenere - terrei / terrebbe 
+    ricordare - to remember
+    ricordarsi - to remind itself - przypomniec sobie
+    avere - avrei / avrebbe
+    sentirsi di - to feel like doing sth
+
+Adjectives:
+    via - far away / away 
+    ancora - still
+    anche - even  
+    comunque - anyway
+    nemmeno - not even
+    altrimenti - otherwise 
+
+#-----------------    
+Verbs:
+    unire - to join 
+    fare affari - to deal
+    affare - to deal  
+    stampare - to print 
+    telefonare - to call 
+
+Nouns:
+    canale - channel
+    codice - code
+    articolo - article 
+    indirizzo - address 
+    lettore - reader 
+    intervista - interview 
+    giornalista - journalist 
+    invito - invitation 
+    noticia/zie - news 
+    rivista - magazine 
+    posta - mail - poczta 
+    discorso - speech- przemowa 
+    soggetto - subject 
+    argomento - matter / subject 
+    stampa - newspaper 
+    francobollo - stamp 
+    cartolina - postcard
+    dialogo - dialog 
+
+Adjectives:
+    in fondo - at the bottom 
+    rilassante - relaxing 
+
+#---------------------
+Verbs:
+    avere caldo - to be hot - osobie jest cieło 
+    fare caldo - to be hot - pogoda 
+    piovere - to rain 
+    nevicare - to snow
+    fumare -to smoke 
+    andare fuori - to go out 
+    annaffiare - to water 
+
+Nouns:
+    spiagga - beach 
+    il clima - climate 
+    Terra - earth 
+    aira - air 
+    primavera - spring 
+    estate - summer 
+    astmosfera - atmosphere 
+    nuvola - cloud 
+    nebbia - fog - mgła 
+    giardino - garden 
+    fuoco - fire 
+    l'erba' - the grass - trawa 
+    foresta- forest 
+    lago - lake 
+    fiore - flower 
+    il pianeta - planet 
+    luna - moon - księżyc 
+    piogga - rain 
+    mare - sea 
+    cielo - heaven / sky 
+    roccia - rock 
+    argento - silver 
+    alba - dawn - świt 
+    neve - snow 
+    spazio - space 
+    pietra - stone 
+    temporale - storm - burza 
+    vento - wind 
+    cascata - waterfall 
+    albero - tree 
+    stagiona - season - pora roku 
+    bosco - forest 
+    terreno - ground 
+    sabbia - sandal
+
+Adjectives:
+    dietro - behind 
+    meravigliosa - wonderful
+    paesaggio - landscape - krajobraz 
+    sopra - over - nad 
+    sotto - under / in the 
+    di legno - wooden 
+    soleggiato - sunny 
+    per terra - on the ground 
+
+
+#-------------------------
+Verbs:
+    consigliare - to advice 
+    costare - to cost 
+    aspettarsi - to expect 
+    vincere - to win 
+    affittare - to rent - wypożyczyć
+
+Nouns:
+    banca - bank
+    imprenditore - businessman / entrepreneur - przedsiebiorca 
+    pubblicita - advertising - reklama 
+    consiglio - advice 
+    bolletta - bill 
+    collega - colleague 
+    ditta / compagnia - firm /company .
+    moneta - coin 
+    sconto - discount 
+    fabbrica / fabbriche - factory/ries 
+    incontro -meeting 
+    assicurazione - insurance 
+    diregenza - management - kierownictwo 
+    soldi - money 
+    organizzazione - organization 
+    proprietaria - owner 
+    departimento vendite - sales department 
+    stipendio - salary 
+    risorsa - resource
+    rete - network 
+    il personale - staff - 
+    valore - value - wartość 
+    tassa - tax - podatek  
+    denaro - money 
+    finanziamenti - funds - środki 
+    camera - room - pokój xD 
+    
+
+Adjectives:
+    in contanti - in cash 
+    di solito / generalmente - usually 
+    a volte - /qualche volte - sometimes
+    spesso - often
+    cento - one hundred
+    a tutti i costi - at all costs 
+    in vendita - on sale - na sprzedaż
+    allora - then
+
+#-------------------------------
+Verbs:
+    avere - have / avessi/sse 
+    avere ragione - to be right
+    venire - venissi
+    potere - potesse 
+    volere - volessi 
+    essere - fossi 
+    sapere - sapessi 
+    dare   - dessi 
+    chiedere - chiedesse 
+
+
+Adjectives:
+    Come se - as if - jakbyśmy 
+    li dentro - in there - tam 
+    di cuanto - than - niż
+
+#-------------------
+Verbs:
+    dipingere - painting
+
+Nouns:
+    chiesa- church
+    dio - /dios - god
+    fede - faith - wiara
+    angelo - angel - janioł
+    cattedrale - cathedral 
+    speranza - hope 
+    vita - live 
+    preghiera - prayer
+    meditazione - meditation
+    anima - soul - dusza
+    realta - reality - rzeczywistość
+    coscienza - conscience/ consciousness- świadomość 
+    memoria - memory 
+    virtu - virtue - cnota 
+    depression - depression 
+    desino - destiny 
+    spirito - spirit 
+    esistenza - existence 
+    santa - saint - świeta 
+    stella - star
+
+Adjectives:
+    prima di tutto - first of all 
+    poi - then - wtedy
+    a memoria - by heart - na pamieć 
+    Fa' mente locale! - Gather your thoughts '
+    Gather - zebrać 
+    impegnata - busy 
+
+#-------------------------
+Verbs:
+    essere d'accordo - to agree 
+    iniziare - to startt/begun /initiate
+
+Nouns:
+    crimine - crime 
+    dittatura - dictatorship 
+    democrazia - democracy
+    bandiera - flag
+    accordo - agrement 
+    gevernatrice - governor
+    elezioni - elections
+    liberta - freedom
+    giudice - judge 
+        giudici - judges
+
