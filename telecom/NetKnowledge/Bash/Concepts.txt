@@ -1,0 +1,52 @@
+Instalowanie oprogramowania na Debianie:
+	1. Dodawanie repozytoriow:
+		- pakiet oprogramowania, z ktorego pobieramy i instalujemy oprogramowanie
+	2. Dodawanie klucza GPG:
+		- podpisywanie pakietow w repo, weryfikacja autentycznosi/ integralnosci
+
+	3. Update pakietow 
+		- widok na nowego pakiety w nowych repozytoriach
+
+	4. Instalowanie pakietw
+
+Example VScode installation:
+	1. wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+
+	2. sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/code stable main" > /etc/apt/sources.list.d/vscode.list'
+
+	3. apt update
+
+	4. apt install code
+
+#----------------------------
+Environment variables:
+	printenv - show all env vars
+		printenv key - show value of variable
+
+	Settings env var:
+		export <NAME>='value'
+	Removal:
+		unset <NAME>
+
+Shell Variable:
+	Setting:
+		<NAME>='value'
+
+Setting bashrc:
+	bashrc - booting script used by bash
+		pwd - ~/.bashrc
+		after update : source ~/.bashrc
+	Used to configure and personalize bash session behaviour 
+		Aliases
+			alias gs='git status'
+		Env vars
+			export PATH=$PATH:/usr/local/my_custom_tools
+		Functions
+			function mkcd() {
+				mkir -p "$1"
+				cd "$1"
+			}
+
+
+
+

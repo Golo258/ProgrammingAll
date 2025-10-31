@@ -1,0 +1,214 @@
+1. Podstawy Terminala i Komend
+	Podstawowe komendy: ls, cd, cp, mv, rm, mkdir, rmdir, touch
+	Zarządzanie plikami: find, grep, diff, file
+		find: - szukanie plikow i katalogow
+			nazwa pliku:
+				find /katalog -name one.txt
+			rozmiar pliku:
+				find /katalog -type f -size +1M
+			czas modyfikacji:
+				find /katalog -mtime -8 
+			inne:
+				-empty | -regex | -readable
+
+		grep: - kontent w plikach 
+			grep 
+				-i - ignore letter capitalization
+				-r - recursive
+				-n - line number
+				   "pattern"  /catalog
+				   
+
+	Uprawnienia: chmod, chown, chgrp, umask
+		Kontrolowanie zabezpieczen plikow/katalogow
+			Dostep/Modyfikacj/Wykoywanie
+		Chmod - change mode - zmiana uprawnien plikow /katalogow
+			r - read  | w - write | x -execute
+			u - owner | g - group | o - others 
+
+			chmod u+wx file - dodanie uprawnien do usera
+			chmod g-r file - usuniecie uprawnien grupie
+
+			lub liczbowo r -4 | w - 2 | x - 1
+
+		Chown - change owner - zmienia wlasciiela pliku
+			chown user file.txt
+
+		Chgrp - change group - zmiana grupy pliku
+			chgrp group file.txt
+
+		umask - ustawianie domyslnych ustawien nowych pl/kat
+			umask  - show how its set now
+			umsk 702 - set new settings
+
+	Zarządzanie procesami: ps, top, htop, kill, pkill, nice, renice
+		ps  - informacje o procesach
+			ps aux - szczegolowe info, wszystkie procesyt
+			kolumny:
+				PID – ID procesu.
+				USER – Użytkownik uruchamiający proces.
+				CPU – Użycie procesora.
+				MEM – Użycie pamięci.
+	top/htop - interfacy graficzny zarzadzajace procesami
+	 htop sygnaly
+	 	SIGTERM (15): Grzeczne zakonczenie, proces moze zrobic clean i save files 
+		SIGKILL (9): wymuszone zakonczenie. 
+		SIGHUP (1): hangup - zawieszenie procesu
+		SIGSTOP/SIGCONT:
+			 stop - zatrzymanie / continues - wznowienie
+
+	kill- zatrzymywanie procesow
+		kill 1234 - 1234- pid  procesu
+		kill -9 1234 - wymuszone 
+	pkill - konczenie procesu na podstawie nazwy
+		pkill firefox
+
+	nice - uruchamianie z priorytetem
+		- 20 (najwyzszy proiorytet) do 19 (najnizszy)
+		nice -n 5 skrypt.sh
+
+	renice - zmiana priorytetu instejacego procesu
+		renice 10 1234
+
+
+2. Zarządzanie Pakietami
+	Debian/Ubuntu: apt, apt-get, dpkg
+		apt - menadzer pakietw, apt jest nowszy 
+			apt-get install <pakiet> - instalowanie pakietu
+			apt-get update  - aktualizacja listy dostepnych pakietow
+			apt-get upgrade - akutalizuje systemu, wszystkich pakietow
+			apt remove <pakiet> - usuwanie pakietu, bez jego konfiguracji
+			apt purge <pakiet> - usuwa wraz z konfiguracja
+			apt autoremove - usuwa niepotrzebne pakiety
+
+		apt dziala w oparciu o repozytoria:
+			/etc/apt/sources.list.d/
+			
+		dpkg - niskopiozmowe zarzadzanie pakietami/pliki .deb
+			dpkg -i <plik.deb> - instalowanie
+			dpkg -r .. - usuwanie
+			naprawianie problem po instalacji
+				apt --fix-broken install
+
+3. Skrypty Bash
+	Zmienne: Definiowanie i używanie zmiennych (VAR=value, $VAR)
+	Pętle: for, while, until
+	Warunki: if, else, elif, case
+	Funkcje: Definiowanie i używanie funkcji
+	Wejście/Wyjście: read, echo, printf
+	Operacje na plikach: Czytanie i zapisywanie danych do plików
+
+4. Zarządzanie Użytkownikami i Grupami
+	Tworzenie i usuwanie użytkowników: useradd, usermod, userdel
+		Useradd - tworzy nowego usera
+			userad [ opcje ] username
+				-m - domyslny katalog domowy
+				-s - okreslona powoka ex. /bin/bash 
+			
+		usemod - modyfikacja instejacego uzytkownika
+			usermod -aG grupa nowy_user
+			-d - zmiana katalogu domowego w systemie /etc/passwd
+
+		userdel - usuwanie usera
+			-r - wraz z katalogiem domowym
+			
+	Zarządzanie grupami: groupadd, groupdel, gpasswd
+		groupadd - tworzy nowa grupe - jest w /etc/group 
+		groupdel - usuwa grupe
+		gpasswd - zarzadza userami i haslami grupy
+			-a user grupa - dodaje uzytkownika
+			-d user grupa - usuwa usera
+		groups user - pokazuje do jakich grup nalezy user
+
+	Zarządzanie hasłami: passwd - zmiana hasla usera
+		passwd user
+	Przydzielanie uprawnień: sudo, visudo
+
+4.5. Struktura katalogow:
+	/ - katalog glowny
+		-s/bin -> link to /usr/s/bin
+		- usr - narzedzia uzytkownika bin/s -> link do /usr/s/bin 
+			-local - lokalne zainstlowane programy - po instalacji tutaj sa programy
+			- include - pliki naglowkowe (.h) do programow C++
+			- lib - biblioteki systemowe do aplikacji
+			- lib64 - biblioteki dla systemow 64 bitowych
+			- share - wspoldzielone dane przez aplikacje, man, icons, fonts itp
+			- bin - podstawowe programy wykonalne (ls/p/mv/rm/bash)
+			- sbin - systemowe programy (grub /ip)
+		-etc - konfiguracje systemowe - calego systemu	
+			- kazdy program / usluga daje tam config
+			Useful catalogs / files:
+				- passwd - plik z userami systemu
+				- shadow - plik z zahashowanymi haslami userow
+				- group - plik z grupami w systemie
+				- sudoers - uprawnienia dla suedorsow
+				- fstab - systemy plikow montowanych przy starcie:
+					dodawanie partycji/dyskow 
+				- hostname - nazwa hosta 
+				- hosts - odwzorowanie ip na hostw, zarzadzanie siecia
+
+				- network/interfaces - konfigurowanie sieci 
+					interfacy sieciowe, ip, itd
+
+				-apt/sources.list - lsita repozytoriow, pobieranie pakietow
+				- systemd - zarzadzanie uslugami i procesami systemowymi
+				
+				- crontab- plik z planem wykonywania skryptow o danym czasie
+				
+				- ssh - konfguracja ssh 
+				- resolv.conf - konfiguracja dns 
+
+		- -home - katalogi domowe userow
+		- var  - pliki dynamiczne(zmienne), modyfikowane podczas pracy system
+			- log - log systemowe i aplikacji / diagnozowanie bledow
+				-apt - term.log / history.log - logi z zarzadzania pakietami
+				- boot.log - startowanie systemu
+			- cashe - pamiec podreczna - tymczasowe pliki, optymalizacja 	dzialania systemu
+
+			- spool - pliki oczekujace na dalsze przetworzenie
+
+			- lib - aplikacje przechwouja tu zmienne dane/ stan lub bazy danych
+			- tmp - pliki tymczasowe
+			- run - informacje o biezacych procesach i uslugach
+		
+		- tmp - tymczasowe pliki usuwane po restarcie
+
+		- dev- plikii urzadzen, montowane dyski,usb, klawiatura
+		- proc - info o procesach
+		- sys - inf o o sprzecie
+		- lib - bibliotekli systemowe, potrzebne do progrtamow z bin i sbin
+
+5. Konfiguracja Systemu
+	Pliki konfiguracyjne: /etc/fstab, /etc/hosts, /etc/network/interfaces
+	Usługi: systemctl, service, journalctl
+	Zarządzanie usługami: systemctl start <service>, systemctl stop <service>, systemctl restart <service>
+
+6. Monitorowanie i Diagnostyka
+	Monitorowanie systemu: top, htop, vmstat, iostat
+	Zarządzanie dziennikami: tail, less, grep na plikach logów w /var/log
+	Diagnostyka sieci: ping, netstat, ss, traceroute, ifconfig, ip
+
+7. Bezpieczeństwo
+	Uprawnienia plików: chmod, chown, chgrp
+	Zapory ogniowe: ufw, iptables
+	Szyfrowanie: gpg, openssl
+
+8. Automatyzacja i Zdalne Zarządzanie
+	Cron i atd: crontab, at, atd
+	Zdalne połączenia: ssh, scp, rsync
+	Scripting i automatyzacja: Tworzenie skryptów do automatyzacji rutynowych zadań
+	
+9. Zarządzanie Zasobami
+	System plików: df, du, mount, umount
+	Zarządzanie dyskami: fdisk, parted, lsblk, blkid
+
+10. Wersjonowanie i Repozytoria
+	Git: git init, git clone, git commit, git push, git pull
+	Repozytoria: Dodawanie i usuwanie repozytoriów, aktualizowanie listy pakietów
+	
+Praktyczne Ćwiczenia
+	Tworzenie skryptów: Napisz skrypty automatyzujące codzienne zadania.
+	Zarządzanie plikami: Eksperymentuj z różnymi operacjami na plikach.
+	Zarządzanie użytkownikami: Dodaj i usuń użytkowników oraz grupy.
+	Monitorowanie systemu: Regularnie sprawdzaj stan systemu i monitoruj zasoby.
+	Kopia zapasowa: Skonfiguruj i testuj mechanizmy tworzenia kopii zapasowych.

@@ -7,7 +7,7 @@ def GIT:
         git checkout ggolonka/fix_CBO11066_test
         # dodatkowo mozesz
         git config --global remote.gitlab.url "https://wrgitlab.int.net.nokia.com/RAN/robotlte"
-        git config --global remote.gitlab.url "https://ca_ltewts_ci:CoNWgPqx27mcMjUzHtTm@wrgitlab.int.net.nokia.com/RAN/robotlte"
+        git config --global remote.gitlab.url "https://wrgitlab.int.net.nokia.com/RAN/robotlte"
 
     # ustawienia 
     thr
@@ -144,7 +144,7 @@ def GIT:
         git config --global alias.amend "commit --amend --no-edit"
         git config --global alias.pushRef "! git push origin HEAD:refs/for/master"
 
-
+        git config --global credential.helper store -- przydatne do ustawiania zapisywania hasłą
 
     # rozwiazywanie konfliktów MR gerrit:
         git fetch & checkout -- zabrać z MRa z gerrita
