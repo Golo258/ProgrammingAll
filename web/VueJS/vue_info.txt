@@ -1,0 +1,279 @@
+
+
+
+
+Adding vue:
+    1. By package:
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    2. npm
+        npm install vue@next
+    
+    3. vue cli - commandline interface 
+        npm install -g @vue/cli
+        vue creat project_name
+
+    4. vite 
+        npm init vite-app project-name
+
+Project Structure:
+    package.json:
+        dependencies and scripts required for project
+    package-lock.json 
+        installed dependencies from npm
+    
+`   Folders:
+        node_modules:
+            all installed dependencies
+        public:
+            contains static assets (resources)
+            index.html - only html file in vue application
+                no change - vue is controlling the user interface
+            
+        src:
+            here is where we are going to work in a lot
+
+            App.vue 
+                specification of html, js, css responding on UI
+
+            Compononets:
+                App.vue | Hello.vue 
+                    Represents the view which we see in the browser
+
+            assets:
+                images / giffs, and more 
+
+        .vue filetype:
+            uses html-like syntax to describe portion of UI
+            contains three level blocks:
+                template - html
+                script   - data / logic  / js
+                style    - css / styles to template
+
+
+    Compononets:
+        vue is called a SFC - single file component
+
+Vue syntax:
+    Binding text:
+        {{ data_var}}
+        <div>
+            v-text="var" - is assigning data from var into div body 
+    Binding html:
+        div
+            v-html="var" - is converting html syntax from var in div body
+    Binding attritbutes:
+        div 
+            v-bind:id /class /src etc
+
+        Modyfing regular classes by using binded var:
+            var has to be boolean
+            v-bind:class="var && 'regular_class'"
+            3 arguments operators works also
+            :class=" var ? 'class1' : 'class2'
+            array of binded class [ one_class, two_class]
+            applying multi classes under condition
+            :class="{
+                class_name: condition_var,
+                class_name2: condition_var2
+
+            }"
+
+    Binding styles:
+        v-bind:style= "
+        {
+            color : var,
+            'text-decoration': var2,
+            paddingTop : var3,
+        }
+        v-bind:style ="headerStyles"
+
+    Conditional rendering:
+        v-if="var operation "
+        v-else-if
+        v-else
+
+        v-show - if you don't wannt have it at all in html under condition
+
+    Link rendering:
+        v-for   
+        array of strings/ objects/ arrays/
+        Itering strings:
+            v-for="name in names" :key="name"
+        Iterring objects:
+            v-for="name in names" {{ name.attribute1 }}
+
+    Conditional list render:
+     <div v-for="name in namesArray" :key="name">
+        <h2 v-if="name.length % 2 === 0">
+          {{ name }}
+
+    Event handling:
+        v-on directive: or shortcut @
+            v-on:(event that we want to listen)
+                click
+                mouse-over -
+        in methods to get event:
+            method (event){
+                console.log(event)
+            }
+            if there is an argument you:
+                @click="function(argument, $event)
+            method(argument, event){
+                console.log(argument, event)
+            }
+    We can pass many methods for the same event
+        @click = " method1(),  method2()"
+
+    Form handling:
+        Capture inputs:
+            inputs
+            textareas
+            select control
+            checkbox 
+            radio
+        
+        v-model - two way Binding  
+            from modal to view
+            from view to model
+
+        <label for="name">
+        <input id ="name">
+        also <textarea id="name"
+        also select id ="name"
+            <option value>
+
+            name is corresponding with each other
+
+        input checkbox v-model="var = True/False"
+            or setting posible answers True/False
+                true-value= "true-option":
+                false-value= "false-option"
+
+        input withs value take the value as return not boolean
+        Radio :
+                <input type="radio" id="02" value="0-2" v-model="formValues.exprienceYears">
+                <label for="02">0 - 2</label>
+
+        Submit button:
+            form v-on:submit="action"
+
+    Modifiers:
+        v-model.trim - without blank spaceps
+        v-model.number- precion of type
+        v-model.lazy- lazy bind with model
+            after getting out of course the model is changed
+        @submit.prevent
+            <-> event.preventDefault() - not refresh after button submition
+
+        v-on / @keyup.enter / f1
+
+    Other directives:
+        v-once - rendering only ones, useful with static things
+
+        v-pre - not render js, var only {{ name }} literelly 
+
+    Computed Properties:
+         computed : {
+            getFullName() {
+                return something
+
+            }
+         }
+         {{getFullName}}
+
+        Useful methods:
+            Reduce: iterating over each item and perform function based on it 
+                    (accumulator, current_item, current_index, array) =>
+                    {
+                        accumulator += current_item
+                    }
+                returning accumulated object 
+            Map: iterating and changing every element based on the function 
+                ()=> {
+
+                }
+            Filter:
+                creating  a new collection dependence on condition
+                numbers.filter(
+                        numb => numb % 2 == 0
+                        );
+            Foreach:
+                iteration over each element
+                    numbers.forEach((num) => console.log(num));
+            Find: 
+                finding first element which meets requirements
+                    numbers.find((num) => num % 2 === 0);
+
+            Some:   
+                Check whether any of elements meets requirements
+            
+            Every:
+                Check whether every elements meets requirements
+
+        
+        Methods:
+            use when you want to perform operation on demand
+        Computed:
+            use when you want to count dynamically values,
+            automatically updated after data variables are changed
+
+    Computed getter and setter: -- then the computed become an attribute
+
+    Watchers:
+        tracking data variable whether its value is as you set
+            watch : {
+                volume(new_volume){
+                    if ( new_volume conditioon)
+                        do something
+                }
+            }
+            immediate : true, 
+                -> watcher is tracking variable as soon as page is rendered
+                with taking data variable as object with new_value handler
+
+            deep: true  
+                -> watcher is tracking nested variable:
+                like objects: actor: { title: "master, age: 12}
+                with handler
+    
+    Compononets:
+        .vue file
+            <template> <script> <style>  
+
+        importing components:
+            import Compononet from "path"
+            use: <Compononet/>
+            use its methodes: Compononet.methods.compMethod()
+        components: {
+            componentName
+        }
+        
+        setting props value outside the component
+            props: [
+                'name'
+            ]
+        <componentName name="something" />
+
+    Setting props type:
+        Props : {
+            Attribute : type (example: String)
+        }
+        if its number or boolean 
+        in the definition we have to use v-bind
+            :likes="12" :isPublished="true"
+    Validation:
+         title : {
+                type : String,
+                required : true,
+                default: "eso es muy simple"
+            },
+    Non propo attribute:
+        adding attribute to component:
+            <BlogArticle id="something">
+            by default it set to root div
+                no default set it as:
+                    v-bind="$attrs"
+        inheritAttrs : false
+
+    Provide / Inject:
+        
