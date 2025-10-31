@@ -1,0 +1,45 @@
+Opis: Stwórz system do zarządzania projektami w firmie. System powinien umożliwiać śledzenie projektów, przypisywanie pracowników do projektów, oraz zarządzanie zadaniami w ramach projektów. Implementacja wymaga stworzenia bazy danych, zaprojektowania odpowiednich tabel, oraz napisania zapytań SQL do różnych operacji.
+
+Wymagania:
+
+	Projektowanie bazy danych:
+		Tabele:
+			Employees - Przechowuje informacje o pracownikach.
+			employee_id (INT, PK, AUTO_INCREMENT)
+			first_name (VARCHAR)
+			last_name (VARCHAR)
+			email (VARCHAR)
+			hire_date (DATE)
+
+		Projects - Przechowuje informacje o projektach.
+			project_id (INT, PK, AUTO_INCREMENT)
+			project_name (VARCHAR)
+			start_date (DATE)
+			end_date (DATE)
+
+		Tasks - Przechowuje zadania przypisane do projektów.
+			task_id (INT, PK, AUTO_INCREMENT)
+			task_description (VARCHAR)
+			due_date (DATE)
+			status (ENUM: 'Not Started', 'In Progress', 'Completed')
+			project_id (INT, FK)
+		
+		ProjectAssignments - Przechowuje przypisania pracowników do projektów.
+			assignment_id (INT, PK, AUTO_INCREMENT)
+			employee_id (INT, FK)
+			project_id (INT, FK)
+			role (VARCHAR)
+
+	Zadania do wykonania:
+		Tworzenie tabel: Napisz zapytania SQL do stworzenia powyższych tabel.
+		Wstawianie danych: Wstaw przykładowe dane do tabel.
+		Zarządzanie projektami:
+			Dodaj nowy projekt.
+			Dodaj nowe zadanie do projektu.
+			Przypisz pracownika do projektu.
+			Aktualizuj status zadania.
+		Zapytania:
+			Znajdź wszystkie projekty, które rozpoczęły się po określonej dacie.
+			Znajdź pracowników przypisanych do konkretnego projektu.
+			Znajdź wszystkie zadania przypisane do projektu, które mają status 'Not Started'.
+			Znajdź projekty, w których pracował dany pracownik.

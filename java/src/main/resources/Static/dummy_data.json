@@ -1,0 +1,88 @@
+[
+  {
+    "table": "employees",
+    "data": [
+      {
+        "id": 1,
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "hireDate": "2023-01-15"
+      },
+      {
+        "id": 2,
+        "firstName": "Jane",
+        "lastName": "Smith",
+        "email": "jane.smith@example.com",
+        "hireDate": "2023-02-20"
+      }
+    ]
+  },
+  {
+    "table": "projects",
+    "data": [
+      {
+        "id": 1,
+        "name": "Tick tack toe",
+        "startDate": "2023-01-15",
+        "endDate": "2023-08-30"
+      },
+      {
+        "id": 2,
+        "name": "Training app",
+        "startDate": "2022-05-20",
+        "endDate": "2023-02-12"
+      }
+    ]
+  },
+  {
+    "table": "tasks",
+    "data": [
+      {
+        "id": 1,
+        "description": "Design Database Schema",
+        "dueDate": "2024-01-15",
+        "status": "TODO",
+        "projectId": 1
+      },
+      {
+        "id": 2,
+        "description": "Implement API Endpoints",
+        "dueDate": "2024-02-15",
+        "status": "IN PROGRESS",
+        "projectId": 1
+      },
+      {
+        "id": 3,
+        "description": "Create primary feature view",
+        "dueDate": "2023-05-12",
+        "status": "TODO",
+        "projectId": 2
+      },
+      {
+        "id": 4,
+        "description": "Refactor backend endpoints structure",
+        "dueDate": "2023-02-15",
+        "status": "DONE",
+        "projectId": 2
+      }
+    ]
+  },
+  {
+    "table": "projectAssignments",
+    "data": [
+      {
+        "assignmentId": 1,
+        "role": "Developer",
+        "employee_id": 1,
+        "project_id": 1
+      },
+      {
+        "assignmentId": 2,
+        "role": "Project Manager",
+        "employee_id": 2,
+        "project_id": 1
+      }
+    ]
+  }
+]
