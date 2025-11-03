@@ -1,0 +1,37 @@
+<!-- templates/book_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Book List</title>
+</head>
+<body>
+<h1>Book List</h1>
+<ul>
+    {% for book in books %}
+        <li>
+            <h2>{{ book.title }}</h2>
+            <p>Author: {{ book.author }}</p>
+            <p>Published Date: {{ book.published_date }}</p>
+            <p>Pages: {{ book.pages }}</p>
+            {% if book.is_available %}
+                <p>book is currently avaiable</p>
+            {% else %}
+                <p>book is not available. Sorry for problem</p>
+            {% endif %}
+            {% if book.cover_image %}
+                <img src="{{ book.cover_image.url }}" alt="{{ book.title }}" width="100">
+            {% else %}
+                <p>No cover image available.</p>
+            {% endif %}
+
+            <a href="{% url 'book_detail' book.pk %}">View Details</a>
+            <a href="{% url 'book_update' book.pk %}">Edit</a>
+            <form method="post" action="{% url 'book_delete' book.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+            </form>
+        </li>
+    {% endfor %}
+</ul>
+</body>
+</html>
