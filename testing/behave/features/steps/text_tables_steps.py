@@ -1,5 +1,5 @@
 from behave import given, when, then
-from UtilClasses.TestedData import DataProcessor
+from utils.TestedData import DataProcessor
 
 
 @given(u'I have some text')

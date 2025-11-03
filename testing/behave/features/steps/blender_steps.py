@@ -1,5 +1,5 @@
 from behave import given, when, then
-from UtilClasses.TestedData import DataHandler
+from utils.TestedData import DataHandler
 
 
 @given(u'I have a database handler')
