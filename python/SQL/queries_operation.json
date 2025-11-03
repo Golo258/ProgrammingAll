@@ -1,0 +1,68 @@
+{
+    "Queries" : {
+        "Modifying": [
+            {
+                "purpose": "task management",
+                "operation": "create_table"
+            },
+            {
+                "purpose": "Update single record",
+                "operation": "update_record"
+            },
+            {
+                "purpose": "Update many records",
+                "operation": "update_records"
+            },
+            {
+                "purpose": "Remote records under null condition",
+                "operation": "remove_records"
+            },
+            {
+                "purpose": "Remote the whole table",
+                "operation": "remove_table"
+            }
+        ],
+        "Inserting": [
+            {
+                "purpose": "Insert singular record",
+                "operation": "insert_record"
+            },
+            {
+                "purpose": "Insert many records to table",
+                "operation": "insert_multi_records"
+            }
+        ],
+        "Filtering": [
+            {
+                "purpose": "Selecting record based on condition",
+                "operation": "where_operators"
+            },
+            {
+                "purpose": "Selecting record and ordering it properly",
+                "operation": "ordering_records"
+            },
+            {
+                "purpose": "Selecting record and limiting output",
+                "operation": "limitations"
+            }
+        ],
+        "Aggregation": [
+            {
+                "purpose": "Counting number of records based on column",
+                "operation": "counting"
+            },
+            {
+                "purpose": "Counting number of unique records",
+                "operation": "counting_distinct"
+            },
+            {
+                "purpose": "Counting and grouping records by column",
+                "operation": "grouping"
+            },
+            {
+                "purpose": "Numeric aggregation operations",
+                "operation": "numeric_aggregation"
+            }
+        ]
+    }
+}
