@@ -1,87 +1,347 @@
 
-Dispatcher co robi i jak:
-    Docker Compose, który uruchamia 3 usługi:
-    web → Twoja aplikacja Pythonowa
-    mysqldb → Baza danych MySQL
-    phpmyadmin → Panel webowy do bazy (dla ludzi)
+"""
+    Wyjaśnienie:
+        Obraz - image
+            szablon do odczytu (read only)
+            zbiór plików i ustawień (co zainstalować, jaki program uruchomić na starcie)
+            zazwyczaj ma specyficzny tak np mysql:7.4 
+            jest złożony z warstw (layerts)
+            warstwy są cashgowane, dziieki czemu pobieranie / budowanie jest szybsze
+            nie uruchamia sie sam, to jest tylko przepis
 
-    aplikacja start: CMD [ "python3", "wts_ute_cloud_interface/cli_interface.py", "-l", "info" ]
+            Do czego on jest:
+                aby wszedzie było to samo środowiska
+                można zrobić wiele kopii tej samej aplikacji bez instalowania jej od zera
+                żeby łatwo wersjonizować app1.0 app1.1
+
+        Kontener - 
+            -to uruchomiona instancja obrazu, czyli już upieczone ciasto z przepisu
+            to proces działający w odizolowanym pudełku
+                ( ma własny pid, sieć, system plików)
+            ma dodatkową warstwe zapisu (writable). wszystko co zmieniasz w trakcie działania
+                trafia do tej warstwy, obraz pod spodem jest nadal niezmieniony
+            
+            kontener żyje dopóki działa proces. możesz go 
+                zatrzymąć(stop)
+                wystartować(start)
+                skaskować
+                nadać mu nazwe
+            
+            Używamy do:
+                uruchmaiania aplikacji /usług z obrazow 
+                do skalowania: z jednego obrazu odpalasz 5 takich samych kontenerów
+                do izolacji: każdy kontener ma swoje biblioteki, porty, zmienne 
+
+    Czyli:
+        Obraz- niezmienony szablon - gwarancja powtarzalności
+        Kontener - stan uruchomienia - ma swoje dane zmiany, znikną gdy skasuje 
+    
+        Obraz → jak klasa w programowaniu.
+        Kontener → jak obiekt tej klasy.
+        Możesz mieć 10 obiektów z tej samej klasy — tak samo możesz mieć 10 kontenerów z jednego obrazu
+
+"""
+1. Zaciągnie obrazu
+    docker pull nazwa_obrazu:tag(wersja) -- jak nie podasz wersji to zrobi latests
+        np: docker pull mysql:8.4
+
+2. Jakie masz obrazy i kontenery:
+    docker images - pokazuje wszystkie obrazy 
+    docker ps - jakie mamy kontenery  
+        -a --all - wszystkie 
+        -q --quiet - tylko id kontenerów
+        -l --latest - ostatnio utworzony 
+        -n - x utworzonych kontentórw
+        -f --filter - filtruje po danym atrybucie
+        --format - własny sposób wyświetlania
+
+3. Jak zrobić kontener z obrazu:
+    - tworzy  kontener na podstawie obrazu i od razu uruchamia kontener.
+    docker run -d --name db1 mysql:8.4
+        -d (detached czyli leci w tle)
+        --name db1 - nadajem mu nazwe, żeby było łątwiej znaleźć
+        - mysql:7.4 - z jakiego obrazu tworzymy 
+        -przydantne flagi
+            porty:               -p 3306(host):3306(container) - wystaw port z kontenera na hosta
+            dane trwałem:        -v mysql_data:/var/lib/mysql - volumen named
+            zmienna środowiska:  -e MYSQL_PASS=secret
+            automatyczny reset:  --reset unless-stopped
+            usuwanie po wyjściu: --rm
+            sieć:                --network bridge|host|nazwa_sieci
+            plik env:            --env-file .env
+            limit zasobów:       --cpus 1.5 --memory 1g
+                docker run -d --name db1 \
+                -e MYSQL_PASS=secret_pass \
+                -v mysql_data:/var/lib/mysql \
+                -p 3306:3306 \
+                --reset --unless-stopped \
+                mysql:8.4
+
+4. Tworzenie bez startu
+    docker create --name db2 mysql:8.4
+    docker start db2 -- start kontenera
 
 
-    sh "sudo docker run -d -v /home/ute/workspace-jenkins/...:/wts_ute_cloud_interface/logs --network testline_dispatcher_nginxphp -p 5000:5000 --name cus_dispatcher cus_dispatcher:${DISPATCHER_VERSION}"
-        odpal kontent cus_dispatcher z wcześniej zbudowanego brazu
-        podłącz go do seici nginxphp
-        przekieruj port 5000
-        dodaj volumy z logami 
+5. Sterowanie życiem kontenra
+    docker stop db1
+        -t 120 - można dodać ile czasu ma przed zamknieciem
+    docker start db1
+    docker reset db1
+    docker rm db1     -- usuń ( musi być zatrzymany)
+    docker rm -f db1  -- usuń na siłe (kill + rm)
 
 
-        pliki YAML są kopiowane do kontenera do katalogu
-             wts_ute_cloud_interface/wts_ute_cloud_interface/data
+6. Interakcja z kontenerem: 
+    docker exec -it <nazwa kontenera> bash
+        exec - wykonaj polecenie na działającym kontenerze
+        -i --interactive - tryb interakyny (stdin otwarty)
+        -t --tty - terminal 
+        bash sh - powłoka na jakiej otwieramy terminal
+
+    docker logs -f --tail 20 <kontener>  
+        logs - podgląd logów z kontenera
+        -f --folow = na żywo (jak tail -f )
+        --tail x - pokaze ylko x lini
+
+    docker top <kontener>
+        - top jakie procesy działają wewnątrz kontenera
+
+    docker stats -  statystuki kontenra CPU / RAM / IO itp
+
+    docker cp 
+        ./plik.txt <nazwa_kontenera>:/sciezka
+             - kopiowanie plików z hosta do kontenera
+        <nazwa_kontenera>:/sciezka ./sciezka
+             - kopiowanie plików z kontenera do hosta
+
+    docker inspect - szczegółowe informacje o kontenerze
+    
+7. Czyszczerenie śmeici
+    docker system prune  - usuwa zatrzymane kontenery, sieci itp
+    docker system prune -a - to samo tylko wszystkie --all
+
+8. Budowanie obrazu:
+    docker build -t nazwa/aplikacja:tagi .
+        -t - tag (repo/nazwa:wersja)
+        . - kontekst buildu wszystkoco nie jest w .dockerignore leci do 
+            demona Dockera  
+
+9. Wypychanie obrazu:
+    docker login - logowanie na dockera
+    docker push repo/nazwa:wersja
+    potem 
+    docker pull  repo/nazwa:wersja
+    docker run -p 8000:8000 repo/nazwa:wersja
+
+10. Po co pliczki:
+    Dockerfile:
+        przepis na zbudowanie obrazu 
+        mówi nam co mamy zrobić, wziąśc odpalić, skopiować, żeby zbudować nowy obraz
+    
+    docker-compose.yml
+        przepis na uruchomienie wielu kontenerów razem
+            (np: aplikacja pythonowa, baza danych, panel admina itp)
+        zamiast pisać 5 razy docker run, mamy 1 plik z definicją wszystkiego 
+
+        odpalamy poprzez docker compose up
+    
+    Makefile:
+        zbiór skrótów/aliasów do czesto powtarzanych komend 
+            zamiast pisać: docker build / puish - robimy make build, make push 
+            
+10.1
+    Dockerfile: - lsita kroków  jak zbudować obraz 
+        kadza linijka to instrukcja jak robimy warstwy obrazu
+    Najważniejsze klocki:
+        FROM - z czego startujemy - wybiera bazowy obraz z jakąś zawartością
+            (System narzedzia, programy jezyki ) 
+            FROM python:3.12-slim ( splim małe bazy danynch | alpine duze)
+
+        WORKDIR - katalog roboczy w dla wszystkich dalszych instrukcji w Dockerfile
+            i dla domyślnego startu kontenera - exec- it kontener bash - wejdzie do danego katalogu 
+            ustala cd na reszte instrukcji 
+            WORKDIR /app
+        COPY - kopiujemy pliki z kontekstu buildu do obrazu
+            COPY requirements.txt .
+            COPY . .
+                - source | target 
+                - jestli target to . - to kopiuje do bieżacego workdir 
+
+        RUN - wykonaj komende w czasie budowania
+            a wynik zapisuje w obrazie jako warstwa
+            np tutaj: instaluje biblioteki w obrazie
+            RUN pip install --no-cache-dir -r requirements.txt
+
+        ENV -zmienne środowiskowe w obrazie / zostaja na stałe w obrazie
+            ENV PYTHONUNBUFFERED=1
+        ARG - zmienne na czas budowania
+            dostpene tylko  w buldzie można nadpisać --build-arg
+            ARG APP_VERSION=dev
+            LABEL version=$APP_VERSION
+        EXPOSE - informacje o porcie, dokumentacja w obrazie 
+            EXPOSE 8000
+
+        CMD vs ENTRYPOINT - co startuje kontener 
+            CMD - domyślna komenda  argumenty , łątwo nadpisać w rocker run 
+            ENTRYPOINT - twarda komenda - trudniej nadpisać
+            np: CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+            -- komenda która urchamia sie gdy odpalasz kontener 
+
+        VOLUME: deklaracje miejsca na dane
+            VOLUME ["/data"]
+    Jak odpalać:
+        docker build -t repo/app:wersja
+        docker push repo/app:wersja
+
+10.2 - docker-compose.yaml
+    -- definiuje nam jak uruchomić jedną albo kilka aplikacji w kontenerze
+        -- może on zbudować obrazy (sekcja build) i od razu urchomić z nich kontenery
+
+    scenarisuz uruchamiania dla wielu kopntenerów naraz
+        services - lista usług/kontenerówJ jakie mają powstać
+            - (każdy wpis to osobny kontener)
+        image/build - skąd wziąć obraz 
+            image - nazwa obrazu z którego bedzie kontener
+            build: info skad zbudować obraz -( dockerfile)
+                context: precyzujemy na przykąłd 
+                context: . - czyli wszystko gdzie jesteśmy jest kontekstem buildu
+
+        env_file - wskazuej plik .env - w którym są zmienne środowiskowe
+        environment - lsita zmiennych środowiskowych
+            albo DB_HOST: db 
+            albo - DB_USER=app
+        ports: mapowanie portów host<->kontener np 8000:8000
+            host - VM / PC, na któym działą docker
+            kontener - wewnętrzny port na którym aplikacja nasłuchuje 
+
+        volumes: dane trwałem named volume lub mount kodu dev
+            named volumes - trwałe dane, które zostają 
+            bind mounts- mapowanie katalogu z hosta
+                :/app:/app
+        command: 
+            nadpsiuej cmd z Dockerfile
+            komenda która uruchomi sie po starcie kontenera
+        depends_on: kolejność startu
+        restart: polityka restartu
+            np: always -jesli padnie kontener to Docker go uruchomi automatycznie
+        expose: informacja że ten port jest używany w sieci Dockera
+        networks: zwykle domyslny bridge
+            tworzymy daną sieć, i nadajemy jej drivera np:
+            networks:
+             nginxphp:
+                driver: bridge
 
 
-Reprodukcja na debugowanie pythonowe:
-    potrzebne - środowisko pythonowe
-    pliki .yaml w wts_ute_cloud_interface/data
-    lokalny MySQL z tym samym hasłem 
+
+    Jak odpalać:
+        - start wszystkich usług
+            docker compose up -d 
+        - logi konkretnego serwisu
+            docker compose logs -f (-- follow) db
+        - stan usług
+            docker compose ps
+        - wejscie do kontenera 
+            docker compose exec app bash 
+
+        - restart/stop/start danej usługi
+            docker compose restart app
+            docker compose stop app
+            docker compose start app
+
+        - zatrzymanie i usunięcie kontenerów
+            docker compose down
+        
+        - zatrzymanie + czyszczenie volumenów
+            docker compose down -v
+
+        - walidacja i podgląd tego co compose widzi
+            docker compose config 
 
 
-tokens_to_spare.yaml
-    []
+11. Tagowanie:
+    nadawnaie obrazowi adresu pod którym jest znany
+    Nazwa obrazu w dockerze
+    [registry]/namespace/repo:tag
+        docker.io/golo258/myapp:1.0
+        registry - gdzie to leży - na jakim hubie 
+        namespace - konto, organizacja w rejestrze
+        repo - nazwa projektu/obrazu
+        tag - wersja 
 
-tl_for_retry.yaml
-    default: 1
-    CLOUD_R4A_CUS: 2
-    CLOUD_R4BANO_CUS: 2
-    CLOUD_R4LAPO_CUS: 2
-te pliki wpierdalamy w ścieżke /wts_ute_cloud_interface/wts_ute_cloud_interface/data/
-absolutną !! - nie w projekcie 
+    dziąła to jak alias  - nie kopiuejmy danego obrazu tylko nadajemy etykeite
+            zbudowana aplikacja   na realny namespace 
+    docker tag grzesio/myapp:1.0 golo258/myapp:1.0
+    
 
-docker-compose-mysql.yaml
-    version: '3.8'
-    services:
-    phpmyadmin:
-    depends_on:
-    - mysqldb
-    image: phpmyadmin
-    restart: always
-    ports:
-    - '9000:80'
-    expose:
-    - 80
-    environment:
-    PMA_HOST: mysqldb
-    MYSQL_ROOT_PASSWORD: 'relsup2018'
-    networks:
-    - nginxphp
 
-    mysqldb:
-    image: mysql
-    restart: always
-    ports:
-    - 3306:3306
-    environment:
-    - MYSQL_DATABASE=relsup
-    - MYSQL_ROOT_PASSWORD=relsup2018
-    - MYSQL_HOST=localhost
-    volumes:
-    - mysql:/var/lib/mysql
-    - mysql_config:/etc/mysql
-    networks:
-    - nginxphp
+12. Sieci:
+    docker daje nam prywante LANY wirtualne 
+    prywatny pokój dla wybranych kontenerów
+    kontenery w sieci widzą sie po nazwie, gadaja po wewnętrznych portach
+    są odciete od innych poza siecią
 
-    volumes:
-    mysql:
-    mysql_config:
+    -p - portów - używamy tylko z zewnątrz do kontenera,
 
-    networks:
-    nginxphp:
-    driver: bridge
+    Tworzenie:
+        docker network create appnet
+        docker network ls
+    Dodawanie kontenera do sieci:
+        docker run -d --name web --network appnet nginx:slim
 
-i komenda do odpalenia mysql i phpadmin
-    docker-compose -f docker-compose-mysql.yml up -d
+        docker run --rm curlimages/curl echo "Siemano kolano" 
+            pobiera obraz 
+            uruchamia od razu komende 
+            po zakończeniu, usuwa kontener  
 
-    wbijasz na http://localhost:9000
-        root i hasło relsup2018
+        # kto sie dzici w danej sieci
+        docker network inspect <nazwa_sieci> | jq '.[0].Containers'
+        #odłączanie kontenera od sieci
+        docker network disconnect <siec> <kontener>
+    
+    Jak definiujemy sieci w compose:
+        networks:
+            nginxphp:
+            driver: bridge
+        to potem nie tworzy sie sieć dokładnie o takiej samej nazwie tylko
+            nazwa_kontener_nazwa_sieci
+            
+13: Volumeny:
+    Kontener ma system plików któy znika w momencie usunięcia
+    Wlumen to trwały magazyn danych
+        żyje poza kontenerem
+        może być podłączony do wielu kontenerów
+            odłączyć i dać do innego
+    
+    #tworzenie 
+        docker volume create <nazwa>
+        docker volume ls - jakie są
+    
+    # dodawanie danych do volumenu
+        1.Named volume: zarzadzany przez dockera
+        docker run -v <nazwa>:/jakie_dane <kontener>
+            -v --volume 
+        2.Bind mount: mapujesz katalog z hosta:
+                            (host dir) : (container dir)
+            docker run -v $PWD/data:/app/data ...
+                jeśli zmienisz na hoście albo na contenerze to bedzie miało wpływ na drugie
+
+14. Env w kontenterach: - środowisko uruchomieniowe
+    zmienne środowiskowe
+        konfguracja bez zmiany obrazu   
+        bezpieczniejsze niż wypisywanie haseł
+        łatwe zmiany w docker run i compose
+
+    # ustawianie env
+        docker run -t --rm \
+            -e VAR=sifmap \
+            -e PASS=secret \
+            ubuntu bash
+
+        # potem można zrobić
+            echo $VAR
+    # wczytywanie z pliku .env
+        docker run - --rm --env-file .env ubuntu bash
+        
 
 wejście na dockera i sprawdwzenie co sie tam dzieje
     docker ps - bierzesz sobie id contenera
