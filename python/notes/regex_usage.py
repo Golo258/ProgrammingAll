@@ -13,7 +13,7 @@ class RegexPlayground(object):
 
     def __init__(self, text):
         self.example_text = text
-
+    
     """
         Check if text begins with the pattern
         Match is not looking forward, only the beginning
@@ -309,7 +309,45 @@ class RegexPlayground(object):
 
 
         w_class_example()
-
+        
+        
+    """
+        re.split()
+            narzędzie przydatne do czytania skomplikowanych logów outputów 
+            i zparsowania ich według patternu
+    """
+    
+    def split_example():
+        # splitowanie na stringu, na podstawie separatora rozdziela stringi
+        parsed_string = "aaa,bbb,ccc".split(",")
+        print(parsed_string) # ['aaa', 'bbb', 'ccc']
+        
+        # w re.split() zamiast separatora używamy wyrażenia regularnego, wzoru
+        
+        text = "one--two---three----four"
+        parts = re.split(r"-+", text)
+        print(parts) # ['one', 'two', 'three', 'four']
+        #przykłąd z timestampem
+        output = ""
+        timestamp_pattern = re.compile(r'\r?\n\d{2}\.\d{2}:\d{2}:\d{2}\.\d{3}\|')
+        parsed = [p.strip() for p in timestamp_pattern.split(output) if p.strip()]
+        
+    """
+        re.sub(<wzorzec>, <na_co_zamienić>, <tekst>)
+            znajduje w stringu wszystkie fragmenty z patternu
+                i zamienia je na repl
+                albo jak nie ma to wtedy je usuwa / czyści            
+    """
+    def sub_example():
+        text = "Hello 123 world 456"
+        cleaned = re.sub(r'\d+', '', text)
+        print(cleaned) # Hello  world 
+            
+        # ze ściezka
+        path = "\x1b[0;32m/home/user/config.ini\x1b[0m"
+        cleaned_path = re.sub(r'\x1b\[[0-9;]*m', '', path)
+        print(cleaned_path) # /home/user/config.ini
+            
 
 if __name__ == "__main__":
     example_text = "Ola has a cat, but Ola doesnt have guitar 12"
