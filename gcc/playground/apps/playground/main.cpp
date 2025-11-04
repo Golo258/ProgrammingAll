@@ -1,17 +1,18 @@
-#include <logger.hpp>
+// ---------EXTERNAL----------------
 #include <string>
+//----------INTERNAL----------------
+#include <logger.hpp>
+#include <utils/parse.hpp>
+
 
 int main() {
     Logger log{std::clog, LogLevel::Debug, true};
 
     log.debug() << "Start aplikacji\n";
     log.info()  << "Siema, działa logowanie\n";
-    log.warn()  << "Uwaga – to tylko demo\n";
+    log.warn()  << "Uwaga  to tylko demo\n";
     log.error() << "Błąd testowy\n";
-
-    log.set_min_level(LogLevel::Warn);
-    log.info()  << "Tego nie zobaczysz\n";
-    log.error() << "To zobaczysz\n";
+    log.info()  << add(5, 12) << std::endl;
 
     return 0;
 }
