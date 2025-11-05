@@ -7,17 +7,7 @@
 /* 
     Main function to execute notes functions and classes methods
 */
-void namespaces_runner(){
-    Begin::print();
-    End::print();
-    using namespace Begin;
-    print();
-    Out::Inner::write();
-    Out::Inner::read();
-    // API::Vector_v1 vector1;
-    // API::append_list(vector1);
-    // API::v2::append_list();
-}
+
 
 void structures_runner(){
     Person person{"John", 24};
@@ -87,7 +77,6 @@ void logger_settings(){
 }
 
 int main(){
-    // namespaces_runner();
     // structures_runner();
     // memory_runner();
     // playing_with_vector();

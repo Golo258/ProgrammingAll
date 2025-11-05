@@ -18,7 +18,20 @@ int main() {
     // Strumienie, zabawa
     log.info() << "\n<======================================>\n";
     // Knowledge::StreamsManagement::standard_stream();
-    Knowledge::StreamsManagement::show_file_stream();
+    // Knowledge::StreamsManagement::show_file_stream();
+    std::string_view example_results = 
+    "Alice:10\n"
+    "  Math         :   61\n"
+    "# kobi: 52\n"
+    " marcin=  12\n"
+    " kasztan: bialy\n"
+    " 51: bialy\n"
+    " 51: 21\n"
+    " kasz anka: 83\n";
+
+    utils::parser::LeaderboardResults results = 
+        utils::parser::parse_name_score_lines(example_results);
+
     log.info() << "\n<======================================>\n";
     return 0;
 }

@@ -9,6 +9,8 @@
 #include <fstream> // strumienie plikowe
 #include <sstream> // strumienie w pamieci 
 #include <ctime> // zarządzanie czasem
+#include <vector>
+#include <map>
 
 // ------------------------
 /*
@@ -28,10 +30,9 @@ namespace Knowledge {
                 - czytać dane - input stream
                 - pisać dane  - output stream
                 - lub oba 
-            jak rura przez którą przepływa tekst 
-            << - pisanie - wyjście   - coś wychodzi 
-            >> - czytanie  - wejście - coś wchodzi 
-        
+        jak rura przez którą przepływa tekst 
+        << - pisanie - wyjście   - coś wychodzi 
+        >> - czytanie  - wejście - coś wchodzi 
     */
     namespace StreamsManagement {
 
@@ -126,7 +127,123 @@ namespace Knowledge {
         // | `rdbuf()`                                                   | przekierowywanie strumieni (np. `clog` → `cout`)      
         // | wyjątki na streamach (`exceptions()`)                       | wykrywanie błędów przez `throw`, nie przez `if (!cin)`
 
-
     }
 
-}
+    namespace Aliases {
+        // stosuejmy pascal case - czyli duża litera i potem małe
+
+            /* aliasy podstawowe*/
+        // stary sposób (C- style)
+        typedef unsigned int Uint32;
+        
+        // nowoczesny sposób (c++1++)
+        using ULL = unsigned long long;
+
+        // aliasowanie funkcji
+        using Callback = void(*)(int); // wskaźnik do funkcji 
+            //  to podpytać -- narazie nie 
+
+            /*aliasy szablonowe*/
+        
+        // skrót dla vectora dowolnego typu
+        template<typename T>
+        using TypeVec = std::vector<T>;
+
+        //  skrót lda mapy string : dowolny typ
+        template<typename T>
+        using StringMap = std::map<std::string, T>;
+
+            /*Silne typy */
+        // unikalny typ
+        using UserIdAlias = int; 
+        
+        // nowy typ, niezmienialny
+        struct UserId {
+            int value;
+            explicit UserId(int value) : value(value){}
+        };
+
+    }
+    namespace NameSpacesKnow {
+        // Namespacy wytłumaczenie
+        /*
+            Sposób na grupowanie nazw
+                (funkcji, klas, zmienych) w logiczne bloki,
+                aby uniknąć konfliktu nazw w projetach
+                Dostęp poprzez using nazwa_namespacu
+                print() -> funkcja z danego namespacu
+        
+            Aby dostać sie potem do funkcji z tego namespacu używamy:
+                nazwa_namespacu::funkcja()
+            Można stworzyć alias do przestrzeni nazw
+                namespace IO = App::IO; IO::read();
+            Można tworzyć anonimowe przestrzenie nazw
+                namespace { funckja() { deklaracja }}
+            taka przestrzeń jest static i widoczna tylko w danym .cpp
+        */
+        namespace Begin {
+            void print();
+        }
+        namespace End {
+            void print();
+        }
+        /*
+            Można tworzyć zagnieżdzone namespacy
+                od C++17 można wewnętrzne deklarować jako
+                namespace Out::In {}
+        */
+        namespace Out {
+            namespace Inner {
+                void read();
+                void write();
+            }
+        }
+        namespace App::IO { // C++17
+            void read();
+            void write();
+        }
+        
+        /*
+            Można tworzyć inline namespace
+                umożliwia wersjonowanie np API
+            API::append_list() # domyślnie V1
+            API::v2::append_list() # jawnie v2
+            inline daje coś takiego że jest widoczne
+                jakby v1 było bezpośednio w API
+                wtedy traktujemy na przykłąd tą wersje v1
+                    jakby była domyslna/aktualna wersja
+                a inne już musimy wymusić
+            Nie może być przez to dwóch inner inline namespaców
+            Można w namespacach trzymać takzę klasy i struktury
+                Gdy przekazujemy w danym namespacie do funkcji
+                    inną strukture danych to ona przy definicji automatycznie
+                wie że to jest ten własnie tych i nie trzeba tego precyzować
+        */
+        namespace API {
+            inline namespace v1 {
+                struct Vector_v1;
+                void append_list(Vector_v1 vector);
+            }
+            namespace v2 {
+                class Vector_v2;
+                void append_list(Vector_v2 vector);
+            }
+        }
+
+    }    
+    namespace StringOperations{
+        
+        /*
+            std::string 
+                przechowuje własny bufor pamieci
+                kopiuje dane przy przypisaniu
+
+            std::string_view- lekki, nieposiadający danych
+                widok na ciag znakow
+                Nie kopiuje tekstu, tylko wskazuje na istniejący fragment pamieci
+        */
+       void string_example();
+    }
+}    
+
+
