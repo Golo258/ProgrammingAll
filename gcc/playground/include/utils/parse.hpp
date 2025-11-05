@@ -5,6 +5,8 @@
 #include <vector>
 #include "utility"// std::pair
 
+int add(int a, int b);
+
 namespace utils {
     struct ParseError : std::runtime_error {
         using std::runtime_error::runtime_error;
