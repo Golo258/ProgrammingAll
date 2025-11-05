@@ -5,16 +5,17 @@
 #include <vector>
 #include "utility"// std::pair
 
-int add(int a, int b);
-
 namespace utils {
-    struct ParseError : std::runtime_error {
-        using std::runtime_error::runtime_error;
-        // do dodania numer linii/ kolumny w komunikacie
-    };
+    namespace parser {
+        using BoardResult = std::pair<std::string, int>;
+        using LeaderboardResults = std::vector<BoardResult>;
+    
+        struct ParseError : std::runtime_error {
+            using std::runtime_error::runtime_error;
+            // do dodania numer linii/ kolumny w komunikacie
+        };
+        
+        LeaderboardResults parse_name_score_lines(std::string_view text);
 
-    //  z tego możnaby zrobić typ przez alias 
-    std::vector<
-        std::pair<std::string,int>
-    > parse_name_score_lines(std::string_view text);
+    }
 }

@@ -1,8 +1,11 @@
 
 
 #include <utils/parse.hpp>
+using namespace utils::parser;
 
-
-int add(int a, int b) {
-    return a + b; 
+LeaderboardResults parse_name_score_lines(
+    std::string_view text
+){
+    std::cout << " Siemano kolano";
+    return;
 }

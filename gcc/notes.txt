@@ -1,0 +1,4 @@
+[INFO] File stream in here!
+ [NEXT] end
+<->
+[NEW] one and last
