@@ -52,8 +52,63 @@ namespace Knowledge {
             }
             append_out << "\n[NEW] one and last";
         }
-        //  czytanie 
+        void FileStream::reading_by_lines(){
+            std::ifstream in("notes.txt");
+            if (!in){
+                std::cerr << "Cannot open notes.txt";
+                return;
+            }
+            std::string line;
+            int index = 0;
+            while (std::getline(in, line)){
+                std::cout << "Line " << index++ << " content: " << line << ".\n"; 
+            }
+        }
 
+        void MemoryStream::reading_from_string(){
+            std::string text = "12 34 5 61\n";
+            /*
+                Tekst trafia do buffora
+                    bo chcesz na nim potem robić jakieś rzeczy
+                    jakbyś czytał plik 
+            */
+            std::istringstream in(text);
+            int a,b ,c, d;
+            in >> a >> b >> c >> d;
+
+            std::cout << "a=" << a << ", b=" << b << ", c=" << c << ", d=" << d << '\n';
+        }
+
+        void MemoryStream::writng_building_string(){
+            std::ostringstream out;
+            out << "Result: " << 27 << std::endl;
+            std::string text = out.str(); // pobiera z buffora
+            std::cout << "Content after loading from buffor " << text << std::endl;
+        } 
+
+        void MemoryStream::both_string_operation(){
+            std::stringstream sstream;
+            sstream << "123 451";
+            int first, second;
+            sstream >> first >> second;
+            std::cout << (first + second) << '\n';
+        }
+        
+        void simple_tasks(){
+            // otwórz app.log w trybie append 
+            //  dopisz linie z aktualnym czasem i started\n;
+            std::ofstream out_data("app.txt");
+            if(!out_data){
+                std::cout << "Cannot open app.log";
+                return;
+            }
+            else{
+                std::cout << "Writing to it";
+                time_t current_date = time(0);
+                char* datetime = ctime(&current_date);
+                out_data << "[" << datetime << "]: Started \n";
+            }
+        }
 
         void show_file_stream(){
             StandardStream sstream_obj;
@@ -61,7 +116,16 @@ namespace Knowledge {
             FileStream fstream_obj;
             fstream_obj.writing_overriting();
             fstream_obj.appending();
+            fstream_obj.reading_by_lines();
+            MemoryStream mstream;
+            mstream.reading_from_string();
+            mstream.writng_building_string();
+            mstream.both_string_operation();
+            log.info() << "\n-----------------------------\n";
+            simple_tasks();
         }
+
+       
     }
 };
 
