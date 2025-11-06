@@ -509,3 +509,60 @@ dodawanie adresu jako aliasu:
 #-----------------
     sprawdzenie dokłądne procesów
     ps -eo pid,comm | grep nbio
+
+
+# zajecia 
+    update
+    upgrade 
+    less
+    ssh-keygen
+    ssh-copy-id
+
+    ssh user@host -v -- szczegółowe logi
+
+    PermitRootLogin prohibit-password
+        jeśli ktoś ma klucz prywatny to może sie dostać
+
+    zmiana kolorów ip a
+
+
+10.55.269.1-19 / 16
+
+    10.55.249.1-14 /16 - + dodać brame jak z windows
+    Adresy do wykorzystania 
+            /etc/network/interfaces
+        Gateway...
+            Nameservery - 8.8.8.8
+            namsepaserer - 149.156.24.24
+                /etc/resolv.conf
+            testowanie dig / nslookup
+
+
+    /potem test
+    systemctl restart networking 
+        restartuje konfiguracje 
+
+    
+255.255.0.0 / 16
+
+auto enp0s3 
+iface enp0s3  inet static
+    address 10.55.249.6/16
+    gateway 10.55.0.1
+    dns-nameservers 8.8.8.8 149.156.24.24
+
+
+    wygenerować autentykacje na roota za pomocą swojej pary kluczy publicznych
+nameserver 8.8.8.8
+nameserver 149.156.24.24
+
+type idrsa.pub
+
+ssh user@host -i .id_rsa -v -- używa innego klucza 
+
+
+sudo nano /etc/apt/sources.list -- repozytoria
+    # wrzucamy
+    deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware
+    deb http://deb.debian.org/debian/ bookworm-updates main contrib non-free non-free-firmware
+    deb http://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
