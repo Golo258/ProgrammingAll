@@ -11,10 +11,11 @@
 #include <ctime> // zarządzanie czasem
 #include <vector>
 #include <map>
-
+#include <algorithm>
+#include <numeric> // accumulate 
 // ------------------------
 /*
-    Co trzeba będdzie sie nauczyć 
+    Co trzeba będzie sie nauczyć 
         - 1 przechwytywanie strumienia
             - jakie są typy strumienia itp
         - Jak przechwytywać wyjątki
@@ -243,6 +244,62 @@ namespace Knowledge {
                 Nie kopiuje tekstu, tylko wskazuje na istniejący fragment pamieci
         */
        void string_example();
+    }
+
+    namespace Collections {
+        
+        /*
+            Vector - co to jest itp
+                To dynamiczna tablica, ciągły blok pamieci 
+                        zarzadzana automatycznie
+                Działa jak tablica, ale sama powiększa bufor przy dodawaniu
+                Iteratory /pointer / referencje mogą sie uniewaznić
+                    przz realokacji
+                - size()     ile elementów jest faktycznie
+                - capacity() ile elementów mieści bufor
+                - szybko wstawaia na koniec
+        */
+        class VectorExamples{
+            public:
+                std::vector<int> creation_ways();
+                void access_to_elements(std::vector<int> numbers);
+                void modification();
+                void iteration();
+                void sort_and_algorithms();
+        };
+        /*
+            Map - słownik
+                Para klucz i wartość
+                    numer telefonu → imię
+                    nazwa użytkownika → liczba punktów
+                    dzień tygodnia → temperatura
+                Klucze są unikalne i posortowane 
+                    alfabetycznie, liczbowo itp
+
+            różnica miedzy:
+              unordered:  (bashowana)
+                - nie sortuje kluczy 
+                - gorsze zużyciepamieci, losowa kolejnosc
+
+            pair: para klucz wartosc
+                tworzenie:
+                    klasyczny konstruktor
+                        pair("key", "value")
+                    lista inicjalizacyjna
+                        pair = {key, value}
+                c++17
+                    rozbijanie pary na zmienne
+                auto[name, score] = para
+        */
+        class MapExamples {
+            public:
+                std::map<int, int> creation_ways();
+                void access_to_elements(std::map<int, int> scores);
+                void modification();
+                void iteration(std::map<int, int> scores);
+                void sort_and_algorithms();
+        };
+        void show_all_methods();
     }
 }    
 

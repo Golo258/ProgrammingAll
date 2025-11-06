@@ -28,10 +28,9 @@ int main() {
     " 51: bialy\n"
     " 51: 21\n"
     " kasz anka: 83\n";
-
-    utils::parser::LeaderboardResults results = 
-        utils::parser::parse_name_score_lines(example_results);
-
+    // using namespace utils::parser;
+    // LeaderboardResults results = parse_name_score_lines(example_results);
+    Knowledge::Collections::show_all_methods();
     log.info() << "\n<======================================>\n";
     return 0;
 }

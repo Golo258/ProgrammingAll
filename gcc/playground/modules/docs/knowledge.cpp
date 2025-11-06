@@ -175,6 +175,209 @@ namespace Knowledge {
             std::cout << "[INFO] " << msg << "\n";
         }
     }
+
+    namespace Collections {
+        // --------------------------------//
+        //       VECTOR EXAMPLES           //
+        // --------------------------------//
+        std::vector<int> VectorExamples::creation_ways(){
+            std::vector<int> empty_vec; // pusty
+            std::vector<int> zeros(5); // inicjalizuje zerami
+            std::vector<int> numbers(5, 42); //  5 elementów liczby 42
+            std::vector<int> inicialized{1,5,7,12}; // lista inicjalizacyjna
+
+            // kopia i przeniesienie
+            std::vector<int> copy = zeros;
+            std::vector<int> moved = std::move(numbers);
+
+            std::cout << copy.size() << " " << copy.capacity() << "\n";
+            return inicialized;
+        }
+        
+        void VectorExamples::access_to_elements(std::vector<int> numbers){
+            log.info() << "Without checking index:" 
+                << numbers[0] << std::endl;
+            log.info() << "With checking index:" 
+                << numbers.at(0) << std::endl; // sprawdza czy jest zakres inaczej out_of_range
+            log.info() << "First one" 
+                << numbers.front() << std::endl;
+            log.info() << "Last one" 
+                << numbers.back() << std::endl;
+        }
+        void VectorExamples::modification() {
+            std::vector<float> holds;
+            /*
+                Dodają oba na koniec vectora
+                >push_back
+                    - dodaje gotowy obiektu kopiuje lub przenosi
+                    - jesli chce go dodać na miejscui to emplace
+                >emplace_back
+                    - tworzy obiekt bezpośrednio w wektorze
+                    - jesli mam obiekt i chce go dodać to push_back
+            */
+            holds.push_back(10.5); 
+            holds.emplace_back(20.15);
+            // wstawianie w dane miejsce
+            int index = 2;
+            holds.insert(holds.begin() + index, 99 );
+            // usuniecie z danego indexu
+            holds.erase(holds.begin() + index );
+            // czyszczenie bez zmiany capacity
+            holds.clear();
+            // gdy zna sie przybliżoną wartośc to mamy
+            holds.reserve(100); // docelowe capacity 100
+        }
+
+        void VectorExamples::iteration(){
+            std::vector<double> doubles{12.667, 512.51267, -133.5787};
+            /*
+                size_t - typ liczbowy, rodzaj zmiennej do liczb całkowitych
+                    ale tylko dodatnich
+                Używany do rozmiarów, indeksów, długości, liczby bitów
+                    zamiast unsigned - na różnych systemach różna ilość bitów
+                    to jest tutaj size_t  
+            */
+            // poprzez indeksy
+            for (std::size_t index = 0; index < doubles.size(); ++index) {
+                log.debug() << "Index: " << index << " element " << doubles[index] << std::endl;
+            }
+
+            // range-for - read only 
+            for (double dub: doubles) {
+                log.error() << "Read only numbers: " << dub << std::endl;
+            }
+            // range for - z modyfikacją(poprzez referencje)
+            for (double& dub: doubles) {
+                dub *= 3;
+                log.warn() << "Changed numbers: " << dub << std::endl;
+            }
+            /*
+                Iterator
+                    coś w rodzaju wskaźnika
+                    pokazuje na który element kontenera akutalnie patrzymy
+                    Możemy zacząć od początku begin | końca end
+                    Przejść dalej po kontenerze (kolejny adres) ++it
+                    Zobaczyć zawartość *it ->it
+            */
+            for (auto it = doubles.begin(); it != doubles.end(); it++){
+                log.info() << "Iter: " << *it << std::endl;
+            }
+        }
+        void VectorExamples::sort_and_algorithms(){
+            std::vector<unsigned int> positive{5,6,12,73,8};
+            std::sort(
+                positive.begin(), positive.end()
+            ); // rosnąco 
+            std::sort(
+                positive.begin(), positive.end(),
+                std::greater<>()
+            ); // malejąco
+            std::stable_sort(positive.begin(), positive.end()); // stabilne
+            // mapowanie wartości
+            std::transform(
+                positive.begin(), positive.end(), positive.begin(),
+                [](unsigned int x) {
+                    return x * 10;
+                }
+            );
+            // sumowanie
+            int sum = std::accumulate(positive.begin(), positive.end(), 0);
+            // szukanie
+            auto it = std::find(positive.begin(), positive.end(), 4);
+        }
+        // --------------------------------//
+        //         MAP EXAMPLES            //
+        // --------------------------------//
+
+        std::map<int, int> MapExamples::creation_ways(){
+            std::map<int, int> empty_scores; // pusta mapa
+            std::map<int, int> filled_scores = {
+                {1, 15},
+                {2, 56},
+                {3, 79},
+                {4, 37}
+            }; // gotowe dane
+            // kopia
+            std::map<int, int> copy = filled_scores;
+            // przeniesienie (oddanie bez kopiowania)
+            std::map<int, int> moved = std::move(empty_scores);
+            std::cout << "Copy size: " << copy.size() << std::endl;
+            //  para
+            std::pair<std::string, int> single_score = {"Bob", 561};
+            std::cout << single_score.first << std::endl;
+            std::cout << single_score.second << std::endl;
+
+            return copy;
+        }
+        void MapExamples::access_to_elements(std::map<int, int> scores){
+            scores[0] = 12; // utworzy jak nie ma
+            scores[1] = 51; // nadpisze 
+
+            log.info() << "By operator []:" 
+                << scores[1] << std::endl;
+            log.info() << "With checking index:" 
+                << scores.at(0) << std::endl; // sprawdza czy jest zakres inaczej out_of_range
+        }
+
+        void MapExamples::modification(){
+            std::map<int, int> scores;
+            // dodanie nowego
+            scores[1] = 12;  // jeśli nie ma, doda
+            scores[5] = 20;  // jeśli jest, nadpisze
+            // alternatywy
+            scores.insert({52, 51});          // wstaw (nie nadpisze)
+            scores.emplace(6, 65);            // tworzy bezpośrednio w mapie
+            scores.insert_or_assign(67, 100); // C17 -doda lub nadpisze
+            scores.try_emplace(2, 200);       // doda tylko jeśli nie istnieje
+            /*
+            map.find()
+                -szuka elementu o danym kluczu i zwraca iterator
+                jeśli znalazł -> iterator do elementu
+                jesli nie - to scores.end()
+            */
+            if (scores.find(1) != scores.end()){
+                std::cout << "1 not exists\n";
+            }
+            // 20 contains
+            if (scores.contains(1)){
+                std::cout << "1 exists\n";
+            }
+            // usuwanie
+            scores.erase(1);
+            // łączenie dwóch map
+            std::map<int, int> results = {
+                {51, 25},
+                {66, 2}
+            };
+            scores.merge(results);
+        }
+        void MapExamples::iteration(std::map<int, int> scores){
+            for (auto &pair : scores) {
+                std::cout << pair.first << " => " << pair.second << std::endl;
+            }
+
+            // (C++17)
+            for (auto &[name, score] : scores) {
+                std::cout << name << " ma wynik " << score << std::endl;
+            }
+        }
+        void MapExamples::sort_and_algorithms(){}
+
+        void show_all_methods() {
+            VectorExamples vec_examples;
+            std::vector<int> numbers = vec_examples.creation_ways();
+            vec_examples.access_to_elements(numbers);
+            vec_examples.iteration();
+            vec_examples.sort_and_algorithms();
+            
+            MapExamples map_examples;
+            std::map<int, int> scores = map_examples.creation_ways();
+            map_examples.access_to_elements(scores);
+            map_examples.modification();
+            map_examples.iteration(scores);
+            // map_examples.sort_and_algorithms();
+        }
+    }
 };
 
 
