@@ -232,18 +232,73 @@ namespace Knowledge {
         }
 
     }    
-    namespace StringOperations{
+    namespace ClassKnow {
+        /*
+            Klasy:
+                - domyslnie mają wszystkie pola prywatne
+                - w struct publiczne
+            Specyfikatory dostępu:
+                - mówią, kto  może dotykać rzeczy w środku klasy
+                    --> jej zmiennych i metod
+                Jak drzwi do domu:
+                    - otwarte dla wszystkich - public
+                    - tylko dla domowników   - protected
+                    - zamkniete na klucz     - private
+            
+        */
+        /*
+            private - tajemnica klasy
+                dostep mają tylko metody tej klasy
+                z zewnątrz nikt nie może tego dotknąć
+                - metody mogą czytać/zapisywaćpola innych
+                    obiektów tej samej klasy
+        */
+        class PrivateSpec {
+            private:
+                int velocity = 0; // with default 
+            public:
+                void start();
+                void compare(const PrivateSpec& diff);
+        };
+        /*
+            public:
+                Każdy kto ma obiekt może wywołać odczytać 
+                Widoczne dla użytkownika rzeczy
+        */
+        class PublicSpec {
+            public:
+                double scores;
+            
+                    void set_and_show();
+        };
+        void demonstrate_classes();
+    }
+
+    namespace StringKnow{
         
         /*
             std::string 
+                właścieciel danych
+                    modyfikowalnyn bufor bajtów /tekst
                 przechowuje własny bufor pamieci
-                kopiuje dane przy przypisaniu
+                    kopiuje dane przy przypisaniu
+
 
             std::string_view- lekki, nieposiadający danych
                 widok na ciag znakow
                 Nie kopiuje tekstu, tylko wskazuje na istniejący fragment pamieci
         */
-       void string_example();
+        class StringOperation {
+            private:
+                std::string base_text;
+
+            public:
+                StringOperation() = default;
+                StringOperation(std::string base);
+                void access();
+                void modification(std::string );
+        };
+       void show_all_string_operation();
     }
 
     namespace Collections {
