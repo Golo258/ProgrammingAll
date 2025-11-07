@@ -166,13 +166,62 @@ namespace Knowledge {
             std::cout << "Appending to list from api v2\n";
         }
     }
-    namespace StringOperations {
-        void string_example() {
+    namespace ClassKnow {
+
+        void PrivateSpecificator::start(){
+            velocity = 50; // this.velocity
+        }
+        
+        void PrivateSpec::compare(const PrivateSpec& diff){
+            std::cout << "Comparing: [" << velocity - diff.velocity << "]\n";  
+            velocity = diff.velocity;
+        }
+        
+        void PublicSpec::set_and_show(){
+            scores = 51.2;
+            log.info() << "Scores: " << scores << std::endl;
+        }
+        void demonstrate_classes(){
+            PrivateSpec first, second;
+            first.start();
+            /*
+                Błąd kompilacji, nie można dostać się do prywatnego atrybutu
+                second.velocity = 12;  
+            */
+            first.compare(second);
+            first.compare(second); // after change 
+            PublicSpec 
+        }
+    }
+    namespace StringKnow {
+        StringOperation::StringOperation(std::string base)
+            : base_text(base) {}
+        
+        void StringOperation::access(){
+            // rozmiar
+            log.info() << "size: "  << base_text.size() << std::endl;
+            log.info() << "empty: " << base_text.empty() << std::endl;
+            //  dostęp
+            log.info() << "0: "     << base_text[0] << std::endl;
+            log.info() << "front: " << base_text.front() << std::endl;
+            log.info() << "back: "  << base_text.back() << std::endl;
+            log.info() << "data: "  << base_text.data() << std::endl;
+            log.info() << "c_str: " << base_text.c_str() << std::endl;
+        }
+
+        void StringOperation::modification(std::string text){
+
+        }
+        void show_all_string_operation() {
             std::string one = "one";
             std::string two = one; // kopia, nowe dane w pamieci
 
             std::string_view msg;
             std::cout << "[INFO] " << msg << "\n";
+            //  explanation class
+            std::string text = " some funny tricky text";
+            StringOperation str_operation(text);
+            str_operation.access();
         }
     }
 

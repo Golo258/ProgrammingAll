@@ -30,7 +30,9 @@ int main() {
     " kasz anka: 83\n";
     // using namespace utils::parser;
     // LeaderboardResults results = parse_name_score_lines(example_results);
-    Knowledge::Collections::show_all_methods();
+    // Knowledge::Collections::show_all_methods();
+    // Knowledge::StringKnow::show_all_string_operation();
+    Knowledge::ClassKnow::demonstrate_classes();
     log.info() << "\n<======================================>\n";
     return 0;
 }
