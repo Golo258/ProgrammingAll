@@ -257,7 +257,8 @@ namespace Knowledge {
             }
             // 
 
-            void AccessGates::set_amount(int new_amount){
+            void AccessGates::
+            set_amount(int new_amount){
                 if (new_amount < 0){
                     std::cerr << "Vector cannot have negative amount of elements\n";
                     return;
@@ -333,11 +334,75 @@ namespace Knowledge {
             log.info() << "back: "  << base_text.back() << std::endl;
             log.info() << "data: "  << base_text.data() << std::endl;
             log.info() << "c_str: " << base_text.c_str() << std::endl;
+            // formatowanie +20
+            // include <format>
+            // std::string message = std::format("{} {}", "data", "data")
         }
 
-        // void StringOperation::modification(std::string text){
-// 
-        // }
+        void StringOperation::modification(){
+            std::string backup = base_text;
+            base_text.push_back('!'); // dopięcie na koncu / char expected
+            base_text += "and more"; // concatenate
+            base_text.append(" with = specific width", 10); // 10 liczba znaków dodawanego string
+            base_text.insert(5, "in the middle"); // wstawienie w dane miejsce
+            base_text.erase(0, 4); // usuwa od 0 - 4
+            base_text.replace(1, 5, "some"); // podmiana fragmentu
+            // base_text.clear();
+            log.info() << "After replacement: " << base_text << std::endl;
+            // bierze fragment i zwraca | zaczyna od 0 i bierze 5 znaków
+            std::string repl = base_text.substr(0, 5); 
+            // od 4 index, 2 znaki 
+            std::string small_repl = base_text.substr(4, 2);
+            // od 7 index, do końca 
+            std::string repl_rest = base_text.substr(7);
+            base_text.reserve(256); // rezerwacja pamieci
+            // upper | lower
+            char a_sign = 'A';
+            char lower_case = std::tolower(a_sign);
+            char upper_case = std::toupper(lower_case);
+        }
+        void StringOperation::searching(){
+            auto sign_position = base_text.find('=');
+            size_t pos = base_text.find('-', 15); // zaczyna od danego
+            if (sign_position != std::string::npos){
+                std::string key = base_text.substr(0, sign_position);            // [0, pos)
+                std::string value = base_text.substr(sign_position + 1);
+                log.info() << "Key: " << key << std::endl;
+                log.info() << "Value: " << value << std::endl;
+            }
+            else {
+                log.error() << "= not found in base \n";
+            }
+            base_text.rfind('='); // od konca
+            base_text.find_first_of(",;="); // szuka pierwszego z zestawu
+            base_text.find_first_not_of("\r \n"); // który nie jest w zestawie 
+            // find_last_of | .find_last_not_of  tak samo tylko ostatni
+            
+            // boolean - true jesli zaczyna sie
+            base_text.starts_with("conf"); 
+            base_text.ends_with(".yaml");
+            // base_text.contains("fig") 
+        }
+        void StringOperation::triming_white_spaces(){
+            const std::string_view white_spaces_group = " \t\r\n";
+            size_t left_position = base_text.find_first_not_of(white_spaces_group);
+            size_t right_position = base_text.find_last_not_of(white_spaces_group);
+            log.info() << "Whitespace from left found in position: " << left_position << std::endl;
+            log.info() << "Whitespace from right found in position: " << right_position << std::endl;
+            std::string_view left_trimmed_string = (
+                left_position == std::string_view::npos
+            ) 
+                ? std::string_view{} 
+                : base_text.substr(left_position);
+            std::string_view right_trimmed_string = (
+                right_position == std::string_view::npos
+            )    
+                ? std::string_view{}
+                : base_text.substr(0, right_position + 1); 
+            log.info() << "Left trimmed: " << left_trimmed_string << std::endl;
+            log.info() << "Right trimmed: " << right_trimmed_string << std::endl;
+        }
+
         void show_all_string_operation() {
             std::string one = "one";
             std::string two = one; // kopia, nowe dane w pamieci
@@ -345,9 +410,12 @@ namespace Knowledge {
             std::string_view msg;
             std::cout << "[INFO] " << msg << "\n";
             //  explanation class
-            std::string text = " some funny tricky text";
+            std::string text = " some funny tricky text\n";
             StringOperation str_operation(text);
             str_operation.access();
+            str_operation.modification();
+            str_operation.searching();
+            str_operation.triming_white_spaces();
         }
     }
 
@@ -515,9 +583,9 @@ namespace Knowledge {
                 std::cout << "1 not exists\n";
             }
             // 20 contains
-            if (scores.contains(1)){
-                std::cout << "1 exists\n";
-            }
+            // if (scores.contains(1)){
+                // std::cout << "1 exists\n";
+            // }
             // usuwanie
             scores.erase(1);
             // łączenie dwóch map
