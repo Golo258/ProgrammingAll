@@ -81,22 +81,15 @@ Klasa LeaderBoard:
 
 Kryteria zaliczenia (checklista)
     parse_name_score_lines poprawnie zwraca dane i rzuca ParseError z numerem linii przy błędzie.
-
     Leaderboard kompiluje się jako osobna biblioteka, posiada metody z wymagań, nie używa globali.
-
     top(n) jest stabilne wg reguły: wynik malejąco, nazwa rosnąco przy remisach.
-
     median() działa dla 0/1/2/… elementów (dla 0 → std::nullopt).
-
     print() wypisuje numerowane pozycje 1), 2), 3) …
-
     apps/playground pokazuje pełny flow (load → top → update → stats → prune → top).
-
     Testy w tests/ przechodzą (uruchom ctest lub ./core_tests).
     
 
 Rozszerzenia (opcjonalne, jak będziesz miał flow)
-
     Wczytywanie z pliku: dodaj utils::read_file(std::filesystem::path) i użyj w main.
     Eksport: metoda to_vector_sorted() zwracająca cały ranking posortowany regułą TOP.
     Wyjątki własne: zrób struct LeaderboardError : std::runtime_error.
