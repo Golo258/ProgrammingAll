@@ -4,7 +4,6 @@
 
 #pragma once
 #include <iostream>
-#include <utils/logger.hpp>
 #include <string>
 #include <fstream> // strumienie plikowe
 #include <sstream> // strumienie w pamieci 
@@ -14,12 +13,36 @@
 #include <algorithm>
 #include <numeric> // accumulate 
 #include <cctype> // to lower | upper
+#include <utils/variables.hpp>
+#include <variant> // union variant
+#include <regex>
+#include <exception> // exception
+#include <chrono> // czas systemowy
+#include <iomanip> // formatowanie czasu
 
 // ------------------------
 /*
     Co trzeba będzie sie nauczyć 
         - Jak przechwytywać wyjątki
         - Jak tworzyć wyjątki
+
+    TODO co do przerobienia:
+        - tworzenie struktur własnych 
+        - tworzenie makr DEFINE i typ podobnych dyrektyw preprocesora
+        - kastowanie zmiennych i pointerów
+        - polimorfizm, dziedziczenie, interfacy itp
+        - enumami 
+        - json, parsowanie, tworzenie, tak samo yaml i inne typy 
+        - testowanie kodu, tworzenie testów
+        - może modyfikacja loggera żeby zapisywał do pliku i żeby terminal nie spamił
+        - includowanie zewnętrznych bibliotek, ale to pewnie przy jsonie
+        - przeciążanie operatorów, mniej wiecej jak to działa
+        - wątki i programowanie wielowątkowe 
+        - tworzenie baz danych
+            łączenie sie, tworzenie query, itp
+        - tworzenie requestów do api, i parsowanie tego
+            - tworzenie własnego API, ale to nie wiem czy nie lepiej w pythonie
+
 
 */
 namespace Knowledge {
@@ -99,8 +122,8 @@ namespace Knowledge {
                     zostaną odczytane albo zapisane
                 To magazyn pośredni miedzy 
                     kodem a źródłem docelowym- plikiem, klawiaturyą
-            Tymczasowe miejsce, gdzie czają dane zanim coś 
-                z nimi zrobisz
+            Tymczasowe miejsce, gdzie trzymamy dane
+                zanim coś z nimi zrobisz
             std::cin - bufor wejsciowy 
                 system trzyma znaki które wpisuje zanim pogram je pobierze
             std::cout - bufor wyjściowy
@@ -130,7 +153,7 @@ namespace Knowledge {
 
     }
 
-    namespace Aliases {
+    namespace AliasesAndTypes {
         // stosuejmy pascal case - czyli duża litera i potem małe
 
             /* aliasy podstawowe*/
@@ -162,6 +185,27 @@ namespace Knowledge {
         struct UserId {
             int value;
             explicit UserId(int value) : value(value){}
+        };
+
+        /*
+            variant, pozwala dać możliwośc wyboru typu
+                 ten typ albo ten typ
+                 
+            std::variant<std::string, intQ possibilities;
+        */
+        void resolve_variant_types();
+        /*
+           klasyczny union
+            pudełko na kilka typów
+            union Nazwa { int a, double b...};
+        */
+        union PossibleTypes {
+            int i;
+            double d;
+            char c;
+        };
+        struct TaggedValue {
+            PossibleTypes value;
         };
 
     }
@@ -350,7 +394,72 @@ namespace Knowledge {
         }
         void demonstrate_classes();
     }
-
+    namespace ExceptionsKnow {
+        /*
+            Wyjątek - exception 
+                kontrolowany skok przy błędzie
+                rzucamy poprzez 
+                    throw w miejscu błędu
+                łapiemy poprzez
+                    catch 
+        */
+        class CustomException : public std::runtime_error {
+            public: 
+                using std::runtime_error::runtime_error;
+        };
+        
+        /*
+            Exception posiada w sobie pola takie jak:   
+                message - surowa treść kod (co poszlo nie tak)
+                function - nazwa funckji w której rzucono wyjątek 
+                    __func__ jak w pythonie
+                file - plik źródłowy __FILE__
+                line - linia gdzie wystąpił błąd
+                code - kod błędu np 1001
+                what - gotowy złożony komnikat zwracany do what()
+        */
+        
+        //TODO definiowanie makr itp, do przerobienia potem
+        #define THROW_CUSTOM(msg, code) \
+            throw CustomWithFields((msg), (code), __func__, __FILE__, __LINE__)
+        
+        class CustomWithFields : public std::exception {
+            private:
+                std::string _message;
+                std::string _function;
+                std::string _file;
+                int _line;
+                int _code;
+                std::string _what; 
+            public:
+                CustomWithFields(
+                    std::string message,
+                    int code,
+                    std::string function,
+                    std::string file_name,
+                    int line
+                );
+                
+                const char* what() const noexcept override {
+                    return _what.c_str();
+                }
+                std::string diagnostic() const{
+                    return _what;
+                }
+                int code() const noexcept { return _code; }
+        };
+        class ExceptionHandling {
+            private:
+                int _arg;
+            public:
+                ExceptionHandling() = default;
+                ExceptionHandling(int arg);
+                void throwing_one();
+        };
+        
+        
+        void show_all_exceptions();
+    }
     namespace StringKnow{
         
         /*
@@ -376,6 +485,7 @@ namespace Knowledge {
                 void modification();
                 void searching();
                 void triming_white_spaces();
+                void regex_matching();
         };
        void show_all_string_operation();
     }
@@ -432,6 +542,7 @@ namespace Knowledge {
                 void modification();
                 void iteration(std::map<int, int> scores);
                 void sort_and_algorithms();
+                void pair_know();
         };
         void show_all_methods();
     }

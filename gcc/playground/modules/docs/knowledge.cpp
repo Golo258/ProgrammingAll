@@ -3,7 +3,6 @@
 /*
     Creating Exceptions
 */
-Logger log{std::clog, LogLevel::Debug, true};
 
 namespace Knowledge {
     
@@ -60,6 +59,12 @@ namespace Knowledge {
             }
             std::string line;
             int index = 0;
+            /*
+                pojedyncze pobranie to 
+                std::string first_line;
+                std::getline(in, first_line);
+                // bierze z buffora pierwszą linie i wstawia w zmienną 
+            */
             while (std::getline(in, line)){
                 std::cout << "Line " << index++ << " content: " << line << ".\n"; 
             }
@@ -121,8 +126,25 @@ namespace Knowledge {
             mstream.reading_from_string();
             mstream.writng_building_string();
             mstream.both_string_operation();
-            log.info() << "\n-----------------------------\n";
+            logger.info() << "\n-----------------------------\n";
             simple_tasks();
+        }
+    }
+    
+    namespace AliasesAndTypes {
+        void resolve_variant_types(){
+            std::variant<std::string, int> possibilites;
+            if (std::holds_alternative<int>(possibilites)){
+                logger.info() 
+                    << "Variant holds int type" 
+                    << std::get<int>(possibilites) << std::endl;
+            }
+            else {
+                logger.info() 
+                    << "Variant holds string type" 
+                    << std::get<std::string>(possibilites) << std::endl;
+            }
+
         }
     }
     namespace NameSpacesKnow {
@@ -180,11 +202,11 @@ namespace Knowledge {
             //--------------------
             void PublicSpec::set_and_show(){
                 scores = 51.2;
-                log.info() << "Scores: " << scores << std::endl;
+                logger.info() << "Scores: " << scores << std::endl;
             }
             //--------------------
             void ProtectedSpec::show_shield() const {
-                log.debug() << "Shield value: " << shield << std::endl;
+                logger.debug() << "Shield value: " << shield << std::endl;
             }
             void ProtectedChild::damage() {
                 shield -= 10; // has access
@@ -196,15 +218,15 @@ namespace Knowledge {
             // -----------------------
             Constructor::Constructor(){
                 _name = "none";
-                log.info() << "Default object created\n";
+                logger.info() << "Default object created\n";
             }
             Constructor::Constructor(std::string name){
                 _name = name;
-                log.info() << "Object with " << name << " name created\n";
+                logger.info() << "Object with " << name << " name created\n";
             }
             Constructor::Constructor(std::string name, int threshold)
                 : _name(name), _threshold(threshold){
-                log.info() << "Object inicialized with list (" << name << ", " << threshold <<  " params created\n";
+                logger.info() << "Object inicialized with list (" << name << ", " << threshold <<  " params created\n";
             }
             // -----------------------
             Destructor::Destructor(){
@@ -214,7 +236,7 @@ namespace Knowledge {
                     return;
                 }
                 else{
-                    log.info() << "Hook to file notes.txt applicated\n";
+                    logger.info() << "Hook to file notes.txt applicated\n";
                 }
             }
             Destructor::Destructor(std::string path){
@@ -224,13 +246,13 @@ namespace Knowledge {
                     return;
                 }
                 else{
-                    log.info() << "Hook to file " << path << "applicated\n";
+                    logger.info() << "Hook to file " << path << "applicated\n";
                 }
             }
             Destructor::~Destructor(){
                 if(_notes_file_hook.is_open()){
                     _notes_file_hook.close();
-                    log.info() << "Hook closed properly\n";
+                    logger.info() << "Hook closed properly\n";
                 }
                 std::cout << "Hook deleted\n";
             }
@@ -276,7 +298,7 @@ namespace Knowledge {
                     }
                     catch(const std::out_of_range& range_exception){
                         std::cerr << "Element " << new_gates.at(id) << " has index out of range\n";
-                        log.error() << "Exception " << range_exception.what() << std::endl;
+                        logger.error() << "Exception " << range_exception.what() << std::endl;
                     }
                 }
             }
@@ -296,7 +318,7 @@ namespace Knowledge {
             // --------------------------------
             allowed.set_and_show();
             allowed.scores = 12.5;
-            log.debug() << "Allowed scores " << allowed.scores << std::endl;
+            logger.debug() << "Allowed scores " << allowed.scores << std::endl;
             Specificators::ProtectedSpec family;
             family.show_shield();
             Specificators::ProtectedChild child;
@@ -311,13 +333,86 @@ namespace Knowledge {
             LifeCycle::Destructor destructor_witH_param("other.json");
             // --------------------------------
             Utility::AccessGates gates(5, 12);
-            log.info() << "Amount: " << gates.get_amount() << std::endl;
-            log.info() << "Size of gates: " << gates.get_gates().size() << std::endl;
+            logger.info() << "Amount: " << gates.get_amount() << std::endl;
+            logger.info() << "Size of gates: " << gates.get_gates().size() << std::endl;
             gates.set_amount(15);
             std::vector<int> new_gates{15, 62, 73, 21};
             gates.set_gates(new_gates);
-            log.info() << "Gates item: " << gates.get_gates().at(1) << std::endl;
+            logger.info() << "Gates item: " << gates.get_gates().at(1) << std::endl;
 
+        }
+    }
+    namespace ExceptionsKnow {
+        ExceptionHandling::ExceptionHandling(int arg)
+            : _arg(arg) {
+                throwing_one();
+            }
+        void ExceptionHandling::throwing_one(){
+            if (_arg < 0) {
+                throw std::invalid_argument("Arg must be >= 0");
+            }
+            else if (_arg == 5){
+                throw CustomException("Should not be 5");
+            }
+            else {
+                THROW_CUSTOM("Other exception type", 1111);
+            }
+        }
+        void show_all_exceptions() {
+            // --------------------------------------
+            try{
+                ExceptionHandling handling(-2);
+            }
+            catch(const std::invalid_argument& arg_err){
+                logger.error() << "Argument error: " << arg_err.what() << "\n";
+            }
+            catch(const std::exception& reg_err){
+                logger.error() << "Other error: " << reg_err.what() << "\n";
+            }
+            catch(...){
+                logger.error() << "Unknown error\n";
+            }
+            // --------------------------------------
+            // custom exception handling
+            try{
+                ExceptionHandling handling_custom(5);
+            }
+            catch(const CustomException::exception& custom_err){
+                logger.error() << "Custom error: " << custom_err.what() << "\n";
+            }
+            // --------------------------------------
+            // custom with fields
+            try{
+                ExceptionHandling handling_custom(12);
+            }
+            catch(const CustomWithFields& custom_adv_err){
+                logger.error() << "Custom error: " << custom_adv_err.what() << "\n";
+            }
+        }
+
+        CustomWithFields::CustomWithFields(
+            std::string message,
+            int code,
+            std::string function,
+            std::string file_name,
+            int line
+        ): _message(std::move(message)), _code(code), 
+            _file(std::move(file_name)), _line(line)
+        {
+            //  no i tworzymy wiadomośc błędu
+            std::ostringstream exception_message; // bufor do wiadomosci
+            // auto now = std::chrono::system_clock::now();
+            // auto tt = std::chrono::system_clock::to_time_t(now);
+            // std::tm tt{};
+            // localtime_r(&tt, &tm);
+            exception_message 
+                // << "[" << std::put_time(&tm, "%F %T") << "] "
+                << "[Code: " << _code << " ]\n"
+                << "[Message (" << _message << ")" 
+                << " called in function " << _function
+                << "() in file" << _file << " at line " << _line << std::endl;
+                
+            _what = exception_message.str();
         }
     }
     namespace StringKnow {
@@ -326,14 +421,14 @@ namespace Knowledge {
         
         void StringOperation::access(){
             // rozmiar
-            log.info() << "size: "  << base_text.size() << std::endl;
-            log.info() << "empty: " << base_text.empty() << std::endl;
+            logger.info() << "size: "  << base_text.size() << std::endl;
+            logger.info() << "empty: " << base_text.empty() << std::endl;
             //  dostęp
-            log.info() << "0: "     << base_text[0] << std::endl;
-            log.info() << "front: " << base_text.front() << std::endl;
-            log.info() << "back: "  << base_text.back() << std::endl;
-            log.info() << "data: "  << base_text.data() << std::endl;
-            log.info() << "c_str: " << base_text.c_str() << std::endl;
+            logger.info() << "0: "     << base_text[0] << std::endl;
+            logger.info() << "front: " << base_text.front() << std::endl;
+            logger.info() << "back: "  << base_text.back() << std::endl;
+            logger.info() << "data: "  << base_text.data() << std::endl;
+            logger.info() << "c_str: " << base_text.c_str() << std::endl;
             // formatowanie +20
             // include <format>
             // std::string message = std::format("{} {}", "data", "data")
@@ -348,7 +443,7 @@ namespace Knowledge {
             base_text.erase(0, 4); // usuwa od 0 - 4
             base_text.replace(1, 5, "some"); // podmiana fragmentu
             // base_text.clear();
-            log.info() << "After replacement: " << base_text << std::endl;
+            logger.info() << "After replacement: " << base_text << std::endl;
             // bierze fragment i zwraca | zaczyna od 0 i bierze 5 znaków
             std::string repl = base_text.substr(0, 5); 
             // od 4 index, 2 znaki 
@@ -367,11 +462,11 @@ namespace Knowledge {
             if (sign_position != std::string::npos){
                 std::string key = base_text.substr(0, sign_position);            // [0, pos)
                 std::string value = base_text.substr(sign_position + 1);
-                log.info() << "Key: " << key << std::endl;
-                log.info() << "Value: " << value << std::endl;
+                logger.info() << "Key: " << key << std::endl;
+                logger.info() << "Value: " << value << std::endl;
             }
             else {
-                log.error() << "= not found in base \n";
+                logger.error() << "= not found in base \n";
             }
             base_text.rfind('='); // od konca
             base_text.find_first_of(",;="); // szuka pierwszego z zestawu
@@ -387,8 +482,8 @@ namespace Knowledge {
             const std::string_view white_spaces_group = " \t\r\n";
             size_t left_position = base_text.find_first_not_of(white_spaces_group);
             size_t right_position = base_text.find_last_not_of(white_spaces_group);
-            log.info() << "Whitespace from left found in position: " << left_position << std::endl;
-            log.info() << "Whitespace from right found in position: " << right_position << std::endl;
+            logger.info() << "Whitespace from left found in position: " << left_position << std::endl;
+            logger.info() << "Whitespace from right found in position: " << right_position << std::endl;
             std::string_view left_trimmed_string = (
                 left_position == std::string_view::npos
             ) 
@@ -399,8 +494,72 @@ namespace Knowledge {
             )    
                 ? std::string_view{}
                 : base_text.substr(0, right_position + 1); 
-            log.info() << "Left trimmed: " << left_trimmed_string << std::endl;
-            log.info() << "Right trimmed: " << right_trimmed_string << std::endl;
+            logger.info() << "Left trimmed: " << left_trimmed_string << std::endl;
+            logger.info() << "Right trimmed: " << right_trimmed_string << std::endl;
+        }
+
+        /* Klasy regexowe:
+            regex - wzorzec, kompilowany regex
+            smatch - dopasowanie do stringa
+            cmatch - dopasowanie do chara
+            regex_match  - sprawdza czy cały string pasuje
+            regex_search - szuka gdziekolwiek w stringu
+            regex_replace - zamienia wzorzec na inny tekst
+
+        */
+        void StringOperation::regex_matching(){
+            std::string text = "some == other and_different";
+            // regex - tworzymy pattern do sprawdzenia tekstu
+            std::regex pattern("other");
+            //  przeszukujemy gdziekolwiek
+            if (std::regex_search(text, pattern)){
+                std::cout << "Other found in text\n";
+            }
+
+            // sprawdzanie całego stringa
+            std::regex specific_pattern("^some [=]{2}.*");
+            if (std::regex_match(text, specific_pattern)){
+                std::cout << "Specific found\n";
+            }
+            // wyciąganie dopasowań
+            // match[x] → grupy z nawiasów ()
+            std::string data = "user: admin, id: 42";
+            std::regex matching_pattern(R"(user:\s*(\w+),\s*id:\s*(\d+))");
+            std::smatch match;
+            if (std::regex_search(data, match, matching_pattern)) {
+                std::cout << "Whole: " << match[0] << std::endl;
+                std::cout << "User: " << match[1] << std::endl;
+                std::cout << "Id: " << match[2] << std::endl;
+            }
+            // pisanie wzorców - najlepiej z literą R (raw string literal):
+            std::regex r_date(R"(\d{2,4}-\d{2}-\d{2})"); // np. 2025-11-08
+            // flagi, jako drugi argument, case insensitive
+            std::regex r_case(R"(kot)", std::regex_constants::icase); 
+            
+            // Iterowanie po dopasowaniach
+            std::string other = "Jan:10, Ala:20, Olek:30";
+            std::regex r(R"((\w+):(\d+))");
+            std::smatch m;
+            auto it = std::sregex_iterator(other.begin(), other.end(), r);
+            auto end = std::sregex_iterator();
+            for (; it != end; it++){
+                 std::cout << "Name: " << (*it)[1] << ", score: " << (*it)[2] << '\n';
+            }
+            // zamiana regex_replace
+            std::regex r_numbs("Ala");
+            std::string changed = std::regex_replace(other, r_numbs, "Ola");
+            std::cout << "Changed " << changed << std::endl;
+
+            //  z  grupami
+            std::string variables = "x=10; y=20;";
+            std::regex group_replace(R"((\w)=(\d+))");
+            std::string changed_vars = std::regex_replace(
+                variables, group_replace, "$1 -> $2"
+            );
+            std::cout << "Changed vars: " << changed_vars << std::endl;
+            // sprawdzenie czy zawiera wiecej niż jedną litere
+            std::regex multiple(R"(a{2,})");
+            // conajmniej 2 litery a
         }
 
         void show_all_string_operation() {
@@ -415,10 +574,10 @@ namespace Knowledge {
             str_operation.access();
             str_operation.modification();
             str_operation.searching();
-            str_operation.triming_white_spaces();
+            // str_operation.triming_white_spaces();
+            str_operation.regex_matching();
         }
     }
-
     namespace Collections {
         // --------------------------------//
         //       VECTOR EXAMPLES           //
@@ -438,13 +597,13 @@ namespace Knowledge {
         }
         
         void VectorExamples::access_to_elements(std::vector<int> numbers){
-            log.info() << "Without checking index:" 
+            logger.info() << "Without checking index:" 
                 << numbers[0] << std::endl;
-            log.info() << "With checking index:" 
+            logger.info() << "With checking index:" 
                 << numbers.at(0) << std::endl; // sprawdza czy jest zakres inaczej out_of_range
-            log.info() << "First one" 
+            logger.info() << "First one" 
                 << numbers.front() << std::endl;
-            log.info() << "Last one" 
+            logger.info() << "Last one" 
                 << numbers.back() << std::endl;
         }
         void VectorExamples::modification() {
@@ -483,17 +642,17 @@ namespace Knowledge {
             */
             // poprzez indeksy
             for (std::size_t index = 0; index < doubles.size(); ++index) {
-                log.debug() << "Index: " << index << " element " << doubles[index] << std::endl;
+                logger.debug() << "Index: " << index << " element " << doubles[index] << std::endl;
             }
 
             // range-for - read only 
             for (double dub: doubles) {
-                log.error() << "Read only numbers: " << dub << std::endl;
+                logger.error() << "Read only numbers: " << dub << std::endl;
             }
             // range for - z modyfikacją(poprzez referencje)
             for (double& dub: doubles) {
                 dub *= 3;
-                log.warn() << "Changed numbers: " << dub << std::endl;
+                logger.warn() << "Changed numbers: " << dub << std::endl;
             }
             /*
                 Iterator
@@ -504,7 +663,7 @@ namespace Knowledge {
                     Zobaczyć zawartość *it ->it
             */
             for (auto it = doubles.begin(); it != doubles.end(); it++){
-                log.info() << "Iter: " << *it << std::endl;
+                logger.info() << "Iter: " << *it << std::endl;
             }
         }
         void VectorExamples::sort_and_algorithms(){
@@ -546,20 +705,30 @@ namespace Knowledge {
             // przeniesienie (oddanie bez kopiowania)
             std::map<int, int> moved = std::move(empty_scores);
             std::cout << "Copy size: " << copy.size() << std::endl;
-            //  para
+            return copy;
+        }
+        void MapExamples::pair_know(){
             std::pair<std::string, int> single_score = {"Bob", 561};
             std::cout << single_score.first << std::endl;
             std::cout << single_score.second << std::endl;
-
-            return copy;
+            
+            // po inicjalizacji moge 
+            std::pair<int, int> result_numbers;
+            result_numbers.first = 12;
+            result_numbers.second = 51; 
+            //albo
+            result_numbers = std::make_pair(12, 51);
+            // jak chcemy zwrócić pustą pare to 
+            // return {};
         }
+
         void MapExamples::access_to_elements(std::map<int, int> scores){
             scores[0] = 12; // utworzy jak nie ma
             scores[1] = 51; // nadpisze 
 
-            log.info() << "By operator []:" 
+            logger.info() << "By operator []:" 
                 << scores[1] << std::endl;
-            log.info() << "With checking index:" 
+            logger.info() << "With checking index:" 
                 << scores.at(0) << std::endl; // sprawdza czy jest zakres inaczej out_of_range
         }
 
