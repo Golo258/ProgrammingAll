@@ -237,40 +237,117 @@ namespace Knowledge {
             Klasy:
                 - domyslnie mają wszystkie pola prywatne
                 - w struct publiczne
+        */
+       namespace Specificators {
+        /*
             Specyfikatory dostępu:
                 - mówią, kto  może dotykać rzeczy w środku klasy
                     --> jej zmiennych i metod
-                Jak drzwi do domu:
-                    - otwarte dla wszystkich - public
-                    - tylko dla domowników   - protected
-                    - zamkniete na klucz     - private
-            
+            Jak drzwi do domu:
+                - otwarte dla wszystkich - public
+                - tylko dla domowników   - protected
+                - zamkniete na klucz     - private
         */
-        /*
-            private - tajemnica klasy
-                dostep mają tylko metody tej klasy
-                z zewnątrz nikt nie może tego dotknąć
-                - metody mogą czytać/zapisywaćpola innych
-                    obiektów tej samej klasy
-        */
-        class PrivateSpec {
-            private:
-                int velocity = 0; // with default 
-            public:
-                void start();
-                void compare(const PrivateSpec& diff);
-        };
-        /*
-            public:
+            /*---------- PRIVATE - tajemnica klasy --------
+                    dostep mają tylko metody tej klasy
+                    z zewnątrz nikt nie może tego dotknąć
+                    - metody mogą czytać/zapisywaćpola innych
+                        obiektów tej samej klasy
+            */
+            class PrivateSpec {
+                private:
+                    int velocity = 0; // with default 
+                public:
+                    void start();
+                    void compare(const PrivateSpec& diff);
+            };
+
+            /*------------ PUBLIC ------------
                 Każdy kto ma obiekt może wywołać odczytać 
                 Widoczne dla użytkownika rzeczy
-        */
-        class PublicSpec {
-            public:
-                double scores;
-            
+            */
+            class PublicSpec {
+                public:
+                    double scores;
                     void set_and_show();
-        };
+            };
+            
+            /* ---------- PROTECTED --------------
+                Opócz metod, też klasy pochodne (dziedziczące)
+                    mają dostęp do pól i metod
+                Ale z zewnątrz obiekt nie ma (jak w private)
+
+            */
+            class ProtectedSpec {
+                protected:
+                    int shield = 100;
+                public:
+                    void show_shield() const;
+            };
+
+            class ProtectedChild : public ProtectedSpec {
+                public:
+                    void damage();
+            };
+        }
+
+        namespace LifeCycle {
+            /* ----- KONSTRUKTOR -----
+                Metoda tworząca i inicjalizująca obiket
+                    NazwaKlasy obiekt; -- wołany przy tworzeniu obiektu
+                Dostęp konstruktora musi być publiczny 
+            */
+            class Constructor {
+                private:
+                    std::string _name;
+                    int _threshold = 12;
+                public:
+                    Constructor(); // default
+                    Constructor(std::string name); // with parameter
+                    Constructor(std::string name, int threshold); // lista inicjalizacyjna
+            };
+
+            /* ----- DESTRUKTOR -----
+                Metoda czyszcząca obiekt gdy kończy sie scope
+                    i obiekt jest usuwany
+                { } - wołany jest przy końcu bloku 
+            */
+            class Destructor {
+                private: 
+                    std::ofstream _notes_file_hook; // // dopisuje
+                public:
+                    Destructor();
+                    // można dla zabawy dodać param z trybem otwarcia
+                    Destructor(std::string path);
+                    ~Destructor(); 
+            };
+        }
+        namespace Utility {
+            /* ------- GETTERS | SETTERS -----------   
+                Kiedy pola są prywatne
+                    gdy z zewnątrz nie można ich ruszyć
+                    są jak bramki dostępu do wnętrza klasy 
+                Umożliwiają one 
+                    odczyt wartość - getter
+                    nadanie i kontrole wartości - setter
+            */
+            class AccessGates {
+                private:
+                    int _amount;
+                    std::vector<int> _gates;
+                public:
+                    AccessGates() = default;
+                    AccessGates(int amount, int item);
+
+                    int get_amount() const;
+                    std::vector<int> get_gates() const;
+
+                    void set_amount(int new_amount);
+                    void set_gates(std::vector<int>& new_gates);
+        
+            };
+
+        }
         void demonstrate_classes();
     }
 
@@ -356,6 +433,4 @@ namespace Knowledge {
         };
         void show_all_methods();
     }
-}    
-
-
+}
