@@ -13,11 +13,11 @@
 #include <map>
 #include <algorithm>
 #include <numeric> // accumulate 
+#include <cctype> // to lower | upper
+
 // ------------------------
 /*
     Co trzeba będzie sie nauczyć 
-        - 1 przechwytywanie strumienia
-            - jakie są typy strumienia itp
         - Jak przechwytywać wyjątki
         - Jak tworzyć wyjątki
 
@@ -373,7 +373,9 @@ namespace Knowledge {
                 StringOperation() = default;
                 StringOperation(std::string base);
                 void access();
-                void modification(std::string );
+                void modification();
+                void searching();
+                void triming_white_spaces();
         };
        void show_all_string_operation();
     }
