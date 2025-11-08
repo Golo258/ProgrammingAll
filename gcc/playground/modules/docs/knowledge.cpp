@@ -168,21 +168,122 @@ namespace Knowledge {
     }
     namespace ClassKnow {
 
-        void PrivateSpecificator::start(){
-            velocity = 50; // this.velocity
+        namespace Specificators {
+            //--------------------
+            void PrivateSpec::start(){
+                velocity = 50; // this.velocity
+            }
+            void PrivateSpec::compare(const PrivateSpec& diff){
+                std::cout << "Comparing: [" << velocity - diff.velocity << "]\n";  
+                velocity = diff.velocity;
+            }
+            //--------------------
+            void PublicSpec::set_and_show(){
+                scores = 51.2;
+                log.info() << "Scores: " << scores << std::endl;
+            }
+            //--------------------
+            void ProtectedSpec::show_shield() const {
+                log.debug() << "Shield value: " << shield << std::endl;
+            }
+            void ProtectedChild::damage() {
+                shield -= 10; // has access
+                show_shield(); // has access
+            }
         }
-        
-        void PrivateSpec::compare(const PrivateSpec& diff){
-            std::cout << "Comparing: [" << velocity - diff.velocity << "]\n";  
-            velocity = diff.velocity;
+
+        namespace LifeCycle {
+            // -----------------------
+            Constructor::Constructor(){
+                _name = "none";
+                log.info() << "Default object created\n";
+            }
+            Constructor::Constructor(std::string name){
+                _name = name;
+                log.info() << "Object with " << name << " name created\n";
+            }
+            Constructor::Constructor(std::string name, int threshold)
+                : _name(name), _threshold(threshold){
+                log.info() << "Object inicialized with list (" << name << ", " << threshold <<  " params created\n";
+            }
+            // -----------------------
+            Destructor::Destructor(){
+                _notes_file_hook.open("notes.txt");
+                if (!_notes_file_hook){
+                    std::cerr << "Cannot open notes.txt file\n";
+                    return;
+                }
+                else{
+                    log.info() << "Hook to file notes.txt applicated\n";
+                }
+            }
+            Destructor::Destructor(std::string path){
+                _notes_file_hook.open(path);
+                if (!_notes_file_hook){
+                    std::cerr << "Cannot open " << path << "path\n";
+                    return;
+                }
+                else{
+                    log.info() << "Hook to file " << path << "applicated\n";
+                }
+            }
+            Destructor::~Destructor(){
+                if(_notes_file_hook.is_open()){
+                    _notes_file_hook.close();
+                    log.info() << "Hook closed properly\n";
+                }
+                std::cout << "Hook deleted\n";
+            }
         }
-        
-        void PublicSpec::set_and_show(){
-            scores = 51.2;
-            log.info() << "Scores: " << scores << std::endl;
+
+        namespace Utility {
+            AccessGates::AccessGates(int amount, int item){
+                if (amount < 0){
+                    throw std::invalid_argument(
+                        "Amount of vector elements cannot be negative"
+                    );
+                }
+                _amount = amount;
+                _gates.resize(_amount);
+                _gates.push_back(item); 
+            }
+
+            int AccessGates::get_amount() const {
+                return _amount;
+            }
+
+            std::vector<int> AccessGates::get_gates() const {
+                return _gates;
+            }
+            // 
+
+            void AccessGates::set_amount(int new_amount){
+                if (new_amount < 0){
+                    std::cerr << "Vector cannot have negative amount of elements\n";
+                    return;
+                }
+                _amount = new_amount;
+                _gates.resize(_amount);
+            }
+
+            void AccessGates::set_gates(std::vector<int>& new_gates) {
+                _gates.resize(new_gates.size()); // dospasowanie rozmiaru
+                for (std::size_t id = 0; id < new_gates.size(); id++) {
+                    try{
+                        // raise Exception if not have index
+                        _gates.at(id) = new_gates.at(id); 
+                    }
+                    catch(const std::out_of_range& range_exception){
+                        std::cerr << "Element " << new_gates.at(id) << " has index out of range\n";
+                        log.error() << "Exception " << range_exception.what() << std::endl;
+                    }
+                }
+            }
         }
+       
         void demonstrate_classes(){
-            PrivateSpec first, second;
+            // --------------------------------
+            Specificators::PrivateSpec first, second;
             first.start();
             /*
                 Błąd kompilacji, nie można dostać się do prywatnego atrybutu
@@ -190,7 +291,32 @@ namespace Knowledge {
             */
             first.compare(second);
             first.compare(second); // after change 
-            PublicSpec 
+            Specificators::PublicSpec allowed;
+            // --------------------------------
+            allowed.set_and_show();
+            allowed.scores = 12.5;
+            log.debug() << "Allowed scores " << allowed.scores << std::endl;
+            Specificators::ProtectedSpec family;
+            family.show_shield();
+            Specificators::ProtectedChild child;
+            child.damage();
+            // child.shield -= 10;  jak z private, błąd komplacji
+            // --------------------------------
+            LifeCycle::Constructor default_one;
+            LifeCycle::Constructor with_parameter("Pretty");
+            LifeCycle::Constructor inicialized_list("Not bad", 15);
+            // --------------------------------
+            LifeCycle::Destructor destructor;
+            LifeCycle::Destructor destructor_witH_param("other.json");
+            // --------------------------------
+            Utility::AccessGates gates(5, 12);
+            log.info() << "Amount: " << gates.get_amount() << std::endl;
+            log.info() << "Size of gates: " << gates.get_gates().size() << std::endl;
+            gates.set_amount(15);
+            std::vector<int> new_gates{15, 62, 73, 21};
+            gates.set_gates(new_gates);
+            log.info() << "Gates item: " << gates.get_gates().at(1) << std::endl;
+
         }
     }
     namespace StringKnow {
@@ -209,9 +335,9 @@ namespace Knowledge {
             log.info() << "c_str: " << base_text.c_str() << std::endl;
         }
 
-        void StringOperation::modification(std::string text){
-
-        }
+        // void StringOperation::modification(std::string text){
+// 
+        // }
         void show_all_string_operation() {
             std::string one = "one";
             std::string two = one; // kopia, nowe dane w pamieci
@@ -275,6 +401,7 @@ namespace Knowledge {
             holds.clear();
             // gdy zna sie przybliżoną wartośc to mamy
             holds.reserve(100); // docelowe capacity 100
+            holds.resize(5);// ustawia dany rozmiar
         }
 
         void VectorExamples::iteration(){
@@ -428,7 +555,3 @@ namespace Knowledge {
         }
     }
 };
-
-
-
-
