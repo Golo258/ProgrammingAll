@@ -4,7 +4,7 @@
 #include <utils/parse.hpp>
 #include <docs/knowledge.hpp>
 #include <utils/variables.hpp>
-
+#include <apps/leaderboard.hpp>
 
 void logger_example(){
     logger.debug() << "Start aplikacji\n";
@@ -13,7 +13,6 @@ void logger_example(){
     logger.error() << "Błąd testowy\n";
 }
     
-
 
 void parser_task(){
     using namespace utils::parser;
@@ -31,22 +30,45 @@ void parser_task(){
     // with_usage of file
     std::string score_results = load_text("scores.txt");
     LeaderboardResults results = parse_name_score_lines(score_results);
+    Leaderboard board;
+    for(BoardResult result: results){
+        logger.info() << "Current result " 
+            << result.first << ", "
+            << result.second << "\n";
+        board.set_score(
+            result.first,
+            result.second
+        );
+    }
+    // przekazujemy że strumien ma lecieć do konsolki
+    board.print(std::cout, 5);
+    board.add_or_update("Kamil", 2000);
+    board.print(std::cout, 5); // Kamilek na czele teraz
+    auto mediana = board.mediana();
+    auto average = board.average();
+    if (mediana != std::nullopt){
+        std::cout << "Mediana: " << *mediana << std::endl;
+    }
+    if (average != std::nullopt){
+        std::cout << "Srednia: " << *average << std::endl;
+    }
 
 }
 void knowleadge_playground(){
     // Knowledge::StreamsManagement::show_file_stream();
-    Knowledge::StreamsManagement::show_file_system_managment();
+    // Knowledge::StreamsManagement::show_file_system_managment();
+    // Knowledge::StreamsManagement::show_streams();
     // Knowledge::Collections::show_all_methods();
     // Knowledge::ClassKnow::demonstrate_classes();
     // Knowledge::StringKnow::show_all_string_operation();
     // Knowledge::ExceptionsKnow::show_all_exceptions();
+    // Knowledge::Functions::show_all_functions();
 }
 
 int main() {
-    Logger log{std::clog, LogLevel::Debug, true};
-    log.info() << "\n<======================================>\n";
-    // parser_task();
-    knowleadge_playground();
-    log.info() << "\n<======================================>\n";
+    logger.info() << "\n<======================================>\n";
+    parser_task();
+    // knowleadge_playground();
+    logger.info() << "\n<======================================>\n";
     return 0;
 }

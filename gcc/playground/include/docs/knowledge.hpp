@@ -48,16 +48,34 @@
 */
 namespace Knowledge {
     /*
-    Strumienie w c++, związek miedzy wejściem / wyjściem I/O
-        tekst, pliki, sieć, pamięć -- wszystko leci przez strumienie
-        Strumień - co to jest 
-            to jest obiekt który potrafi
-                - czytać dane - input stream
-                - pisać dane  - output stream
-                - lub oba 
-        jak rura przez którą przepływa tekst 
-        << - pisanie - wyjście   - coś wychodzi 
-        >> - czytanie  - wejście - coś wchodzi 
+    Strumienień
+        - kanał przepłwu danych , obiekt zarządzający tym przepływem
+        - dane przepływają wchodzą i wychodzą do miejsc takich jak
+        - tekst, pliki, sieć, pamięć -- wszystko leci przez strumienie
+        - dane mogą płynąć na zewnątrz (out) programu
+            - std::ostream 
+        - dane mogą płynąć do programu (in)
+            - std::istream
+        Kierunki:
+            wejście - in, istream   cin, ifstream, istringstream
+            wyjście - out, ostream, cout, ofstream, ostringstream
+            oba - wejscie i wyjscie
+                iostream, input output stream
+                    fstream, stringstream
+        Hierarchia: 
+                std::ios -- wspólna baza trzymająca stan
+                    │
+            ┌───────┴────────┐
+        std::istream     std::ostream
+            │                 │
+        std::ifstream       std::ofstream
+        std::istringstream  std::ostringstream
+            └────────────┬────────────┘
+                    std::iostream
+                        │
+                    std::fstream
+                    std::stringstream
+
     */
     namespace StreamsManagement {
 
@@ -84,6 +102,8 @@ namespace Knowledge {
         */
         class StandardStream {
             public:
+                void input_stream_example();
+                void output_stream_example();
                 void standard_stream();
         };
         /*
@@ -158,6 +178,11 @@ namespace Knowledge {
                 void get_file_from_resources();
         };
         
+        // utils functions
+        void print_list();
+        std::vector<std::string> read_lines(std::istream& is);
+        // -------------------
+        void show_streams();
         void simple_tasks();
         void show_file_stream();
         void show_file_system_managment();
@@ -509,7 +534,6 @@ namespace Knowledge {
         };
        void show_all_string_operation();
     }
-
     namespace Collections {
         
         /*
@@ -565,5 +589,29 @@ namespace Knowledge {
                 void pair_know();
         };
         void show_all_methods();
+    }
+    namespace Functions {
+        /*
+            Funkcja anonimowa, pisana namiejscu
+                bez potrzeby nazywania i defniowania
+            
+            Zamiast
+                bool compare(const Player& a, const Player& b) {
+                    return a.score > b.score;
+                }
+            mamy
+                [](const Player& a, const Player& b) {
+                    return a.score > b.score;
+                })
+        */
+        class LambdaFunction {
+            public:
+                void syntax();
+                // callback function
+                void repeat(int amount, const std::function<void(int)>& fun);
+                void show_function_examples();
+            };
+
+        void show_all_functions();
     }
 }
