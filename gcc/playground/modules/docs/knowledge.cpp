@@ -129,6 +129,91 @@ namespace Knowledge {
             logger.info() << "\n-----------------------------\n";
             simple_tasks();
         }
+
+        fs::path FileSystemManagment::create_paths(){
+            // tworzenie ścieżek
+            fs::path user_path = "/home/user";
+            // operator / - składa ścieżki
+            fs::path scores_path = user_path / "home" / "scores.txt";
+            return scores_path;
+        }
+        void FileSystemManagment::get_slices(fs::path score_path){
+            /* wyciaganie kawałków ze ścieżki*/
+            logger.debug() 
+                << "Filename: "   << score_path.filename()    << std::endl
+                << "Identifier: " << score_path.stem()        << std::endl
+                << "Extension: "  << score_path.extension()   << std::endl
+                << "Parent : "    << score_path.parent_path() << std::endl;
+            // normalizacja i konwersje
+            // abosultna ścieżka, bez sprawdzania czy istnieje
+            fs::path absolute = fs::absolute(score_path);
+            fs::path with_symlinc = fs::canonical(score_path);
+            absolute.string();           // std::string (na UI/logi)
+            // bierzące katalogi, gdzie jesteśmy
+            fs::current_path();
+            fs::temp_directory_path(); // /tmp dir
+        }
+
+        void FileSystemManagment::file_states(fs::path file_path){
+            fs::exists(file_path); // czy istnieje 
+            fs::is_regular_file(file_path); // zwykły plik
+            fs::is_directory(file_path);
+            fs::file_size(file_path);
+            fs::last_write_time(file_path);
+            // czy wskazują na ten sam obiekt
+            fs::equivalent(file_path, fs::path("other.txt")); 
+        }
+        
+        void FileSystemManagment::modification(fs::path file_path){
+            // tworzenie katalogów
+            fs::create_directory(file_path);
+            fs::create_directories(file_path);
+            // usuwanie pliku / pustego katalogu
+            fs::remove(file_path);
+            fs::remove_all(file_path); // rm -rf rekurencyjne
+            // zmian nazwy
+            fs::rename(file_path, fs::path("other.txt"));
+            // kopiowanie
+            fs::copy( // src, dst, option 
+                file_path, fs::path("other/files"),
+                fs::copy_options::overwrite_existing 
+            ); // sa też inne opcje 
+            // iteracja
+            for (const auto& file: fs::directory_iterator(file_path)){
+                const fs::path& path = file.path();
+            }
+            // rekurencyjnie
+            for(const auto& file_rec: fs::recursive_directory_iterator(file_path)){\
+                const fs::path& path = file_rec.path();
+            }
+
+            // nadawanie uprawnień
+            auto status = fs::status(file_path);
+            fs::permissions(
+                file_path, 
+                fs::perms::owner_read | fs::perms::owner_write,
+                fs::perm_options::add
+            );
+        }
+
+        void FileSystemManagment::get_file_from_resources(){
+            try{
+                auto path = resource_path("scores.txt");
+                logger.info() << "Config path: " << path << std::endl; 
+                std::string loaded_text = load_text("scores.txt");
+                logger.info() << "Config path text: " << loaded_text<< std::endl; 
+            }
+            catch (const std::exception& ex){
+                logger.error() << "Error while reading resources: " << ex.what() << std::endl; 
+            }
+        }
+        void show_file_system_managment(){
+            FileSystemManagment managment;
+            // managment.get_file_from_resources();
+            fs::path score_path = managment.create_paths();
+            managment.get_slices(score_path);
+            managment.file_states(score_path);
+        }
     }
     
     namespace AliasesAndTypes {

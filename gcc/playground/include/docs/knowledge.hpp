@@ -19,6 +19,7 @@
 #include <exception> // exception
 #include <chrono> // czas systemowy
 #include <iomanip> // formatowanie czasu
+#include <filesystem> // zarządzanie plikami
 
 // ------------------------
 /*
@@ -137,10 +138,29 @@ namespace Knowledge {
                 void both_string_operation();
         };
         
+        /*
+            filesystem:
+                standardowe funkcje do pracy
+                    z plikami / scieżkami / katalogami
+                najcześciej sie używa aliasu do namespaca
+                namespace fs = std::filesystem
+
+            Ścieżki:
+                fs::path
+        */
+        namespace fs = std::filesystem;
+        class FileSystemManagment {
+            public:
+                fs::path create_paths();
+                void get_slices(fs::path score_path);
+                void file_states(fs::path file_path);
+                void modification(fs::path file_path);
+                void get_file_from_resources();
+        };
         
         void simple_tasks();
         void show_file_stream();
-
+        void show_file_system_managment();
         // | Temat                                                       | Po co                                                 
         // | ----------------------------------------------------------- | ------------------------------------------------------
         // | `std::cin.ignore()` i `clear()`                             | obsługa błędów i czyszczenie bufora                   
