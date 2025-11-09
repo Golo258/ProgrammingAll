@@ -1,0 +1,34 @@
+# --- Leaderboard results ---
+Alicja = 1200
+Bartek = 950
+Czarek = 1000
+Daria = 1350
+Ewelina = 870
+Franek = 1600
+Grzegorz = 1250
+Hubert = 1600
+Iza = 1420
+Jakub = 300
+Kamil = 0
+Łukasz = 1520
+Monika = 1580
+Natalia = 1590
+Oskar = 1475
+Patryk = 890
+Robert = 1020
+Sebastian = 870
+Tomasz = 400
+Ula = 1320
+Weronika = 1150
+Zosia = 990
+
+# --- Duplicate names (test how parser handles it) ---
+Grzegorz = 800
+Monika = 1700
+Franek = 1600
+
+# --- Names with spaces or special characters ---
+Jan Kowalski = 720
+Marta_K = 1110
+Player-42 = 1337
+The Best Player = 1999

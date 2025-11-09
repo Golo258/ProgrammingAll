@@ -30,9 +30,6 @@ namespace utils::parser {
             catch(const ParseError::exception& parser_err){
                 logger.error() << "Error cause of " << parser_err.what() << std::endl;
             }
-            catch(const std::exception& other_err){
-                logger.error() << "Error cause of " << other_err.what() << std::endl;
-            }
         }
         std::cout << "\n\n\n";
         for (auto item: results){
