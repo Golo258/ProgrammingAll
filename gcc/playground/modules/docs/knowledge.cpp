@@ -7,6 +7,43 @@
 namespace Knowledge {
     
     namespace StreamsManagement {
+        void StandardStream::input_stream_example(){
+            // input - czyli dane wchodzą gdzieś
+
+        }
+
+        void print_list(std::ostream& os, const std::vector<int>& items){
+            int index = 1;
+            for (const auto& item: items){
+                os << index++ << ") value: " << item << "\n";
+            }
+        }
+        std::vector<std::string> read_lines(std::istream& is){
+            std::vector<std::string> lines;
+            std::string line;
+            while(std::getline(is, line)){
+                lines.push_back(line);
+            }
+            return lines;
+        }
+        void StandardStream::output_stream_example(){
+            /*
+                output - czyli dane wychodzą gdzieś
+                - funkcja nie zna celu wyjśca wtedy mamy ostream jako parametr
+            */
+            std::vector<int> numbs{1, 15, 61, 211};
+            std::ofstream out("numbers_list.txt");
+            std::ostringstream mem;
+            print_list(out, numbs);
+            print_list(mem, numbs);
+            logger.info() << "Memory buffor " << mem.str() << "\n";
+            
+            // istream
+            std::ifstream in("numbers_list.txt");
+            std::istringstream stream_mem("a\nb\nc\n");
+            auto lines = read_lines(in);
+            auto mem_lines=  read_lines(stream_mem);
+        }
         void StandardStream::standard_stream() {
             std::cout << "Enter some number" << std::endl; //  pisanie do stdout - terminala 
             int number;
@@ -29,6 +66,12 @@ namespace Knowledge {
                 std::cout << "Provided number: [" << number << "]. \n" << std::endl; 
                 std::clog << "[LOG-INFO] User provide number: " << number << std::endl;
             }
+        }
+        void show_streams(){
+            StandardStream stream;
+            stream.input_stream_example();
+            stream.output_stream_example();
+            // stream.standard_stream()
         }
         void FileStream::writing_overriting(){
             // tworzy nowy albo czyści
@@ -150,18 +193,18 @@ namespace Knowledge {
             fs::path with_symlinc = fs::canonical(score_path);
             absolute.string();           // std::string (na UI/logi)
             // bierzące katalogi, gdzie jesteśmy
-            fs::current_path();
-            fs::temp_directory_path(); // /tmp dir
+            // fs::current_path();
+            // fs::temp_directory_path(); // /tmp dir
         }
 
         void FileSystemManagment::file_states(fs::path file_path){
-            fs::exists(file_path); // czy istnieje 
-            fs::is_regular_file(file_path); // zwykły plik
-            fs::is_directory(file_path);
-            fs::file_size(file_path);
-            fs::last_write_time(file_path);
+            bool path_exists = fs::exists(file_path); // czy istnieje 
+            bool is_regular = fs::is_regular_file(file_path); // zwykły plik
+            // fs::is_directory(file_path);
+            // fs::file_size(file_path);
+            auto path_time = fs::last_write_time(file_path);
             // czy wskazują na ten sam obiekt
-            fs::equivalent(file_path, fs::path("other.txt")); 
+            // fs::equivalent(file_path, fs::path("other.txt")); 
         }
         
         void FileSystemManagment::modification(fs::path file_path){
@@ -215,7 +258,6 @@ namespace Knowledge {
             managment.file_states(score_path);
         }
     }
-    
     namespace AliasesAndTypes {
         void resolve_variant_types(){
             std::variant<std::string, int> possibilites;
@@ -714,6 +756,11 @@ namespace Knowledge {
             // gdy zna sie przybliżoną wartośc to mamy
             holds.reserve(100); // docelowe capacity 100
             holds.resize(5);// ustawia dany rozmiar
+        
+            // zwrócenie danej ilości elementów / ciecie
+            std::vector<int> v = {0,1,2,3,4,5,6,7,8,9,10,11,12};
+            // elementy od 0 do 10 
+            std::vector<int> sub_vector(v.begin(), v.begin() + 11); 
         }
 
         void VectorExamples::iteration(){
@@ -772,6 +819,23 @@ namespace Knowledge {
             int sum = std::accumulate(positive.begin(), positive.end(), 0);
             // szukanie
             auto it = std::find(positive.begin(), positive.end(), 4);
+            /*
+                Sortowanie obiektów, przez funkcje sprawdzającą
+            */
+            struct Player {
+                std::string name;
+                int score;
+            };
+            std::vector<Player> players = {
+                {"Ala", 10}, {"Ola", 25}, {"Ela", 15}
+            };
+            std::sort(players.begin(), players.end(),
+                [](const Player& first, const Player& second){
+                    return first.score > second.score;
+                }
+            );
+
+
         }
         // --------------------------------//
         //         MAP EXAMPLES            //
@@ -790,8 +854,20 @@ namespace Knowledge {
             // przeniesienie (oddanie bez kopiowania)
             std::map<int, int> moved = std::move(empty_scores);
             std::cout << "Copy size: " << copy.size() << std::endl;
+            
+            // dodawanie nowych elementów
+            filled_scores[12] = 51;
+            // check if key exists
+            bool is_key_in = filled_scores.contains(1);
+            int element = filled_scores[1];
+            int element_save = filled_scores.at(2);
+            auto searching = filled_scores.find(1);
+            if (searching != filled_scores.end()){
+                int element = searching->second;
+            }
             return copy;
         }
+
         void MapExamples::pair_know(){
             std::pair<std::string, int> single_score = {"Bob", 561};
             std::cout << single_score.first << std::endl;
@@ -874,6 +950,99 @@ namespace Knowledge {
             map_examples.modification();
             map_examples.iteration(scores);
             // map_examples.sort_and_algorithms();
+        }
+    }
+    namespace Functions {
+        void LambdaFunction::syntax(){
+            /*
+                [parametry_zewnetrznye] 
+                    co  funkcja ma widzieć (czyli capture list)
+                (argumenty_lambdy) 
+                    - argumenty jak w normalnej funkcji
+                -> typ - opcjonalny typ zwracany
+                {} kod który wykona lambda
+                 --- całość
+                [parametry_zewętrzny](argumenty_lambdy) -> zwracany_typ {
+                    ciało funkcji
+                }
+            */
+           // od razu wykonana (bo () na końcu).
+            []() { std::cout << "In the lambda\n"; }(); 
+            // z zaczepieniem o zmienną
+            auto hook = []() {
+                std::cout << "With hook\n";
+            };
+            hook(); // wywołanie
+            // z argumentami
+            auto add = [](int first, int second){
+                return first + second;
+            };
+            logger.debug() << add(1,51) << std::endl;
+            // z sprecyzowanym typem
+            auto devide = [](int first, int second) -> double {
+                return static_cast<double>(first) / second;
+            };
+            logger.debug() << devide(1,51) << std::endl;
+            //  z capture list - zmienne z zewnętrznego zakresu
+            int threshold = 10;
+            auto exceeds = [threshold](int max) -> bool {
+                return max < threshold;
+            };
+            logger.debug() << "Exceeds "<< std::boolalpha << exceeds(15) << std::endl;
+            // łapanie zmiennych przez referencje
+            int counter = 1;
+            auto increment = [&counter]() -> void {
+                counter++;
+            };
+            logger.debug() << "Counter before " << counter <<  std::endl;
+            increment();
+            logger.debug() << "Counter aftert" << counter <<  std::endl;
+            /*
+                [=] -- łapanie wszystkie przez kopie wartości
+                [&] -- łapanie przez referencje
+                [x, &y] - przez wartość, przez referencje
+            */
+        }
+        /*
+        Przyjcie funckji jako callbacku
+            funckja przyjmuje parametr int i nie wzraca nic
+                syntax
+                    std::function<typ_zwrotny(parametry...)>
+
+        */
+        void LambdaFunction::repeat(int amount, const std::function<void(int)>& fun){
+            for (int i = 0; i< amount; i++){
+                fun(i);
+            }
+        }
+        void print_square(int radius){
+            std::cout << "Square: " << radius * radius << std::endl;
+        }
+
+        void LambdaFunction::show_function_examples(){
+            repeat(5, print_square);
+            repeat(5,
+                [](int i) {
+                    std::cout << "With lambda\n";
+                }
+            );
+            // jeden parametr
+            std::function<void(int)> single_param_call;
+            single_param_call = [] (int single) {
+                std::cout << "Number: " << single << std::endl;
+            };
+            // double
+            std::function<void(int, std::string)> double_param_call;
+            // returned type
+            std::function<int(double, int)> with_return_type;
+            // without any 
+            std::function<void()> no_param;
+        }
+
+        void show_all_functions(){
+            LambdaFunction lambda;
+            lambda.syntax();
+            lambda.show_function_examples();
         }
     }
 };
