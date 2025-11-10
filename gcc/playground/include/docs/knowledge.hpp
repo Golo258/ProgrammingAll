@@ -23,10 +23,6 @@
 
 // ------------------------
 /*
-    Co trzeba będzie sie nauczyć 
-        - Jak przechwytywać wyjątki
-        - Jak tworzyć wyjątki
-
     TODO co do przerobienia:
         - kastowanie zmiennych i pointerów
         - polimorfizm, dziedziczenie, interfacy itp
@@ -250,6 +246,88 @@ namespace Knowledge {
             PossibleTypes value;
         };
 
+        /*
+            Castowanie - rzutowanie
+                świadoma zamiana jakiegos typu 
+            Kompilator albo automatycznie rzutuje zmienną   
+                albo chce żebyśmy świadomie rzutowali
+            4 typy castów
+                static_cast
+                const_cast
+                reinterpret_cast
+                dynamic_cast
+                (typ) -> stary styl z C 
+        */
+       //Implicit conversion - automatyczne rzutowanie
+        class VariableCasting {
+        public:
+            double pi_double = 3.14562;
+            
+            inline void implicit_conversion(){
+                int converted_pi = pi_double;
+                std::cout<< "Converted "<<  converted_pi << "\n";
+            }
+             /*
+                static_cast 
+                    normalne, bezpieczne castowanie typów pokrewnych
+                        int na double
+                        char na int itp.
+                        wskaźnika na typ bazowy w klasach
+                    Syntax:
+                        static_cast<na_jaki_typ>(jaką zmienną)
+            */
+            inline void static_casting(){
+                double var = 3.1561261;
+                int static_var = static_cast<int>(var); 
+                std::cout<< "Converted "<<  static_var << "\n";
+            }
+             /*
+            const_cast
+                usuwanie lub dodawanie const
+                używane tylko do manipulowania const
+                np: gdy masz funckje const ale potrzebuje tam cos zmienic
+            */
+            inline void const_casting(const int* value){
+                int* pointer = const_cast<int*>(value);
+                *pointer = 99; // nie polecane, ale możliwe
+                std::cout << *pointer << "\n";
+            }
+             /*
+                reinterpret_cast 
+                    nie zmienia danych, tylko zmienia
+                    sposób ich ich interpetacji w pamieci
+                    Używany do niskopoziomowgo kodu
+                    sieciowych, bibliotek systemowych
+                Mało używany
+            */
+            inline void reinterpret_casting(){
+                int value = 65;
+                char* ptr = reinterpret_cast<char*>(&value);
+                std::cout << *ptr << "\n";
+            }
+            /*
+                dynamic_cast
+                    rzutowanie obiektów miedzy klasami w OOP
+                    Przy dziedziczeniu i polimorfizmie
+            */
+            struct Base {
+                virtual ~Base() = default;
+            };
+            struct Derived : Base {
+                inline void say(){
+                    std::cout << "Something\n";
+                }
+            };
+            // TODO: powrót po nauce dziedziczenia itp
+            inline void dynamic_casting(){
+                Base* base = new Derived;
+                Derived* derived = dynamic_cast<Derived*>(base);
+                if (derived) {
+                    derived->say();
+                }
+            }
+        };
+        void casting_example();
     }
     namespace NameSpacesKnow {
         // Namespacy wytłumaczenie
