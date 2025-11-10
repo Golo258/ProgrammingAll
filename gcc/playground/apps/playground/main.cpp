@@ -61,7 +61,10 @@ void knowleadge_playground(){
     // Knowledge::StringKnow::show_all_string_operation();
     // Knowledge::ExceptionsKnow::show_all_exceptions();
     // Knowledge::Functions::show_all_functions();
-    Knowledge::Structures::all();
+    // Knowledge::Structures::all();
+    Knowledge::Preprocesor::all();
+    
+
 }
 
 int main() {
