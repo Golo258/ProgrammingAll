@@ -57,7 +57,7 @@ void knowleadge_playground(){
     // Knowledge::StreamsManagement::show_file_system_managment();
     // Knowledge::StreamsManagement::show_streams();
     // Knowledge::Collections::show_all_methods();
-    // Knowledge::ClassKnow::demonstrate_classes();
+    Knowledge::ClassKnow::demonstrate_classes();
     // Knowledge::StringKnow::show_all_string_operation();
     // Knowledge::ExceptionsKnow::show_all_exceptions();
     // Knowledge::Functions::show_all_functions();
@@ -65,8 +65,8 @@ void knowleadge_playground(){
     // Knowledge::Preprocesor::all();
     // Knowledge::AliasesAndTypes::casting_example();
     // Knowledge::AliasesAndTypes::pointer_example();
-    Knowledge::AliasesAndTypes::enums_example();
-    Knowledge::AliasesAndTypes::check_optional();
+    // Knowledge::AliasesAndTypes::enums_example();
+    // Knowledge::AliasesAndTypes::check_optional();
 
 }
 

@@ -27,7 +27,6 @@
 // ------------------------
 /*
     TODO co do przerobienia:
-        - enumami 
         - json, parsowanie, tworzenie, tak samo yaml i inne typy 
         - testowanie kodu, tworzenie testów
         - może modyfikacja loggera żeby zapisywał do pliku i żeby terminal nie spamił
@@ -791,7 +790,8 @@ namespace Knowledge {
         namespace Polymorphism {
             /*
             Polimorfizm:
-                Koncepcja która pozawala 
+            
+            Koncepcja która pozawala 
                     obiektowi zachować sie inaczej
                     w zależności od faktycznego typu obiektu
                 Nadpisujemy override wirtualne metody klasy    
@@ -800,6 +800,10 @@ namespace Knowledge {
                     i różne klasy pochodne które robią coś innego
                 a poprzez to możemy traktować je 
                 jako ten sam typ bazowy w petli i kolekcjach
+            
+                Inaczej:
+                    mechanizm języzka który pozwala
+                        wołać metody po wskaźniku/refernecji do klasy bazowej
             */
             class Notification {
                 public:
@@ -838,8 +842,61 @@ namespace Knowledge {
                 const std::string& message  
             );
             void show_broadcast();
+            /*
+                Interfejsy, klasy abstrakcyjne
+                umowa (kontrakt) pomiedzy klasami
+                gdzie każda, która dziedziczaca
+                    musi zaimplementować dane metody
+                
+                Inefejs:
+                    nie zawiera żadnej logiki
+                    ma tylko deklaracje:
+                        jakie metody mają istnieć
+                        jakie argumenty i typy zwracają
+                        ale nie definicje
+                Interfejs:
+                    to klasa któa ma przynajmniej jedną metode
+                    czysto virtualną
+                    virutal typ nazwa() = 0;
+                Interface to szablon projektowy 
+                    który mówi że każdy kto implemetuje go 
+                        to musi mieć dane metody
+                Nazewnictwo interfacu:
+                    klasa interfacu zaczyna sie od 'I'
+            */
+            struct IProcessor { 
+                virtual void process(
+                    const std::string& input
+                ) = 0; 
+                virtual ~IProcessor() = default;
+            };
+
+            struct Compressor : IProcessor {
+                void process(const std::string& input) override {
+                    std::cout << "[COMPRESSOR] Compressing data: " << input << '\n';
+                }
+            };
+
+            struct Encryptor : IProcessor {
+                void process(const std::string& input) override {
+                    std::cout << "[ENCRYPTOR] Encrypting data: " << input << '\n';
+                }
+            };
+
+            struct Logger : IProcessor {
+                void process(const std::string& input) override {
+                    std::cout << "[LOGGER] Saving data to logs: " << input << '\n';
+                }
+            };
+
+            void pipeline(
+                const std::vector<std::unique_ptr<IProcessor>>& steps,
+                const std::string& input_text
+            );
+
         }
         void demonstrate_classes();
+        void show_pipeline_steps();
     }
     namespace ExceptionsKnow {
         /*

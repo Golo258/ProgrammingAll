@@ -737,6 +737,24 @@ namespace Knowledge {
                 );
                 broadcast(notifications, "Senor, como esta uested?");
             }
+            
+            void pipeline(
+                const std::vector<std::unique_ptr<IProcessor>>& steps,
+                const std::string& input_text
+            ){
+                for (const auto& step: steps){
+                    step->process(input_text);
+                }
+            }
+            
+            void show_pipeline_steps(){
+                std::vector<std::unique_ptr<IProcessor>> steps;
+                steps.push_back(std::make_unique<Compressor>());
+                steps.push_back(std::make_unique<Encryptor>());
+                steps.push_back(std::make_unique<Logger>());
+
+                pipeline(steps, "Confidential data");
+            }
 
         }
         void demonstrate_classes(){
@@ -784,6 +802,7 @@ namespace Knowledge {
             diff.introduce();
             //Polymorphism 
             Polymorphism::show_broadcast();
+            Polymorphism::show_pipeline_steps();
         }
         
     }

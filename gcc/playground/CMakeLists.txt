@@ -65,4 +65,20 @@ add_compile_definitions(PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}")
 add_app(playground ${CMAKE_SOURCE_DIR}/apps/playground/main.cpp)
 # add_app(mytool     ${CMAKE_SOURCE_DIR}/apps/mytool/main.cpp)
 
-#------------------
+# ================== TESTS ==================
+include(CTest)
+enable_testing()
+# doctest header
+include_directories(
+  ${CMAKE_SOURCE_DIR}/third_party/doctest
+)
+
+add_executable(tests
+    tests/test_main.cpp
+    tests/test_explanation.cpp
+)
+
+target_link_libraries(tests PRIVATE core)
+target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
+
+add_test(NAME unit COMMAND tests)
