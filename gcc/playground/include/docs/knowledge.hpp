@@ -439,6 +439,48 @@ namespace Knowledge {
         }
         void demonstrate_classes();
     }
+    namespace Structures {
+        /*
+            Struct - własny typ danych
+                grupuje kilka powiązanych wartości
+                dostęp wszystko jest public
+            zamiast 
+                std::string name;
+                int age;
+                double salary;
+        */
+       
+        // można zrobić
+        struct Employee {
+            // pola structury
+            std::string name;
+            int age;
+            double salary;
+            // metody struktury
+            void print() const;
+            // konstruktor - do tworzenia obiektów
+            Employee() = default;
+            Employee(std::string name, int age, double salary);
+        };
+        // Zagnieżdżone struktury
+        struct Stats {
+            int hp;
+            int attack;
+            int defense;
+            void show_stats() const;
+        };
+
+        struct Player {
+            std::string name;
+            int level;
+            Stats stats;
+            void introduce() const;
+        };
+        void show_player(const Player& player);
+        void creation_and_access();
+        void all();
+    }
+    
     namespace ExceptionsKnow {
         /*
             Wyjątek - exception 

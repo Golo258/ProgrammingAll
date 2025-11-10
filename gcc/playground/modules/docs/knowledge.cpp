@@ -469,6 +469,68 @@ namespace Knowledge {
 
         }
     }
+    namespace Structures {
+        void Employee::print() const {
+            std::cout << name 
+                << " (" << age << " lat) - " 
+                << salary << " PLN\n";
+        }
+        Employee::Employee(std::string name, int age, double salary)
+            : name(std::move(name)), age(age), salary(salary)
+        {
+            std::cout << "Employee " << name << "created successfully\n";
+        }
+        void Stats::show_stats() const {
+            std::cout << "HP: " << hp
+                  << " | ATK: " << attack
+                  << " | DEF: " << defense << '\n';
+        }
+        void Player::introduce() const {
+            std::cout << "Player: " << name << " (lvl " << level << ")\n";
+            stats.show_stats();
+        }
+        void show_player(const Player& player){
+            std::cout << "=== PLAYER ===" << std::endl;
+            player.introduce();
+            // player.level++;  object == const - not allowed
+        }
+        void creation_and_access(){
+            // poprzez pojedyncze wstawianie wartości
+            Employee man;
+            man.name = "Man";
+            man.age = 31;
+            man.salary = 512612.55;
+            logger.info() << "Employee " << man.name << " earns " << man.salary << " PLN\n";
+            // poprzez liste inicjalizacyjną
+            Employee second{
+                "Mark", 53, 4666.66
+            };
+            second.print();
+            // braced initialization
+            Employee basia = {"Basia", 22, 7200.0};
+            basia.print();
+            // z konstruktorem
+            Employee john("John", 21, 215.22);
+            john.print();
+            // zagnieżdżone struktury
+            Stats base_stats{100, 25, 10};
+            Player mage{"Lord", 7, base_stats};
+            // inicjalizacja pojedyncza 
+            Player warior{
+                "Odyn", // name
+                7,                // level
+                {120, 40, 15}     // stats: hp, attack, defense
+            };
+            mage.introduce();
+            warior.introduce();
+            // zmiana statystyk
+            mage.stats.hp = 50;
+            mage.stats.show_stats();
+        }
+        void all(){
+            creation_and_access();
+        }
+    }
     namespace ExceptionsKnow {
         ExceptionHandling::ExceptionHandling(int arg)
             : _arg(arg) {
@@ -1045,4 +1107,5 @@ namespace Knowledge {
             lambda.show_function_examples();
         }
     }
+
 };
