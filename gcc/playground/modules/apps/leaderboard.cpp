@@ -2,7 +2,7 @@
 // modules/apps/leadersboard.cpp
 #include <apps/leaderboard.hpp>
 
-
+//--------------------------------------------
 void Leaderboard::set_score(
     std::string name, int score
 )
@@ -14,7 +14,7 @@ void Leaderboard::set_score(
         logger.error() << "Params are not compatibles\n";
     }
 }
-
+//--------------------------------------------
 void Leaderboard::add_or_update(
     std::string name, int score
 )
@@ -26,7 +26,7 @@ void Leaderboard::add_or_update(
         logger.error() << "Params are not compatibles\n";
     }
 }
-
+//--------------------------------------------
 std::optional<int> Leaderboard::score_of(const std::string& name) const
 {
     auto it = _data.find(name);
@@ -38,6 +38,7 @@ std::optional<int> Leaderboard::score_of(const std::string& name) const
     }
 }
 
+//--------------------------------------------
 utils::parser::LeaderboardResults Leaderboard::top(std::size_t amount) const {
     utils::parser::LeaderboardResults results_copy(
         _data.begin(), _data.end()
@@ -53,6 +54,7 @@ utils::parser::LeaderboardResults Leaderboard::top(std::size_t amount) const {
     );
     return top_scores;
 }
+//--------------------------------------------
 void Leaderboard::print(std::ostream& os, std::size_t n) const {
     std::string line;
     int index = 1;
@@ -61,7 +63,7 @@ void Leaderboard::print(std::ostream& os, std::size_t n) const {
         os << index++ << ") " << name << " " << score << "\n";
     }
 }
-
+//--------------------------------------------
 std::optional<double> Leaderboard::mediana() const {
     if (_data.empty()) return std::nullopt;
    
@@ -80,7 +82,7 @@ std::optional<double> Leaderboard::mediana() const {
         ) / 2.0;
     }
 }
-
+//--------------------------------------------
 std::optional<double> Leaderboard::average() const {
     if (_data.empty()) return std::nullopt;
    
@@ -92,3 +94,4 @@ std::optional<double> Leaderboard::average() const {
         sum += score;
     return sum / _data.size();
 }
+//--------------------------------------------
