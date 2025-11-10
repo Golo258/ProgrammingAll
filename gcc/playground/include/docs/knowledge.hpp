@@ -10,6 +10,7 @@
 #include <ctime> // zarządzanie czasem
 #include <vector>
 #include <map>
+#include <array>
 #include <algorithm>
 #include <numeric> // accumulate 
 #include <cctype> // to lower | upper
@@ -20,11 +21,12 @@
 #include <chrono> // czas systemowy
 #include <iomanip> // formatowanie czasu
 #include <filesystem> // zarządzanie plikami
+#include <memory> // smart pointers
+#include <optional>
 
 // ------------------------
 /*
     TODO co do przerobienia:
-        - polimorfizm, dziedziczenie, interfacy itp
         - enumami 
         - json, parsowanie, tworzenie, tak samo yaml i inne typy 
         - testowanie kodu, tworzenie testów
@@ -327,6 +329,100 @@ namespace Knowledge {
             }
         };
         void casting_example();
+        struct Person {
+            int _age;
+            Person(int age) : _age(age) {}
+            ~Person() { std::cout << "End of story\n"; }
+            void introduce(){
+                std::cout << "age: " << _age << std::endl;
+            }
+        };
+        
+        struct Connection {
+            std::string name;
+            int accounts;     
+            Connection() { std::cout << "Openning connection \n"; }
+            ~Connection() { std::cout << "Closing connection \n"; }
+        };
+
+        class Pointers {
+            /*
+                wskąźnik, czyli
+                    zmienna która przechowuje adres obiektu /zmiennej
+            */
+            public:
+                void simple_poiners();
+                void pointers_to_structures();
+                /*
+                    Dynamiczne tworzenie obiektów
+                        należy samemu zarządzać pamiecią 
+                        i ją potem zwalniać poprzez delete
+                */
+                void dynamic_memory();
+                /*
+                    Smart pointers - bezpieczne wskaźniki
+                        z klasy memory
+                        automatycznie zarządzają pamiecią
+                */
+                void unique_pointer();
+                void shared_pointer();
+                void weak_pointer();
+
+        };
+        void pointer_example();
+        void check_optional();
+        namespace Enums {
+            /*
+                Enum - typ wyliczeniowy
+                    nadaje nazwane stałe wartościom liczbowym
+                    Zamiast pisać dane liczby 
+                        to mają one określony sens
+                Każdy element to domyslnie int 
+                    zaczynający się od 0
+                
+                Można przypisać konkretne wartości do typów
+                    enum Nazwa {
+                        typ = wartosc;
+                    }
+            */
+            enum Status {
+                OK,       // 0
+                WARNING,  // 1 
+                ERROR,    // 2
+                CRITICAL  // 3
+            };
+            enum HttpCode {
+                OK_FOUND  = 200,
+                NOT_FOUND = 404,
+                INTERNAL  = 500
+            };
+            /*
+                nowoczesny enum class - silnie typowany
+                    nie miesza sie z int
+                    nie wchodzi w globalny namespace
+                    wymaga jawnego rzutowania 
+                Aby dostać sie do wartość 
+                    wymagane jest rzutowanie na inta
+                można obrać jaki jest typ bazowy 
+                    rozmiar / zarkes 
+            */
+            enum class RequestMethod {
+                GET,
+                POST,
+                DELETE
+            };
+            //  można przypisać hexa
+            enum class Color : uint8_t {
+                RED   = 0xFF,
+                GREEN = 0x80,
+                BLUE  = 0x40,
+                BLACK = 0x00
+            };
+            std::string method_to_string(Enums::RequestMethod method);
+            std::optional<Enums::RequestMethod> string_to_method(const std::string& method_str);
+            
+        }
+        void enums_example();
     }
     namespace NameSpacesKnow {
         /*
@@ -745,7 +841,6 @@ namespace Knowledge {
         }
         void demonstrate_classes();
     }
-    
     namespace ExceptionsKnow {
         /*
             Wyjątek - exception 
