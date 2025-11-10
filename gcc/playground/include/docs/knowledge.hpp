@@ -28,8 +28,6 @@
         - Jak tworzyć wyjątki
 
     TODO co do przerobienia:
-        - tworzenie struktur własnych 
-        - tworzenie makr DEFINE i typ podobnych dyrektyw preprocesora
         - kastowanie zmiennych i pointerów
         - polimorfizm, dziedziczenie, interfacy itp
         - enumami 
@@ -47,37 +45,37 @@
 
 */
 namespace Knowledge {
-    /*
-    Strumienień
-        - kanał przepłwu danych , obiekt zarządzający tym przepływem
-        - dane przepływają wchodzą i wychodzą do miejsc takich jak
-        - tekst, pliki, sieć, pamięć -- wszystko leci przez strumienie
-        - dane mogą płynąć na zewnątrz (out) programu
-            - std::ostream 
-        - dane mogą płynąć do programu (in)
-            - std::istream
-        Kierunki:
-            wejście - in, istream   cin, ifstream, istringstream
-            wyjście - out, ostream, cout, ofstream, ostringstream
-            oba - wejscie i wyjscie
-                iostream, input output stream
-                    fstream, stringstream
-        Hierarchia: 
-                std::ios -- wspólna baza trzymająca stan
-                    │
-            ┌───────┴────────┐
-        std::istream     std::ostream
-            │                 │
-        std::ifstream       std::ofstream
-        std::istringstream  std::ostringstream
-            └────────────┬────────────┘
-                    std::iostream
-                        │
-                    std::fstream
-                    std::stringstream
 
-    */
     namespace StreamsManagement {
+        /*
+        Strumień
+            - kanał przepłwu danych , obiekt zarządzający tym przepływem
+            - dane przepływają wchodzą i wychodzą do miejsc takich jak
+            - tekst, pliki, sieć, pamięć -- wszystko leci przez strumienie
+            - dane mogą płynąć na zewnątrz (out) programu
+                - std::ostream 
+            - dane mogą płynąć do programu (in)
+                - std::istream
+            Kierunki:
+                wejście - in, istream   cin, ifstream, istringstream
+                wyjście - out, ostream, cout, ofstream, ostringstream
+                oba - wejscie i wyjscie
+                    iostream, input output stream
+                        fstream, stringstream
+            Hierarchia: 
+                    std::ios -- wspólna baza trzymająca stan
+                        │
+                ┌───────┴────────┐
+            std::istream     std::ostream
+                │                 │
+            std::ifstream       std::ofstream
+            std::istringstream  std::ostringstream
+                └────────────┬────────────┘
+                        std::iostream
+                            │
+                        std::fstream
+                        std::stringstream
+        */
 
         /*
            Strumienie standardowe
@@ -197,7 +195,6 @@ namespace Knowledge {
         // | wyjątki na streamach (`exceptions()`)                       | wykrywanie błędów przez `throw`, nie przez `if (!cin)`
 
     }
-
     namespace AliasesAndTypes {
         // stosuejmy pascal case - czyli duża litera i potem małe
 
@@ -321,6 +318,81 @@ namespace Knowledge {
         }
 
     }    
+    namespace Preprocesor {
+        /*
+            Preproces 
+                to etap który działa zanim kod C++ trafi do kompilatora
+                czyta plik źródłowy i dokonuje zamian tekstowych
+            Zanim skompiluje kod, preprocesor:
+                rozwija #include 
+                podstawia #define 
+                #usuwa fragmenty zależne od #ifdef #ifndef
+                przetwarz #pragma itd
+                g++ -E main.cpp -- jak to działa
+        */
+        // makra symboliczne 
+        #define PI 3.141624
+        double circle_area(double radius);
+        void all();
+        /*
+            Makra funkcyjne
+                czyli funkcje bez typów i kompilacji
+        */
+        #define SQUARE(x) ( (x) * (x))
+        // w nowoczesnym pisze sie 
+        template <typename MathType>
+        constexpr MathType square(MathType var){
+            return var * var;
+        }
+
+        /* 
+            Makra warunkowe
+                pozwalają kompilować rózne kawałki kodu
+                w zależności od warunków
+            #ifdef x // jesli x jest zdefinowane
+            #ifndef x // jesli x nie jest zdefinowane
+            #endif  -konie cwarunku
+            #undef x - usuń definicje
+
+            include guard
+                #pragma once - zabezpieczenie przez wielokrotnym includowanie
+                zamiast 
+                    #ifndef LOGGER_HPP
+                        #define LOGGER_HPP
+                        
+                    ... kod
+                    #endif
+        */
+        #define DEBUG_MODE 
+        #ifdef DEBUG_MODE // jesli jest zdefinowane
+            #define LOG(x) std::cout << "[DEBUG]" << x << "\n"
+        #else
+            #define LOG(x)
+        #endif
+        
+        /*
+            Parametry przekazywane z kompilatora:
+                kompilacja z parametrem
+                -D
+                np: g++ -Dversion=3 main.cpp 
+            to tak jakby kompilator dodał na początku pliku
+                #define version 3
+            w kodzie potem można używać
+                #idef VERSION
+                    #if VERSION == 3
+                        std::cout << "Wersja 3!\n";
+                    #elif VERSION == 2
+                        std::cout << "Wersja 2!\n";
+                    #else
+                        std::cout << "Nieznana wersja\n";
+                    #endif
+                #endif
+            Inne:
+                #error	ręczne przerwanie kompilacji
+                #warning	ostrzeżenie podczas kompilacji
+        */
+
+    }
     namespace ClassKnow {
         /*
             Klasy:
@@ -480,7 +552,6 @@ namespace Knowledge {
         void creation_and_access();
         void all();
     }
-    
     namespace ExceptionsKnow {
         /*
             Wyjątek - exception 

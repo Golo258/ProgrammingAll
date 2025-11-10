@@ -315,6 +315,20 @@ namespace Knowledge {
             std::cout << "Appending to list from api v2\n";
         }
     }
+    namespace Preprocesor {
+        double circle_area(double radius){
+            return PI * radius * radius; 
+        }
+
+        void all(){
+            double area = circle_area(5);
+            std::cout << "Area: " << area << std::endl;
+            // usage of SQUARE macro
+            std::cout << SQUARE(4) << std::endl;
+            LOG("Program startuje!");
+        }
+        
+    }
     namespace ClassKnow {
 
         namespace Specificators {
