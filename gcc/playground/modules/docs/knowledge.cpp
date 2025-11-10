@@ -363,7 +363,6 @@ namespace Knowledge {
                 show_shield(); // has access
             }
         }
-
         namespace LifeCycle {
             // -----------------------
             Constructor::Constructor(){
@@ -407,7 +406,6 @@ namespace Knowledge {
                 std::cout << "Hook deleted\n";
             }
         }
-
         namespace Utility {
             AccessGates::AccessGates(int amount, int item){
                 if (amount < 0){
@@ -453,7 +451,124 @@ namespace Knowledge {
                 }
             }
         }
-       
+        namespace Structures {
+            void Employee::print() const {
+                std::cout << name 
+                    << " (" << age << " lat) - " 
+                    << salary << " PLN\n";
+            }
+            Employee::Employee(std::string name, int age, double salary)
+                : name(std::move(name)), age(age), salary(salary)
+            {
+                std::cout << "Employee " << name << "created successfully\n";
+            }
+            void Stats::show_stats() const {
+                std::cout << "HP: " << hp
+                      << " | ATK: " << attack
+                      << " | DEF: " << defense << '\n';
+            }
+            void Player::introduce() const {
+                std::cout << "Player: " << name << " (lvl " << level << ")\n";
+                stats.show_stats();
+            }
+            void show_player(const Player& player){
+                std::cout << "=== PLAYER ===" << std::endl;
+                player.introduce();
+                // player.level++;  object == const - not allowed
+            }
+            void creation_and_access(){
+                // poprzez pojedyncze wstawianie wartości
+                Employee man;
+                man.name = "Man";
+                man.age = 31;
+                man.salary = 512612.55;
+                logger.info() << "Employee " << man.name << " earns " << man.salary << " PLN\n";
+                // poprzez liste inicjalizacyjną
+                Employee second{
+                    "Mark", 53, 4666.66
+                };
+                second.print();
+                // braced initialization
+                Employee basia = {"Basia", 22, 7200.0};
+                basia.print();
+                // z konstruktorem
+                Employee john("John", 21, 215.22);
+                john.print();
+                // zagnieżdżone struktury
+                Stats base_stats{100, 25, 10};
+                Player mage{"Lord", 7, base_stats};
+                // inicjalizacja pojedyncza 
+                Player warior{
+                    "Odyn", // name
+                    7,                // level
+                    {120, 40, 15}     // stats: hp, attack, defense
+                };
+                mage.introduce();
+                warior.introduce();
+                // zmiana statystyk
+                mage.stats.hp = 50;
+                mage.stats.show_stats();
+            }
+            void all(){
+                creation_and_access();
+            }
+        }
+        namespace Inheritance {
+            Animal::Animal(int legs)
+                : _legs(legs){
+                std::cout << "Animal created\n";
+            }
+            Dog::Dog()
+                : Animal(4) // default value for base construct
+            {
+                _name = "Burek";
+                std::cout << "Default dog created\n";
+            }
+            Dog::Dog(std::string name)
+                : Animal(4), _name(std::move(name))  // default value for base construct
+            {
+                std::cout << "Regular dog created\n";
+            }
+            Dog::Dog(int legs, std::string name)
+                : Animal(legs), _name(std::move(name))
+            {
+                std::cout << "Dog with amount of legs\n";
+            }
+            int Animal::count_legs() {
+                return _legs;
+            }
+            void Dog::introduce(){
+                std::cout << "Dog " << _name 
+                    << ", legs: " << count_legs() << "\n"; 
+            }
+
+        }
+        namespace Polymorphism {
+            void broadcast(
+                const std::vector<
+                    std::unique_ptr<Notification>
+                >& notifications,
+                const std::string& message  
+            ){
+                for (const auto& notif: notifications){
+                    notif->send(message);
+                }
+            }
+
+            void show_broadcast(){
+                std::vector<
+                    std::unique_ptr<Notification>
+                > notifications;
+                notifications.push_back(
+                    std::make_unique<EmailNotification>("golo338@gmail.com")
+                );
+                notifications.push_back(
+                    std::make_unique<SmsNotification>("golo338@gmail.com")
+                );
+                broadcast(notifications, "Senor, como esta uested?");
+            }
+
+        }
         void demonstrate_classes(){
             // --------------------------------
             Specificators::PrivateSpec first, second;
@@ -489,70 +604,18 @@ namespace Knowledge {
             std::vector<int> new_gates{15, 62, 73, 21};
             gates.set_gates(new_gates);
             logger.info() << "Gates item: " << gates.get_gates().at(1) << std::endl;
-
+            // --------------------------------
+            // Inheritance
+            Inheritance::Dog burek;
+            burek.introduce();    
+            Inheritance::Dog drago("Drago");
+            drago.introduce();       
+            Inheritance::Dog diff(3, "Damaged");
+            diff.introduce();
+            //Polymorphism 
+            Polymorphism::show_broadcast();
         }
-    }
-    namespace Structures {
-        void Employee::print() const {
-            std::cout << name 
-                << " (" << age << " lat) - " 
-                << salary << " PLN\n";
-        }
-        Employee::Employee(std::string name, int age, double salary)
-            : name(std::move(name)), age(age), salary(salary)
-        {
-            std::cout << "Employee " << name << "created successfully\n";
-        }
-        void Stats::show_stats() const {
-            std::cout << "HP: " << hp
-                  << " | ATK: " << attack
-                  << " | DEF: " << defense << '\n';
-        }
-        void Player::introduce() const {
-            std::cout << "Player: " << name << " (lvl " << level << ")\n";
-            stats.show_stats();
-        }
-        void show_player(const Player& player){
-            std::cout << "=== PLAYER ===" << std::endl;
-            player.introduce();
-            // player.level++;  object == const - not allowed
-        }
-        void creation_and_access(){
-            // poprzez pojedyncze wstawianie wartości
-            Employee man;
-            man.name = "Man";
-            man.age = 31;
-            man.salary = 512612.55;
-            logger.info() << "Employee " << man.name << " earns " << man.salary << " PLN\n";
-            // poprzez liste inicjalizacyjną
-            Employee second{
-                "Mark", 53, 4666.66
-            };
-            second.print();
-            // braced initialization
-            Employee basia = {"Basia", 22, 7200.0};
-            basia.print();
-            // z konstruktorem
-            Employee john("John", 21, 215.22);
-            john.print();
-            // zagnieżdżone struktury
-            Stats base_stats{100, 25, 10};
-            Player mage{"Lord", 7, base_stats};
-            // inicjalizacja pojedyncza 
-            Player warior{
-                "Odyn", // name
-                7,                // level
-                {120, 40, 15}     // stats: hp, attack, defense
-            };
-            mage.introduce();
-            warior.introduce();
-            // zmiana statystyk
-            mage.stats.hp = 50;
-            mage.stats.show_stats();
-        }
-        void all(){
-            creation_and_access();
-        }
+        
     }
     namespace ExceptionsKnow {
         ExceptionHandling::ExceptionHandling(int arg)
