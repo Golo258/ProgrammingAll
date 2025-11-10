@@ -259,6 +259,7 @@ namespace Knowledge {
         }
     }
     namespace AliasesAndTypes {
+        // std::variant
         void resolve_variant_types(){
             std::variant<std::string, int> possibilites;
             if (std::holds_alternative<int>(possibilites)){
@@ -282,6 +283,175 @@ namespace Knowledge {
             casting.reinterpret_casting();
             casting.dynamic_casting();
         }
+        // Pointers
+        void Pointers::simple_poiners(){
+            /*
+                numb = wartosc 
+                ptr - adres pamieci
+                *ptr - dereferencja- idz pod adres i wex wartosc
+            */
+            int numb = 412;
+            int* numb_ptr = &numb; // &adres
+            std::cout << "Numb " << numb << std::endl;
+            std::cout << "Numb address " << numb_ptr << std::endl;
+            *numb_ptr = 100;
+            std::cout << "Dreference after chage: " << *numb_ptr << std::endl;
+        }
+
+        /*
+            -> to to samo co (*pointer).metoda()
+        */
+        void Pointers::pointers_to_structures(){
+            Person woman(21);
+            Person* struct_ptr = &woman; //adres obiektu
+            struct_ptr->introduce();
+
+        }
+        
+        void Pointers::dynamic_memory(){
+            int* ptr = new int(10); // tworzy int w pamieci
+            std::cout << *ptr << std::endl;
+            delete ptr;
+        }
+
+        /*
+            std::unique_ptr
+                wyłączna własność obiektu
+                tylko on może przechowywać adres obiektu
+
+            syntax:
+                std::unique_ptr<typ> nazwa =
+                    std::make_unique<Typ>(obiekt)
+            {
+                
+            } Po wyjściu ze scopa automatycznie jest wywoływany destruktor
+            
+            Nie można kopiować do danego obiektu miedzy pointerami
+            Zdefiniowany obiekt należy już tylko do tego pointera
+            Ale można przekazać wartość poprzez
+                std::move(pointer);
+        */
+        void Pointers::unique_pointer(){
+            std::unique_ptr<Person> marek = 
+                std::make_unique<Person>(51);
+            std:: cout << "Person " << marek->_age << " is doing something\n";
+            // auto f2 = marek; compilation fail
+            auto f2 = std::move(marek);
+        }
+        
+        /*
+            shared_ptr<>  make_shared<>(obiekt);
+                wiele pointerów może korzystać z obiektu
+        */
+        void Pointers::shared_pointer(){
+            std::shared_ptr<Connection> sql_db, mongo_db;
+            sql_db = std::make_shared<Connection>();
+            sql_db->name = "SQL db";
+            sql_db->accounts = 1;
+            
+            mongo_db = sql_db; // współdzielenie jednego obiektu
+            mongo_db->accounts = 2;
+            std::cout << "Mongo db: " << mongo_db->name << "\n";
+            std::cout << "SQL amount: " << sql_db->accounts << "\n";
+            std::cout << "Using the connection\n";
+        }
+        /*
+            weak_ptr
+                służy do współpracy z shared_ptr
+                obserwator który nie zwieksza licznika
+            TODO: later
+        */
+        void Pointers::weak_pointer(){} 
+
+        void pointer_example(){
+            Pointers points;
+            points.simple_poiners();
+            points.pointers_to_structures();
+            points.dynamic_memory();
+            points.unique_pointer();
+            points.shared_pointer();
+            // points.weak_pointer();
+        }
+        void check_optional(){
+            // optional
+            // albo wartosc typu albo nullopt 
+            std::optional<int> maybe = 42;
+            std::optional<int> other = std::nullopt; 
+            if (maybe.has_value()){
+                std::cout << "Value " << maybe.value() << std::endl;
+                std::cout << "Value v2" << *maybe << std::endl;
+            }
+            int number = maybe.value_or(-1);
+            std::cout << "Number : " << number;
+
+        }
+
+        // Enumy
+        // mapowanie enuma
+        std::string Enums::method_to_string(Enums::RequestMethod method) {
+            switch (method) {
+                case Enums::RequestMethod::GET:      return "GET";
+                case Enums::RequestMethod::POST:     return "POST";
+                case Enums::RequestMethod::DELETE:   return "DELETE";
+                default:                             return "UNKNOWN";
+            }
+        }
+
+        std::optional<Enums::RequestMethod> Enums::string_to_method(const std::string& method_str) {
+            if (method_str == "GET")    return  Enums::RequestMethod::GET;
+            if (method_str == "POST")   return  Enums::RequestMethod::POST; 
+            if (method_str == "DELETE") return  Enums::RequestMethod::DELETE;
+            return std::nullopt;
+        }
+        void enums_example(){
+            /*
+                jak jest sam enum
+                    to wszystkie wartości które są zdefinowane
+                    są wrzucone prosto do globalnej przestrzeni nazw
+                        jaky na luzie, a mogą byc potem konflikty
+                    i wtedy można sie odwołać czysto do WARNING
+                    a nie trzeba do Status::WARNING
+                        co jest niebezpieczne imo
+            */
+            Enums::Status well = Enums::WARNING;
+            if (well == Enums::ERROR){
+                std::cout << "There occurs an error\n";
+            }
+            else{
+                std::cout << "Value: " << well << " and its ok\n";
+            }
+            // Enums::Status err = (Enums::Status)100;  są konflikty z innymi
+            Enums::RequestMethod method = Enums::RequestMethod::GET;
+            // Wymagane jest rzutowanie na inta
+            int code = static_cast<int>(method);
+            std::cout << "Request method code: " << code << std::endl;
+            Enums::Color color = Enums::Color::GREEN;
+            std::cout << "Hex color: "
+                << std::hex << static_cast<uint8_t>(color) 
+                << std::endl;
+
+            // iterowanie po enumie ( hack na fora)
+            constexpr std::array<Enums::RequestMethod, 3> all_requests = {
+                Enums::RequestMethod::GET,
+                Enums::RequestMethod::DELETE,
+                Enums::RequestMethod::POST
+            };
+            for (auto request: all_requests){
+                std::cout << "Request: " << static_cast<int>(request) << std::endl;
+            }
+            // mapowanie 
+            std::string method_str = Enums::method_to_string(method);
+            std::cout << "Converted method: " << method_str << "\n";
+            // alais do skrótów
+            using REQUEST_METHOD = Enums::RequestMethod;
+            REQUEST_METHOD get_method = REQUEST_METHOD::GET;
+            auto mapped_from_string = Enums::string_to_method(method_str);
+            if (mapped_from_string != std::nullopt){
+                REQUEST_METHOD mapped_value = mapped_from_string.value();
+                std::cout << "Method: " << static_cast<int>(mapped_value) << std::endl;
+            }
+            
+        }   
     }
     namespace NameSpacesKnow {
         namespace Begin{
