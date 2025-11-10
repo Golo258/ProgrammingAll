@@ -271,7 +271,16 @@ namespace Knowledge {
                     << "Variant holds string type" 
                     << std::get<std::string>(possibilites) << std::endl;
             }
-
+        }
+        void casting_example(){
+            VariableCasting casting;
+            casting.static_casting();
+            int x = 10;
+            const int* some_var = &x;
+            casting.const_casting(some_var);
+            std::cout << "After casting" << x << "\n";
+            casting.reinterpret_casting();
+            casting.dynamic_casting();
         }
     }
     namespace NameSpacesKnow {

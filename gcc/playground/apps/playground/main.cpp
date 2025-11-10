@@ -62,7 +62,8 @@ void knowleadge_playground(){
     // Knowledge::ExceptionsKnow::show_all_exceptions();
     // Knowledge::Functions::show_all_functions();
     // Knowledge::Structures::all();
-    Knowledge::Preprocesor::all();
+    // Knowledge::Preprocesor::all();
+    Knowledge::AliasesAndTypes::casting_example();
     
 
 }
