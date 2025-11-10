@@ -61,12 +61,13 @@ void knowleadge_playground(){
     // Knowledge::StringKnow::show_all_string_operation();
     // Knowledge::ExceptionsKnow::show_all_exceptions();
     // Knowledge::Functions::show_all_functions();
+    Knowledge::Structures::all();
 }
 
 int main() {
-    logger.info() << "\n<======================================>\n";
-    parser_task();
-    // knowleadge_playground();
-    logger.info() << "\n<======================================>\n";
+    std::cout<< "\n<---------------------------------------->\n";
+    // parser_task();
+    knowleadge_playground();
+    std::cout << "\n<---------------------------------------->\n";
     return 0;
 }
