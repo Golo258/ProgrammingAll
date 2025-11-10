@@ -24,7 +24,6 @@
 // ------------------------
 /*
     TODO co do przerobienia:
-        - kastowanie zmiennych i pointerów
         - polimorfizm, dziedziczenie, interfacy itp
         - enumami 
         - json, parsowanie, tworzenie, tak samo yaml i inne typy 
@@ -330,8 +329,8 @@ namespace Knowledge {
         void casting_example();
     }
     namespace NameSpacesKnow {
-        // Namespacy wytłumaczenie
         /*
+        Namespacy wytłumaczenie
             Sposób na grupowanie nazw
                 (funkcji, klas, zmienych) w logiczne bloki,
                 aby uniknąć konfliktu nazw w projetach
@@ -477,7 +476,7 @@ namespace Knowledge {
                 - domyslnie mają wszystkie pola prywatne
                 - w struct publiczne
         */
-       namespace Specificators {
+        namespace Specificators {
         /*
             Specyfikatory dostępu:
                 - mówią, kto  może dotykać rzeczy w środku klasy
@@ -529,7 +528,6 @@ namespace Knowledge {
                     void damage();
             };
         }
-
         namespace LifeCycle {
             /* ----- KONSTRUKTOR -----
                 Metoda tworząca i inicjalizująca obiket
@@ -587,49 +585,167 @@ namespace Knowledge {
             };
 
         }
-        void demonstrate_classes();
-    }
-    namespace Structures {
-        /*
-            Struct - własny typ danych
-                grupuje kilka powiązanych wartości
-                dostęp wszystko jest public
-            zamiast 
+        namespace Structures {
+            /*
+                Struct - własny typ danych
+                    grupuje kilka powiązanych wartości
+                    dostęp wszystko jest public
+                zamiast 
+                    std::string name;
+                    int age;
+                    double salary;
+            */
+        
+            // można zrobić
+            struct Employee {
+                // pola structury
                 std::string name;
                 int age;
                 double salary;
-        */
-       
-        // można zrobić
-        struct Employee {
-            // pola structury
-            std::string name;
-            int age;
-            double salary;
-            // metody struktury
-            void print() const;
-            // konstruktor - do tworzenia obiektów
-            Employee() = default;
-            Employee(std::string name, int age, double salary);
-        };
-        // Zagnieżdżone struktury
-        struct Stats {
-            int hp;
-            int attack;
-            int defense;
-            void show_stats() const;
-        };
+                // metody struktury
+                void print() const;
+                // konstruktor - do tworzenia obiektów
+                Employee() = default;
+                Employee(std::string name, int age, double salary);
+            };
+            // Zagnieżdżone struktury
+            struct Stats {
+                int hp;
+                int attack;
+                int defense;
+                void show_stats() const;
+            };
 
-        struct Player {
-            std::string name;
-            int level;
-            Stats stats;
-            void introduce() const;
-        };
-        void show_player(const Player& player);
-        void creation_and_access();
-        void all();
+            struct Player {
+                std::string name;
+                int level;
+                Stats stats;
+                void introduce() const;
+            };
+            void show_player(const Player& player);
+            void creation_and_access();
+            void all();
+        }
+        namespace Inheritance {
+            /*
+             |-------------------
+             |   DZIEDZICZENIE  |
+             |-------------------
+                Mechanizm dzieki któremu klasa pochodna
+                    dziedziczy pola i metody z bazowej
+                Konstruktory
+                    każda klasa dziedziczy wszystko prócz konstruktorów
+                    nie odziedziczy automatycznie
+                    klasa dziedziczaca musi zaincjalizowac baze
+
+                Najpierw baza potem konstruktor pochodnej
+            */
+            // struktur
+            struct Animal {
+                int _legs;
+                public:
+                    Animal() = default;
+                    Animal(int legs);
+                    int count_legs(); 
+            };
+            struct Dog : Animal { // dziedziczy po Animal
+                std::string _name;
+
+                public:
+                    Dog();
+                    Dog(std::string name);
+                    Dog(int legs, std::string name);
+                    void introduce();
+            };
+            /*
+                Poziomy dziedziczenia:
+            */
+            class A {
+                public:
+                    int pub = 1;   // dostępne dla wszystkich
+                protected:
+                    int prot = 2;  // dostępne tylko dla dziedziczących klas
+                private:
+                    int priv = 3;  // dostępne tylko w A
+            };
+            class B : public A {
+                /*
+                    wszystkie dostępy jak w A są zachowane 
+                     B b;
+                    std::cout << b.pub;  // działa
+                    // b.prot; nie działa (protected)
+                    // b.priv; nie działa (private)
+                */
+            };
+            class C : protected A {
+                /*
+                    pub   -> staje się protected
+                    prot  -> zostaje procted
+                    priva -> jest niedostepny
+                
+                    C c;
+                    c.pub;  nie działa, bo pub jest protected
+                */
+            };
+            class D : private A {
+                // wszystko staje sie private
+                // pub | prot | priv 
+            };
+        }
+        namespace Polymorphism {
+            /*
+            Polimorfizm:
+                Koncepcja która pozawala 
+                    obiektowi zachować sie inaczej
+                    w zależności od faktycznego typu obiektu
+                Nadpisujemy override wirtualne metody klasy    
+            
+                Mamy wspólny interfejs
+                    i różne klasy pochodne które robią coś innego
+                a poprzez to możemy traktować je 
+                jako ten sam typ bazowy w petli i kolekcjach
+            */
+            class Notification {
+                public:
+                    virtual void send(const std::string& message) const = 0; // czysto writualna
+                    virtual ~Notification() = default;
+            };
+
+            // pochodna - email
+            class EmailNotification : public Notification {
+                std::string _email;
+                public:
+                    EmailNotification(std::string email)
+                        : _email(std::move(email)) {}
+                    void send(const std::string& msg) const override {
+                        std::cout << "[EMAIL] To: " << _email << std::endl 
+                            << "Content: " << msg << std::endl; 
+                    } 
+            };
+            // pochodna - sms
+            class SmsNotification : public Notification {
+                std::string _phone_number;
+                public:
+                    SmsNotification(std::string phone_number) 
+                        : _phone_number(phone_number){}
+
+                    void send(const std::string& msg) const override {
+                        std::cout << "[SMS] To number: " << _phone_number
+                            << "\nMsg content: " << msg << "\n";
+                    }
+            };
+
+            void broadcast(
+                const std::vector<
+                    std::unique_ptr<Notification>
+                >& notifications,
+                const std::string& message  
+            );
+            void show_broadcast();
+        }
+        void demonstrate_classes();
     }
+    
     namespace ExceptionsKnow {
         /*
             Wyjątek - exception 
