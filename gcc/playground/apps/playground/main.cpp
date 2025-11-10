@@ -15,7 +15,7 @@ void logger_example(){
     
 
 void parser_task(){
-    using namespace utils::parser;
+    namespace up = utils::parser;
     const std::string EXAMPLE_INPUT_RESULT = 
     " marcin===  12\n"
     "# kobi= 52\n"
@@ -26,12 +26,11 @@ void parser_task(){
     "Alice:10\n"
     " kasz anka: 83\n";
     // LeaderboardResults results = parse_name_score_lines(EXAMPLE_INPUT_RESULT);
-
     // with_usage of file
     std::string score_results = load_text("scores.txt");
-    LeaderboardResults results = parse_name_score_lines(score_results);
+    up::LeaderboardResults results = up::parse_name_score_lines(score_results);
     Leaderboard board;
-    for(BoardResult result: results){
+    for(up::BoardResult result: results){
         logger.info() << "Current result " 
             << result.first << ", "
             << result.second << "\n";
@@ -40,10 +39,9 @@ void parser_task(){
             result.second
         );
     }
-    // przekazujemy że strumien ma lecieć do konsolki
     board.print(std::cout, 5);
     board.add_or_update("Kamil", 2000);
-    board.print(std::cout, 5); // Kamilek na czele teraz
+    board.print(std::cout, 5);
     auto mediana = board.mediana();
     auto average = board.average();
     if (mediana != std::nullopt){
