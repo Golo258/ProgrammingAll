@@ -1,10 +1,11 @@
 // ---------EXTERNAL----------------
 #include <string>
 //----------INTERNAL----------------
-#include <utils/parse.hpp>
 #include <docs/knowledge.hpp>
 #include <utils/variables.hpp>
-#include <apps/leaderboard.hpp>
+// ----------------------------
+#include <apps/board_app/parse.hpp>
+#include <apps/board_app/leaderboard.hpp>
 
 void logger_example(){
     logger.debug() << "Start aplikacji\n";
@@ -15,7 +16,7 @@ void logger_example(){
     
 
 void parser_task(){
-    namespace up = utils::parser;
+    namespace bp = board::parser;
     const std::string EXAMPLE_INPUT_RESULT = 
     " marcin===  12\n"
     "# kobi= 52\n"
@@ -28,9 +29,9 @@ void parser_task(){
     // LeaderboardResults results = parse_name_score_lines(EXAMPLE_INPUT_RESULT);
     // with_usage of file
     std::string score_results = load_text("scores.txt");
-    up::LeaderboardResults results = up::parse_name_score_lines(score_results);
+    bp::LeaderboardResults results = bp::parse_name_score_lines(score_results);
     Leaderboard board;
-    for(up::BoardResult result: results){
+    for(bp::BoardResult result: results){
         logger.info() << "Current result " 
             << result.first << ", "
             << result.second << "\n";
@@ -72,8 +73,8 @@ void knowleadge_playground(){
 
 int main() {
     std::cout<< "\n<---------------------------------------->\n";
-    // parser_task();
-    knowleadge_playground();
+    parser_task();
+    // knowleadge_playground();
     std::cout << "\n<---------------------------------------->\n";
     return 0;
 }

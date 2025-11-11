@@ -1,5 +1,6 @@
 
-// include/apps/leadersboard.hpp
+// include/apps/board_app/leadersboard.hpp
+
 #pragma once
 #include <iostream>
 #include <optional>
@@ -8,7 +9,7 @@
 #include <vector>
 #include "utility" // std::pair
 #include <utils/variables.hpp>
-#include <utils/parse.hpp>
+#include <apps/board_app/parse.hpp>
 #include <numeric> // acumulate
 
 class Leaderboard {

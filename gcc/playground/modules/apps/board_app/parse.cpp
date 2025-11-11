@@ -1,17 +1,17 @@
 
 
-#include <utils/parse.hpp>
-namespace up = utils::parser;
+#include <apps/board_app/parse.hpp>
+namespace bp = board::parser;
 //--------------------------------------------
-up::LeaderboardResults up::parse_name_score_lines(
+bp::LeaderboardResults bp::parse_name_score_lines(
     std::string scores_input
 ){
-    up::LeaderboardResults results;
+    bp::LeaderboardResults results;
     std::istringstream scores_buffor(scores_input);
     std::string buffor_line;
     while(std::getline(scores_buffor, buffor_line)){
         try{
-            auto items = up::retrieve_scores_items(buffor_line);
+            auto items = bp::retrieve_scores_items(buffor_line);
             if (!items){
                 logger.error() << "Buffor line is not compatible\n"; 
                 continue;
@@ -22,7 +22,7 @@ up::LeaderboardResults up::parse_name_score_lines(
             if(!std::holds_alternative<std::string>(name_value)
                 || !std::holds_alternative<int>(score_value)
             ){
-                logger.error() << "Type missmatch after cleanup\n";
+                logger.error() << "Type missmatch after cleanbp\n";
                 continue;
             }
             std::string cleaned_name = std::get<std::string>(name_value);
@@ -43,19 +43,19 @@ up::LeaderboardResults up::parse_name_score_lines(
 //--------------------------------------------
 std::optional<
     std::pair<std::string, std::string>
-> up::retrieve_scores_items(std::string buffor){
+> bp::retrieve_scores_items(std::string buffor){
         auto sep_pos = buffor.find('=');
         if (sep_pos == std::string::npos){
-            throw up::ParseError("Line does not contain any = sign\n");
+            throw bp::ParseError("Line does not contain any = sign\n");
         }
 
         std::regex multiple_hashes(R"(={2,})");
         if (std::regex_search(buffor, multiple_hashes)){
-            throw up::ParseError("Line contain multiple equals signs\n");
+            throw bp::ParseError("Line contain multiple equals signs\n");
         }
 
         if (buffor.find("#") != std::string::npos){
-            throw up::ParseError("Line contains # comment sign.\n");
+            throw bp::ParseError("Line contains # comment sign.\n");
         }
         
         std::string score_key = buffor.substr(0, sep_pos);
@@ -65,10 +65,10 @@ std::optional<
         );
     }
 //--------------------------------------------
-std::variant<std::string, int> up::clean_items_parts(
+std::variant<std::string, int> bp::clean_items_parts(
     std::string part
 ){
-    up::trim_string(part, up::Trim::BOTH);
+    bp::trim_string(part, bp::Trim::BOTH);
     try{
         size_t id_x{};
         int value = std::stoi(part, &id_x);
@@ -81,20 +81,20 @@ std::variant<std::string, int> up::clean_items_parts(
     return part;
 }
 //--------------------------------------------
-void up::trim_string(std::string& text, up::Trim side){
+void bp::trim_string(std::string& text, bp::Trim side){
     const auto first = text.find_first_not_of(
-        up::white_spaces_group);
+        bp::white_spaces_group);
     if (first == std::string::npos){
         text.clear();
         return;
     }
-    const auto last = text.find_last_not_of(up::white_spaces_group);
-    if (side == up::Trim::LEFT || side == up::Trim::BOTH) {
+    const auto last = text.find_last_not_of(bp::white_spaces_group);
+    if (side == bp::Trim::LEFT || side == bp::Trim::BOTH) {
         text.erase(0, first);
     }
-    if (side == up::Trim::RIGHT || side == up::Trim::BOTH) {
+    if (side == bp::Trim::RIGHT || side == bp::Trim::BOTH) {
         const auto new_last = 
-            (side == up::Trim::LEFT || side == up::Trim::BOTH) 
+            (side == bp::Trim::LEFT || side == bp::Trim::BOTH) 
                 ? (last - first) 
                 : last;
         text.erase(new_last + 1);

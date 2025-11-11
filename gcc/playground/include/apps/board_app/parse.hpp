@@ -1,4 +1,6 @@
 
+// include/apps/leaderboard/parse.hpp
+
 #pragma once
 #include <iostream>
 #include <map>
@@ -11,7 +13,7 @@
 #include <string>
 #include <regex>
 
-namespace utils {
+namespace board {
     namespace parser {
         enum class Trim {
             LEFT,

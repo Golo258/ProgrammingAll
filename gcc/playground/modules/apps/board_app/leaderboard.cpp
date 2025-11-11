@@ -1,6 +1,6 @@
 
 // modules/apps/leadersboard.cpp
-#include <apps/leaderboard.hpp>
+#include <apps/board_app/leaderboard.hpp>
 
 //--------------------------------------------
 void Leaderboard::set_score(
@@ -39,17 +39,18 @@ std::optional<int> Leaderboard::score_of(const std::string& name) const
 }
 
 //--------------------------------------------
-utils::parser::LeaderboardResults Leaderboard::top(std::size_t amount) const {
-    utils::parser::LeaderboardResults results_copy(
+namespace bp = board::parser;
+bp::LeaderboardResults Leaderboard::top(std::size_t amount) const {
+    bp::LeaderboardResults results_copy(
         _data.begin(), _data.end()
     ); // kopia
 
     std::sort(results_copy.begin(),results_copy.end(),
-        [](utils::parser::BoardResult prev, utils::parser::BoardResult next){
+        [](bp::BoardResult prev, bp::BoardResult next){
             return prev.second > next.second;
         }
     );
-    utils::parser::LeaderboardResults top_scores(
+    bp::LeaderboardResults top_scores(
         results_copy.begin(), results_copy.begin() + amount
     );
     return top_scores;
@@ -58,7 +59,7 @@ utils::parser::LeaderboardResults Leaderboard::top(std::size_t amount) const {
 void Leaderboard::print(std::ostream& os, std::size_t n) const {
     std::string line;
     int index = 1;
-    utils::parser::LeaderboardResults results = top(n);
+    bp::LeaderboardResults results = top(n);
     for (const auto&[name, score]: results){
         os << index++ << ") " << name << " " << score << "\n";
     }
