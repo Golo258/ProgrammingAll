@@ -82,6 +82,7 @@ namespace Knowledge {
                 return;
             }
             out << "[INFO] File stream in here!\n [NEXT] end\n<->";
+            std::filesystem::remove("notes.txt");
             // out.close(); // after went out of func
         }
 
@@ -93,6 +94,7 @@ namespace Knowledge {
                 return;
             }
             append_out << "\n[NEW] one and last";
+            std::filesystem::remove("notes.txt");
         }
         void FileStream::reading_by_lines(){
             std::ifstream in("notes.txt");
@@ -156,6 +158,7 @@ namespace Knowledge {
                 char* datetime = ctime(&current_date);
                 out_data << "[" << datetime << "]: Started \n";
             }
+            std::filesystem::remove("app.txt");
         }
 
         void show_file_stream(){

@@ -68,17 +68,21 @@ add_app(playground ${CMAKE_SOURCE_DIR}/apps/playground/main.cpp)
 # ================== TESTS ==================
 include(CTest)
 enable_testing()
-# doctest header
-include_directories(
-  ${CMAKE_SOURCE_DIR}/third_party/doctest
-)
 
-add_executable(tests
-    tests/test_main.cpp
-    tests/test_explanation.cpp
-)
+# doctest header
+include_directories(${CMAKE_SOURCE_DIR}/third_party/doctest)
+
+# [A] Zbierz wszystkie pliki tests/*.cpp automatycznie
+file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
+     ${CMAKE_SOURCE_DIR}/tests/*.cpp)
+
+add_executable(tests ${TEST_SOURCES})
 
 target_link_libraries(tests PRIVATE core)
 target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-add_test(NAME unit COMMAND tests)
+# [B] Jeśli testy potrzebują resources/, skopiuj je obok binarki testów
+attach_resources(tests "${RES_DIR}")
+
+# add_test(NAME unit COMMAND tests)
+add_test(NAME unit COMMAND tests --order-by=name --success=1)

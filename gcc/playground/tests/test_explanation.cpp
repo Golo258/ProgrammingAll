@@ -62,9 +62,11 @@ TEST_CASE("div: deviding and exception ") {
     CHECK(
         div(9.0, 3.0) == doctest::Approx(3.0)
     );
-    CHECK_THROWS_AS(
-        div(1.0, 0.0), std::runtime_error
-    );
+
+    CHECK_THROWS_AS(div(5.0, 0.0), std::runtime_error);
+    CHECK_THROWS_WITH_AS(div(5.0, 0.0), "division by zero", std::runtime_error);
+    CHECK_NOTHROW(div(6.0, 3.0));
+
 }
 
 TEST_CASE("Assertion example") {
@@ -117,3 +119,66 @@ TEST_CASE_FIXTURE(MathFixture, "fixture demo") {
     ./tests --list-test-cases
     ./tests --dt-help
 */
+
+/*
+    // przykład tylko poglądowy (dla funkcji szablonowych)
+    template <typename T>
+    T twice(T x) { return x + x; }
+
+    TEST_CASE_TEMPLATE("twice() works for integral types", T, int, long, long long) {
+        T v = 21;
+        CHECK_EQ(twice(v), T{42});
+    }
+*/
+/*
+    Fixutre:
+        to mała klasa/struct
+        która przechowuje stan startowy w konstruktorze
+        i sprząta w destuktorze
+    Doctest tworzy jej obiekt dla każdego testu i SBUCASE
+
+*/
+// wzorzec
+struct DbFixture {
+  
+    int counter = 0; // licznik używanych testów
+    int value = 10;
+    std::string name;
+    void set(std::string v) {
+        name = std::move(v);
+    }
+
+    void bump() {
+        ++counter;
+    }
+    DbFixture() {
+        // setup, otwarcie połączenia, załadowanie danych, plików
+    }
+    ~DbFixture(){
+        // teardown, zamkniecie połlączenie, usuniecie danych
+    }
+};
+
+TEST_CASE_FIXTURE(DbFixture, "db: simple connection"){
+    bump(); // można używać metod z fixtury bez prefixu
+    CHECK(counter == 1);
+}
+
+TEST_CASE_FIXTURE(DbFixture, "db: callculate value, subcases"){
+    SUBCASE("add"){
+        value += 5; 
+        CHECK(value == 15);
+    }
+    SUBCASE("multiple"){
+        value *= 3;
+        CHECK(value == 30);
+    }
+    SUBCASE("reset"){
+        value = 0;
+        CHECK(value == 0);
+    }
+}
+TEST_CASE_FIXTURE(DbFixture, "name setup") {
+    set("abc");
+    CHECK(name == "abc");
+}
