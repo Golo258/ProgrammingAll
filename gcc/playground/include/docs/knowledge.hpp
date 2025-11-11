@@ -863,6 +863,9 @@ namespace Knowledge {
                         to musi mieć dane metody
                 Nazewnictwo interfacu:
                     klasa interfacu zaczyna sie od 'I'
+
+                Zazwyczaj nie ma konstruktora, ani pól
+                    nie powiniene przechowywać żadnego stanu
             */
             struct IProcessor { 
                 virtual void process(
@@ -1071,6 +1074,10 @@ namespace Knowledge {
                 void show_function_examples();
             };
 
+        class UsefulFunction{
+            public:
+                void checking_int();
+        };
         void show_all_functions();
     }
 }
