@@ -24,11 +24,16 @@ Struktura klas:
                 - int defense
 
         Metody wirtualne:
-            void attack(Character& target) – wykonuje atak (różnie implementowany w podklasach)
-            void takeDamage(int amount) – zmniejsza HP po otrzymaniu obrażeń
-            void levelUp() – zwiększa level i statystyki
-            virtual void printStats() const – wypisuje statystyki postaci
-            virtual ~Character() – destruktor wirtualny obowiązkowo
+            void attack(Character& target) 
+                – wykonuje atak (różnie implementowany w podklasach)
+            void takeDamage(int amount) 
+                – zmniejsza HP po otrzymaniu obrażeń
+            void levelUp() 
+                – zwiększa level i statystyki
+            virtual void printStats() const 
+                – wypisuje statystyki postaci
+            virtual ~Character() 
+                – destruktor wirtualny obowiązkowo
 
 ⚔️ Etap 2 – Klasy pochodne
     🛡️ Warrior

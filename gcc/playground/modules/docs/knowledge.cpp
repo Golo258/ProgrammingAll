@@ -1379,10 +1379,25 @@ namespace Knowledge {
             std::function<void()> no_param;
         }
 
+        void UsefulFunction::checking_int(){    
+            /*
+                isdigit(int char)
+                    z <cctype>
+                sprawdza czy dany znak reprezentuje cyfre
+                    '0' - '9'
+            */
+            std::cout << std::isdigit('5') << "\n";  // 1 (true)
+            std::cout << std::isdigit('a') << "\n";  // 0 (false)
+            std::cout << std::isdigit(53) << "\n";   // też true, bo 53 to kod ASCII '5'
+            // std::isdigit(123); // NIE działa jak myślisz
+        }
+        
         void show_all_functions(){
             LambdaFunction lambda;
             lambda.syntax();
             lambda.show_function_examples();
+            UsefulFunction useful;
+            useful.checking_int();
         }
     }
 
