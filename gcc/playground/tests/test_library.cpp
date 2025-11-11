@@ -2,11 +2,11 @@
 
 #include "doctest.h"
 #include <stdexcept>
-#include <utils/parse.hpp>
+#include <apps/board_app/parse.hpp>
 #include <vector>
 #include <string>
 
-namespace u_parser = utils::parser;
+namespace u_parser = board::parser;
 
 /*
     Testowanie modudłów

@@ -1,4 +1,4 @@
-// logger.hpp
+// include/utils/logger.hpp
 #pragma once
 #include <iostream>
 #include <fstream>
@@ -22,7 +22,12 @@ inline std::ostream& devnull() {
     return os;
 }
 
-enum class LogLevel { Debug = 0, Info = 1, Warn = 2, Error = 3 };
+enum class LogLevel { 
+    Debug = 0,
+    Info = 1,
+    Warn = 2,
+    Error = 3
+};
 
 class Logger {
     public:
@@ -53,30 +58,8 @@ class Logger {
         LogLevel _min;
         bool _with_time;
 
-        std::ostream& stream(LogLevel lvl) { return (lvl >= _min) ? _out : devnull(); }
-
-        std::string prefix(const char* level) {
-            if (!_with_time) 
-                return std::string("[") + level + "] ";
-
-            using namespace std::chrono;
-            auto now = system_clock::now();
-            auto t   = system_clock::to_time_t(now);
-            auto ms  = duration_cast<milliseconds>(
-                now.time_since_epoch()
-            ) % 1000;
-
-            std::tm tm{};
-            #if defined(_WIN32)
-                localtime_s(&tm, &t);
-            #else
-                localtime_r(&t, &tm);
-            #endif
-            std::ostringstream oss;
-            oss << '[' << std::put_time(&tm, "%F %T")
-                << '.' << std::setw(3) 
-                << std::setfill('0') << ms.count()
-                << "][" << level << "] ";
-            return oss.str();
+        std::ostream& stream(LogLevel lvl) { 
+            return (lvl >= _min) ? _out : devnull(); 
         }
+        std::string prefix(const char* level);
 };
