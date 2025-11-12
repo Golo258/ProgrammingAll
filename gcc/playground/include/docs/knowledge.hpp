@@ -422,6 +422,141 @@ namespace Knowledge {
             
         }
         void enums_example();
+        namespace Templates {
+            /*
+                Co to jest template:
+                    to sposób na pisanie uniwersalnego kod
+                        dla wielu typów, bez duplikowania funkcji 
+                Wewnątrz:
+                    kompilator nie wie jaki jest typ od razu
+                    kiedy wywołujesz z argumentami
+                        to on wtedy podstawia dany typ i generuje kod
+                Każdy typ to osobna wersja funkcji
+                    instancja szabonu
+                
+                Ważne
+                    Typy muszą wspierać operacje użyte w funkcji
+                    np:  Jeśli robimy operacje a + b
+                    to kompilator wymaga żeby typ miał operator +
+
+                    można samemu postawić typ
+                        add<int>(3, 5);
+                        ale kompilator sam sie domyślna
+                Konwencje nazywania typu w templacie:
+                    T (Type)
+                    TValue
+                    TKey
+                    TElement
+                    TData
+                    TReturn
+                FUNKCJE SZABLONOWE
+            */ 
+            //  Zamiast  
+            inline int add_int(int a, int b ) { return a + b; }
+            inline double add_double(double a, double b) {return a + b; }
+            // Piszemy jedną wersje
+            template<typename Type>
+            Type add(Type a, Type b){
+                return a + b;
+            }
+
+            // funkcja max_of
+            template<typename Type>
+            Type max_of(const Type& prev, const Type& next){
+                return (prev > next) ? prev : next;
+            }
+            /*
+            jeśli chcemy mieć typy mieszane to nie można zrobić
+                add(2, 3.5) tylko dajemy kilka typów
+            */ 
+            template<typename Type_a, typename Type_b>
+            auto add_different(Type_a first, Type_b second){
+                return first + second;
+            }
+            /*
+                KLASY SZABLONOWE
+                    kompilator widzi że Box to template
+                    towrzy kopie kodu wtedy gdy użyjemy innego typu
+                    każdy typ ma osobną implementacje
+                        tak jak funkcje szablonowe
+
+                Uniwersalny przepis na dany obiekt
+                T to miejsce na typ który wstawiamy później
+                Kiedy używamy z danym typem
+                    kopmilator tworzy wersje klasy i wszedzie wrzuca swój typ
+            */
+            template<typename T>
+            class Box {
+                private: 
+                    T _value;
+                public:
+                    Box(T value) : _value(value){}
+
+                    T get() const {
+                        return _value;
+                    }
+                    void set(T new_value){
+                        _value = new_value;
+                    }
+            };
+            // z dwoma typami
+            template <typename TKey, typename TValue>
+            class Pair {
+                private:
+                    TKey _key;
+                    TValue _value;
+                public:
+                    Pair(TKey key, TValue value)
+                        : _key(key), _value(value) {}
+                    TKey get_key() const {
+                        return _key;
+                    }
+                    TValue get_value() const {
+                        return _value;
+                    }
+            };
+
+            // Klasa container
+            template <typename TItem>
+            class Container {
+                private:
+                    std::vector<TItem> _items;
+                    inline static int containers_amount = 0; //statyczne pole musi być zaincjalowane przed
+                    
+                public:
+                    Container(){
+                        containers_amount++;
+                    } 
+                    ~Container(){
+                        containers_amount--;
+                    }
+                    Container(size_t size){
+                        _items.reserve(size);
+                        containers_amount++;
+                    }
+                    // wypełnia n kopiami 'value'
+                    Container(std::size_t n, const TItem& value) {
+                        _items.assign(n, value);    
+                        containers_amount++;
+                    }
+
+                    Container(std::initializer_list<TItem> items) 
+                        : _items(items) {
+                        containers_amount++;
+                    }
+
+                    void add(const TItem& item){
+                        _items.emplace_back(item);    
+                    }
+                    
+                    void print_all_items() const {
+                        for (const TItem& item: _items){
+                            std::cout << "Item [" << item << "]\n"; 
+                        }
+                    }
+            };
+            void show_tamples();
+        }
     }
     namespace NameSpacesKnow {
         /*

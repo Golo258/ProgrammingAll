@@ -28,9 +28,7 @@ TEST_SUITE("Character Class Check"){
         CHECK_EQ(c_regular.get_level(), 2);
     }
     TEST_CASE("Check parameters beyond thresholds"){
-        Character c_regular(
-            "Maria", 15, 30
-        );
+        Character c_regular("Maria", 15, 30);
         CHECK_THROWS_AS(
             c_regular.set_level(112),
             std::invalid_argument
@@ -42,9 +40,7 @@ TEST_SUITE("Character Class Check"){
         );
     }
     TEST_CASE("Check parameters below thresholds "){
-        Character c_regular(
-            "Maria", 15, 30
-        );
+        Character c_regular("Maria", 15, 30);
         CHECK_THROWS_AS(
             c_regular.set_level(-12),
             std::invalid_argument

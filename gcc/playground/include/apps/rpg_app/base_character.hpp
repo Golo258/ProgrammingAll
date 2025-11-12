@@ -42,5 +42,11 @@ class Character {
         int get_attach_power();
         int get_defense();
         
-        virtual ~Character() = default;
+        // virtuals
+        // TODO: revise later
+        // virtual void attack(Character& target) = 0;
+        // virtual void take_damage(int amount)   = 0;
+        // virtual void level_up() = 0;
+        // virtual void print_stats() const = 0;
+        // virtual ~Character() = default;
 };
