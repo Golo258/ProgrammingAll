@@ -455,6 +455,45 @@ namespace Knowledge {
             }
             
         }   
+        namespace Templates {
+            void show_tamples(){
+                add_int(1,1);
+                add_double(1.5, 1.5);
+
+                // z użyciem templata
+                int add_int = add(1,2);
+                double add_double = add(1.5, 15.7);
+                std::string add_string = add(
+                    std::string("Hi "), std::string("there")
+                );
+                auto bigger = max_of(5, 9);        // int
+                auto longer = max_of<std::string>("his", "yo"); // string
+                auto different = add_different(
+                    12, 515.5125
+                );
+                // dowolny typ pudełka
+                Box<int> health(100);
+                Box<double> accuracy(99.5);
+                Box<std::string> nickname("Golo");
+
+                std::cout << "HP: " << health.get() << "\n";
+                std::cout << "ACC: " << accuracy.get() << "\n";
+                std::cout << "Nick: " << nickname.get() << "\n";
+                
+                Pair<std::string, int> player_score("Grzesiuniunia", 999);
+                std::cout << player_score.get_key() << ": " 
+                          << player_score.get_value() << "\n";
+                
+                Container<int> numbers(3);
+                numbers.add(10);
+                numbers.add(1256);
+                numbers.print_all_items();
+                Container<int> numbers_inicialized{10, 1256};
+                numbers_inicialized.print_all_items();
+                Container<int> filled_zeros(3, 0);
+                filled_zeros.print_all_items();
+            }
+        }
     }
     namespace NameSpacesKnow {
         namespace Begin{
