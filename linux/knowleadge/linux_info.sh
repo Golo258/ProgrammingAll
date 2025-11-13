@@ -566,3 +566,10 @@ sudo nano /etc/apt/sources.list -- repozytoria
     deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware
     deb http://deb.debian.org/debian/ bookworm-updates main contrib non-free non-free-firmware
     deb http://security.debian.org/debian-security bookworm-security main contrib non-free non-free-firmware
+
+
+Paczka P2:
+    CUS.251105.06
+        MPLANE_ecpri72e_72cells_fullstack_mix   
+    CLOUD_2MPPP_2CUS_MPPP - na tej TLce coś nie bangla
+    
