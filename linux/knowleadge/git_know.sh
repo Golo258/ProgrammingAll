@@ -59,6 +59,8 @@ def GIT:
         -- zamiana z https na git 
         git remote set-url origin git@your-git-server.com:yourgroup/yourrepo.git
         
+    # zmiana nazwy brancha
+    git branch -m nowa-nazwa
 
     #dodawanie submodułów
         cd /sciezka_do_repo
@@ -170,16 +172,20 @@ def GIT:
     git remote add gitlab https://ggolonka:Fws6cLk-Zv1d9qboPXaF@wrgitlab.int.net.nokia.com/RAN/gears/krakow.iht.git
 
     # testowanie gearsów na branch jenkins
-    sh "git clone https://gerrit.ext.net.nokia.com/gerrit/MN/UTE/gears/gears.krakow.iht"
-    sh "cd /home/ute/MN/UTE/gears/gears.krakow.iht; git remote add gitlab https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git; git pull gitlab main"
-    sh "cd /home/ute/MN/UTE/gears/gears.krakow.iht; git fetch --all; git checkout ggolonka/listener_dependency_update"
+    git clone https://gerrit.ext.net.nokia.com/gerrit/MN/UTE/gears/gears.krakow.iht
+    cd /home/ute/MN/UTE/gears/gears.krakow.iht
+    git remote add gitlab https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git
+    git pull gitlab main"
+    sh "cd /home/ute/MN/UTE/gears/gears.krakow.iht
+    git fetch --all
+    git checkout ggolonka/listener_dependency_update"
 
     Ustawianie ignorowania danych plików bez dodania ich do gitignora
         git update-index --assume-unchanged .vscode/
             przy tym musi być śledzony
 
         echo ".vscode/" >> .git/info/exclude -- to jest lepsze 
-
+"
 
     gears env create
     eval $(gears env activate) 
@@ -188,7 +194,6 @@ def GIT:
     cd  ~/MN/UTE/gears/gears.krakow.iht/.gears_cache/virtualenvs/cus-py3.10/lib/python3.10/site-packages/taf/ul
     rm -rf cus_monitoring
     ln -sfn /home/ute/MN/UTE/taf.ul.cus_monitoring/taf/ul/cus_monitoring cus_monitoring
-
 
 
     # sprawdzenie akutalnej kofiguracji .gitconifg
@@ -298,5 +303,16 @@ def GIT:
     17: Zamiana daty
     GIT_COMMITTER_DATE="2025-10-19T16:20:00 +0200" \
     git commit --amend --no-edit --date="2025-10-19T16:20:00 +0200"
-
+":
 #-----------------------
+
+Problem z credentialami:
+    git config --global credential.helper
+        sprawdz jakie masz credentiale
+        manager-core -powinno być
+
+    cat "$HOME/.git-credentials"
+        sprawdzasz które nie potrzebne 
+
+    git config --global credential.helper manager-core 
+        ustawiasz na takei żeby nie psuł ci casha
