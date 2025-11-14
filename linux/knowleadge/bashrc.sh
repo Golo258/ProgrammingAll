@@ -24,30 +24,6 @@ if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
     debian_chroot=$(cat /etc/debian_chroot)
 fi
 # ------------------------------------------------------------------
-# GIT PROMPT - banch and status 
-# ------------------------------------------------------------------
-_git_branch() {
-  # nazwa gałęzi albo tag przy HEAD; puste poza repo
-  local b
-  b=$(git symbolic-ref --short -q HEAD 2>/dev/null) \
-    || b=$(git describe --tags --exact-match 2>/dev/null) \
-    || return 0
-  # status skrótami: ✗ (modified), + (staged), ? (untracked), ↑/↓ ahead/behind
-  local st=""
-  git diff --no-ext-diff --quiet --ignore-submodules || st+="✗"
-  git diff --no-ext-diff --cached --quiet --ignore-submodules || st+="+"
-  [ -n "$(git ls-files --others --exclude-standard)" ] && st+="?"
-  local ab; ab=$(git rev-list --left-right --count @{upstream}...HEAD 2>/dev/null)
-  if [ -n "$ab" ]; then
-    local behind=${ab%%	*}; local ahead=${ab##*	}
-    [ "$ahead" -gt 0 ] && st+="↑$ahead"
-    [ "$behind" -gt 0 ] && st+="↓$behind"
-  fi
-  [ -n "$st" ] && st=" $st"
-  printf '(%s%s)' "$b" "$st"
-}
-
-# ------------------------------------------------------------------
 # SET A FANCY PROMPT (non-color, unless we know we "want" color)
 # ------------------------------------------------------------------
 case "$TERM" in
@@ -63,10 +39,11 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w \[\033[36m\]$(_git_branch)\[\033[00m\]\$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
-    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w $(_git_branch)\$'
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
+unset color_prompt force_color_prompt
 
 unset color_prompt force_color_prompt
 
@@ -99,12 +76,7 @@ fi
 alias ll='ls -lh'
 alias la='ls -lah'
 alias vi='vim'
-alias rt='/home/ute/test_repository/resources/DevKr/FTK12/rt.sh'
-alias rtt='/home/ute/test_repository/resources/DevKr/run_test_and_backup_results.sh'
-alias rd='/home/ute/test_repository/resources/DevKr/FTK12/rd.sh'
-alias rl='tail -f /home/ute/results/latest/robot_debug.log'
 alias admin='firefox --new-tab 192.168.255.129 &'
-alias tltype='/home/ute/test_repository/resources/DevKr/testline_get_type.py | cut -f3'
 alias cus_update='sudo /opt/cus/bin/cus-update'
 # --------------------------------------
 alias ..="cd .."
@@ -153,6 +125,7 @@ alias go_scripts="cd /home/ute/MN/UTE/krakow.iht/cus/testsuite/SCRIPTS"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+export PATH=${PATH}:/home/ute/MN/UTE/robotlte/resources/DevKr
 
 # -----------------PROXY SETUP---------------------
 export https_proxy='http://proxy-lab.krk-lab.nsn-rdnet.net:8080'
