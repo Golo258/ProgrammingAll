@@ -14,6 +14,7 @@ Własne ID:
 ```
 ## Nagłówek {#id_naglowka}
 ```
+## Instalacja <a id="instalacja"></a>
 
 Odnośnik:
 
