@@ -3,7 +3,7 @@ import time
 from itertools import zip_longest
 from os import times
 
-from sub_python_notes.logger import  logger
+from logger import  logger
 
 #------------------------------------
 # Basics

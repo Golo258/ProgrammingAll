@@ -33,7 +33,7 @@ class Parsing:
         json_file_path = f"{self.static_folder}/{file_name}"
 
         def load_and_print_json_file_content(
-                file_path: str = None
+            file_path: str = None
         ):
             with open(file_path or json_file_path, "r") as json_file_r:
                 self.loaded = json.load(json_file_r)  # dict/list

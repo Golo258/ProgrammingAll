@@ -169,14 +169,14 @@ def GIT:
         git stash push --keep-index
 
     # gearsy dodanie
-    git remote add gitlab https://ggolonka:Fws6cLk-Zv1d9qboPXaF@wrgitlab.int.net.nokia.com/RAN/gears/krakow.iht.git
+    git remote add gitlab https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git
 
     # testowanie gearsów na branch jenkins
     git clone https://gerrit.ext.net.nokia.com/gerrit/MN/UTE/gears/gears.krakow.iht
     cd /home/ute/MN/UTE/gears/gears.krakow.iht
     git remote add gitlab https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git
-    git pull gitlab main"
-    sh "cd /home/ute/MN/UTE/gears/gears.krakow.iht
+    git pull gitlab main
+    cd /home/ute/MN/UTE/gears/gears.krakow.iht
     git fetch --all
     git checkout ggolonka/listener_dependency_update"
 
