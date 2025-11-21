@@ -33,6 +33,7 @@ def LINUX:
         ps -o pid,ni,cmd -p <pid>
 
     # zmienianie priorytetu
+    
         sudo renice -n -15 -p <pid>  #-20 (max) do 20 (min)
         nice -n -5 python script.py  # uruchamianie z danym priorytetem
     # szukanie plików
