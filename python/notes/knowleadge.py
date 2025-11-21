@@ -342,5 +342,72 @@ iter_tool_Lib.combinatorics_example()
 
 # Operacje na plikach:
 from pathlib import Path
-class FilesOperation:
-    pass
+class PathLibExplanation:
+    """
+        Praca z plikami i katalogami przy użyciu pathlib.Path
+        Zalety:
+        - Obiektowe podejście do ścieżek
+        - Obsługa różnych systemów operacyjnych
+        - Czytelniejszy kod niż os.path
+    """
+    def basic_operations(self):
+        """
+        Podstawowe operacje na ścieżkach:
+            - Path.cwd() -> bieżący katalog
+            - Path.home() -> katalog domowy użytkownika
+            - Path.exists() -> sprawdza czy ścieżka istnieje
+        """
+        current_path = Path.cwd()
+        home = Path.home()
+        log.debug(f"{current_path=}")
+        log.debug(f"{home=}")
+        log.debug(f"Exists: {home.exists()}")
+        is_path_file = home.is_file()
+        is_path_dir = home.is_dir()
+        log.debug(f"File: {is_path_file}? | Dir: ${is_path_dir} ?")
+        
+        
+    def create_directories(self):
+        """
+            Tworzenie katalogów:
+            - mkdir() -> tworzy katalog
+            - parents=True -> tworzy brakujące katalogi
+            - exist_ok=True -> nie zgłasza błędu, jeśli katalog istnieje
+        """
+        workspace = Path.cwd() / "WORKSPACE"
+        update_results = workspace / "UPDATE_RESULTS"
+        update_results.mkdir(parents=True, exist_ok=True)
+        print(f"Utworzono katalog: {update_results}")
+
+        
+    def file_operations(self):
+        """
+            Operacje na plikach:
+            - touch() -> tworzy pusty plik
+            - write_text(), read_text() -> zapis/odczyt tekstu
+            - unlink() -> usuwa plik
+        """
+        file_path = Path.cwd() / "example.txt"
+        file_path.touch(exist_ok=True)
+        file_path.write_text("Hello pathlib!", encoding="utf-8")
+        content = file_path.read_text(encoding="utf-8")
+        print(f"Zawartość pliku: {content}")
+        file_path.unlink()  # usuwa plik
+        print("Plik usunięty")
+
+    def iterate_files(self):
+        """
+            Iterowanie po plikach:
+            - glob(pattern) -> wyszukuje pliki wg wzorca
+            - rglob(pattern) -> rekurencyjnie wyszukuje pliki
+        """
+        for py_file in Path.cwd().rglob("*.py"):
+            print(f"Znaleziono plik: {py_file}")
+
+#--------------------------------------------
+path_lib = PathLibExplanation()
+path_lib.basic_operations()
+path_lib.create_directories()
+path_lib.file_operations()
+path_lib.iterate_files()
+#--------------------------------------------
