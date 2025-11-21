@@ -411,3 +411,74 @@ path_lib.create_directories()
 path_lib.file_operations()
 path_lib.iterate_files()
 #--------------------------------------------
+
+import paramiko
+from dataclasses import Optional
+class ParamikoLibraryExplanation():
+    """
+        Biblioteka do pracy z SSH i SFTP
+        - połączenie z serwerem
+        - wykonywanie komend 
+        - transfer plik ów
+    """
+    def connect_ssh(
+        self, 
+        host: str,
+        username: str,
+        password: Optional[str] = None,
+        key_file = None
+    ):
+        """
+            Tworzy połączenie ssh
+                -> SSHclient() - obiekt klienta ssh
+                -> set_missing_host_keY_policy() - akceptacja kluczy
+                -> connect() - nawiazanie połączenia
+        """
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        if key_file:
+            client.connect(
+                hostname=host, username=username,
+                key_filename=key_file 
+            )
+        else:
+            client.connect(
+                hostname=host, username=username,
+                password=password 
+            )
+            
+        return client
+
+    def execute_command(self, client: paramiko.SSHClient, command: str):
+        """
+            wykonuje komende na zdalnym serwerze:
+            ->exec_command(cmd) zwraca stdin, stdout, stderr
+        """
+        std_in, std_out, std_err = client.exec_command(command)
+        log.info(std_out.read().decode())
+        log.info(std_err.read().decode())
+        
+    def sftp_transfeR(
+        self,
+        client: paramiko.SSHClient,
+        local_path: str,
+        remote_path: str
+    ):
+        """
+            Trasnfer plików przez sftp:
+            -> open_sftp() - obiekt SFTP
+            -> put(local, remote) - wysyłanie plików
+            -> get(remote, local) - pobieranie plików
+        """
+        sftp = client.open_sftp()
+        sftp.put(local_path, remote_path)
+        sftp.get(remote_path, local_path)
+        sftp.close()
+        
+    
+    def close_connection(self, client):
+        """
+            Zamknięcie połączenia SSH
+        """
+        client.close()
+

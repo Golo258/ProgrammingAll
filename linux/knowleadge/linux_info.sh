@@ -33,7 +33,7 @@ def LINUX:
         ps -o pid,ni,cmd -p <pid>
 
     # zmienianie priorytetu
-    
+
         sudo renice -n -15 -p <pid>  #-20 (max) do 20 (min)
         nice -n -5 python script.py  # uruchamianie z danym priorytetem
     # szukanie plików
@@ -342,6 +342,37 @@ def LINUX:
         atq - 
         atrm - usuwanie 
 
+    #--------------- TAR - ARCHIWIZACJA -------------
+        -> tworzenie archiwum
+            tar -czf archiwum.tar.gz  [Pliki/katalogi]
+            - c - create - tworzy archiwum
+            - z - kopmresja do zip
+            - f - nazwa pliku archiwum
+            
+        Jak mamy kilka plików danym katalogu, to przydaje się  
+            -C - zmienia katalog wchodzi do niego
+            tar -czf archiwum.tar.gz -C /katalog  pliki_z_tego_katalogu
+        
+        -> sprawdzanie zawartości archwium:
+            tar -tzf archwium.tar.gz
+                - t - listowanie - wyświetla zawartośc
+                - z - kompresja zip
+                - f - plik archiwum
+
+        -> rozpakowanie archwium:
+            tar -xzf archiwum.tar.gz
+                - x - extract rozpwkowanie
+            
+            tar -xzf archiwum.tar.gz -C /sciezka/docelowa
+                -C - rozpakuje do danej ścieżki
+
+        -> dodanie pliku do istniejacego archwium
+            tar -rf archwium.tar nowy.plik.txt
+
+        du -sh archiwum.tar.gz - rozmiar arcghiwum
+        
+            
+    #-------------------------------------------------
     # python - virutalenv
         znajduje sie w 
         /home/ute/.pyenv/versions/
