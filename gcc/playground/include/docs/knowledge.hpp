@@ -1,21 +1,21 @@
 
-// docs/knowledge.hpp
+// include/docs/knowledge.hpp
 // ------------------------
 
 #pragma once
 #include <iostream>
 #include <string>
-#include <fstream> // strumienie plikowe
-#include <sstream> // strumienie w pamieci 
-#include <ctime> // zarządzanie czasem
+#include <fstream>  // strumienie plikowe
+#include <sstream>  // strumienie w pamieci 
+#include <ctime>    // zarządzanie czasem
 #include <vector>
 #include <map>
 #include <array>
 #include <algorithm>
-#include <numeric> // accumulate 
-#include <cctype> // to lower | upper
+#include <numeric>  // accumulate 
+#include <cctype>   // to lower | upper
 #include <utils/variables.hpp>
-#include <variant> // union variant
+#include <variant>  // union variant
 #include <regex>
 #include <exception> // exception
 #include <chrono> // czas systemowy
@@ -28,7 +28,6 @@
 /*
     TODO co do przerobienia:
         - json, parsowanie, tworzenie, tak samo yaml i inne typy 
-        - testowanie kodu, tworzenie testów
         - może modyfikacja loggera żeby zapisywał do pliku i żeby terminal nie spamił
         - includowanie zewnętrznych bibliotek, ale to pewnie przy jsonie
         - przeciążanie operatorów, mniej wiecej jak to działa
@@ -37,27 +36,33 @@
             łączenie sie, tworzenie query, itp
         - tworzenie requestów do api, i parsowanie tego
             - tworzenie własnego API, ale to nie wiem czy nie lepiej w pythonie
-
-
 */
 namespace Knowledge {
 
     namespace StreamsManagement {
         /*
         Strumień
-            - kanał przepłwu danych , obiekt zarządzający tym przepływem
-            - dane przepływają wchodzą i wychodzą do miejsc takich jak
-            - tekst, pliki, sieć, pamięć -- wszystko leci przez strumienie
+            - kanał przepływu danych , obiekt zarządzający tym przepływem
+            - dane przepływają:
+                wchodzą i wychodzą do miejsc takich jak
+                -> tekst, plik, sieć, pamięć -- wszystko leci przez strumienie
             - dane mogą płynąć na zewnątrz (out) programu
                 - std::ostream 
             - dane mogą płynąć do programu (in)
                 - std::istream
+            --------------------------------
+            INPUT - program czyta / pobiera dane z zewnątrz
+                pobiera dane z pliku/terminala/bufora i czyta je na konsole 
+                buffor >> zmienna; czytamy z buffora
+            OUTPUT - program wysyła / wyrzuca dane na zewnątrz
+                bierze dane jakieś i wysyła je do pliku
+                buffor << "dane"; - wysylamy do buffora
+            --------------------------------
             Kierunki:
-                wejście - in, istream   cin, ifstream, istringstream
-                wyjście - out, ostream, cout, ofstream, ostringstream
-                oba - wejscie i wyjscie
-                    iostream, input output stream
-                        fstream, stringstream
+                wejście - in  | istream |  cin | ifstream | istringstream | 
+                wyjście - out | ostream | cout | ofstream | ostringstream | 
+                wejscie & wyjscie - iostream --> input output stream
+                              | fstream | stringstream |
             Hierarchia: 
                     std::ios -- wspólna baza trzymająca stan
                         │
@@ -72,84 +77,82 @@ namespace Knowledge {
                         std::fstream
                         std::stringstream
         */
-
+        class StandardStream {
         /*
            Strumienie standardowe
             cin  - wejscie  - czyta z klawiatury
             cout - wyjscie  - pisze na standardowe wyjscie - terminal
             cerr - wyjscie  - pisze błędy bez buforowania
             clog - wyjscie  - pisze logi z buforowaniem
-            #Każdy z nich jest obiektem klasy 
+            -> Każdy z nich jest obiektem klasy 
                 - std::istream - wejscie
                 - std::ostream - wyjscie
-                - iostreram łaczy oba - plikowy może być jednym i drugim
+                - iostream łaczy oba - plikowy może być jednym i drugim
             
             Każdy ze strumieni ma operator bool()
                 w momencie gdy do strumienia wpadła zła wartość
                 i wykryto błąd to coś możemy zrobić 
                 if (!std::cin)
-            
+
             W linuxie:
                 ./program > output.txt 2> errors.txt
-                > output.txt - wyłapie cout i clog
-                2> - wyłaie cerr
+                    > output.txt - wyłapie cout i clog
+                    2> - wyłapie cerr
         */
-        class StandardStream {
             public:
-                void input_stream_example();
-                void output_stream_example();
-                void standard_stream();
+                std::vector<std::string> read_lines(std::istream& is);
+                void print_list(std::ostream& os, const std::vector<int>& items);
+                void standard_output();
+                void standard_input();
         };
+        class FileStream {
         /*
             Strumienie plikowe <fstream>
-                ifstream  - wejscie - czytanie z pliku
-                ofstream  - wyjscie - pisanie do pliku
-                fstream   -  oba    - czytanie i pisanie
+                ifstream - wejscie - czytanie z pliku
+                ofstream - wyjscie - pisanie do pliku
+                fstream  -  oba    - czytanie i pisanie
 
             Tryby otwierania:
                 std::ios::
-                    in - czytanie 
-                    out - pisanie
-                    app - dodawanie append - na koniec
-                    trunc - czyszczenie pliku przy otwarciu
-                    ate - at end - utwainie na koncu
-                    binary - tryb binarny 
+                    - in  - czytanie 
+                    - out - pisanie
+                    - app - dodawanie append - na koniec
+                    - trunc - czyszczenie pliku przy otwarciu
+                    - ate - at end - ustawiane na końcu
+                    - binary - tryb binarny 
                 Można miksować poprzez | 
                     np std::ios::out | std::out::trunc
         */
-        class FileStream {
             public:
-                void writing_overriting();
-                void appending();
-                void reading_by_lines();
+                void write_data_out();
+                void write_data_out_by_append();
+                void read_from_in();
         };
 
+        class MemoryStream {
         /*
-            Strumienie w pamięci <sstream>
-                służa do pcy z tekstem w pamieci
-                    bufor tekstu z wieloma liniami
-                    istringstream
-                    ostringstream
+            Strumienie w pamięci <sstream>, 
+            - służą do pracy z tekstem w pamieci,
+                mamy bufor tekstu z wieloma liniami 
+                | istringstream | ostringstream |
         
             Buffor - po co jak i gdzie i co to jest 
                 Bufor to tymczasowa pamieć (RAM)
                     w której gromadzimy dane zanim 
                     zostaną odczytane albo zapisane
                 To magazyn pośredni miedzy 
-                    kodem a źródłem docelowym- plikiem, klawiaturyą
+                    kodem a źródłem docelowym - plikiem, klawiaturą
             Tymczasowe miejsce, gdzie trzymamy dane
                 zanim coś z nimi zrobisz
             std::cin - bufor wejsciowy 
                 system trzyma znaki które wpisuje zanim pogram je pobierze
             std::cout - bufor wyjściowy
                 tekst trafia do buffora, a dopiero potem do terminala
-
         */
-        class MemoryStream {
             public:
-                void reading_from_string();
-                void writng_building_string();
-                void both_string_operation();
+                void load_string_into_buffor();
+                void load_data_into_buffor();
+                void read_and_write_data_to_buffor();
         };
         
         /*
@@ -166,20 +169,13 @@ namespace Knowledge {
         class FileSystemManagment {
             public:
                 fs::path create_paths();
-                void get_slices(fs::path score_path);
+                void paths_management(fs::path score_path);
                 void file_states(fs::path file_path);
                 void modification(fs::path file_path);
                 void get_file_from_resources();
         };
         
-        // utils functions
-        void print_list();
-        std::vector<std::string> read_lines(std::istream& is);
         // -------------------
-        void show_streams();
-        void simple_tasks();
-        void show_file_stream();
-        void show_file_system_managment();
         // | Temat                                                       | Po co                                                 
         // | ----------------------------------------------------------- | ------------------------------------------------------
         // | `std::cin.ignore()` i `clear()`                             | obsługa błędów i czyszczenie bufora                   
@@ -224,6 +220,12 @@ namespace Knowledge {
             int value;
             explicit UserId(int value) : value(value){}
         };
+
+        // alias przestrzeni nazw poprzez
+        // syntax: namespace NazwaAliasu =  Namespace1::Namespac32;
+        namespace KMD = Knowledge::StreamsManagement;
+        // alias do funckji w rpzestrzeni nazw
+        using StreamReader = Knowledge::StreamsManagement::StandardStream;
 
         /*
             variant, pozwala dać możliwośc wyboru typu

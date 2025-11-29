@@ -14,6 +14,34 @@ void logger_example(){
     logger.error() << "Błąd testowy\n";
 }
     
+void KNOWLEAGE_INTRODUCTION() {
+    namespace Streams = Knowledge::StreamsManagement;
+    // ------------------------------------------------------
+    logger.info() << "STANDARD STREAM INTRODUCTION" << std::endl;
+    using Standard = Streams::StandardStream;
+    Standard std_stream;
+    // std_stream.standard_input(); 
+    std_stream.standard_output();
+    // ------------------------------------------------------
+    logger.info() << "FILE STREAM INTRODUCTION" << std::endl;
+    Streams::FileStream file_stream;
+    file_stream.write_data_out();
+    file_stream.write_data_out_by_append();
+    file_stream.read_from_in();
+    // ------------------------------------------------------
+    logger.info() << "MEMORY STREAM INTRODUCTION" << std::endl;
+    Streams::MemoryStream memory_stream;
+    memory_stream.load_string_into_buffor();
+    memory_stream.load_data_into_buffor();
+    memory_stream.read_and_write_data_to_buffor();
+    logger.info() << "FILE SYSTEM MANAGEMENT INTRODUCTION" << std::endl;
+    Streams::FileSystemManagment fsystem_management;
+    std::filesystem::path file_path = fsystem_management.create_paths();
+    fsystem_management.paths_management(file_path);
+    fsystem_management.file_states(file_path);
+    // fsystem_management.modification(file_path);
+    fsystem_management.get_file_from_resources();
+}
 
 void parser_task(){
     namespace bp = board::parser;
@@ -54,9 +82,6 @@ void parser_task(){
 
 }
 void knowleadge_playground(){
-    // Knowledge::StreamsManagement::show_file_stream();
-    // Knowledge::StreamsManagement::show_file_system_managment();
-    // Knowledge::StreamsManagement::show_streams();
     // Knowledge::Collections::show_all_methods();
     // Knowledge::ClassKnow::demonstrate_classes();
     // Knowledge::StringKnow::show_all_string_operation();
@@ -68,14 +93,15 @@ void knowleadge_playground(){
     // Knowledge::AliasesAndTypes::pointer_example();
     // Knowledge::AliasesAndTypes::enums_example();
     // Knowledge::AliasesAndTypes::check_optional();
-    Knowledge::AliasesAndTypes::Templates::show_tamples();
+    // Knowledge::AliasesAndTypes::Templates::show_tamples();
 
 }
 
 int main() {
     std::cout<< "\n<---------------------------------------->\n";
     // parser_task();
-    knowleadge_playground();
+    // knowleadge_playground();
+    KNOWLEAGE_INTRODUCTION();
     std::cout << "\n<---------------------------------------->\n";
     return 0;
 }

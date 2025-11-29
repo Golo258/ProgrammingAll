@@ -7,18 +7,15 @@
 namespace Knowledge {
     
     namespace StreamsManagement {
-        void StandardStream::input_stream_example(){
-            // input - czyli dane wchodzą gdzieś
-
-        }
-
-        void print_list(std::ostream& os, const std::vector<int>& items){
+        
+        /*-------------StandardStream methods----------------*/
+        void StandardStream::print_list(std::ostream& os, const std::vector<int>& items){
             int index = 1;
             for (const auto& item: items){
                 os << index++ << ") value: " << item << "\n";
             }
         }
-        std::vector<std::string> read_lines(std::istream& is){
+        std::vector<std::string> StandardStream::read_lines(std::istream& is){
             std::vector<std::string> lines;
             std::string line;
             while(std::getline(is, line)){
@@ -26,9 +23,8 @@ namespace Knowledge {
             }
             return lines;
         }
-        void StandardStream::output_stream_example(){
-            /*
-                output - czyli dane wychodzą gdzieś
+        void StandardStream::standard_output(){
+            /* output - czyli dane wychodzą gdzieś
                 - funkcja nie zna celu wyjśca wtedy mamy ostream jako parametr
             */
             std::vector<int> numbs{1, 15, 61, 211};
@@ -36,46 +32,40 @@ namespace Knowledge {
             std::ostringstream mem;
             print_list(out, numbs);
             print_list(mem, numbs);
-            logger.info() << "Memory buffor " << mem.str() << "\n";
-            
-            // istream
+            logger.info() << "Memory buffor: \n" << mem.str();
             std::ifstream in("numbers_list.txt");
             std::istringstream stream_mem("a\nb\nc\n");
             auto lines = read_lines(in);
-            auto mem_lines=  read_lines(stream_mem);
+            auto mem_lines = read_lines(stream_mem);
+            std::filesystem::remove("numbers_list.txt");
         }
-        void StandardStream::standard_stream() {
+        void StandardStream::standard_input() {
             std::cout << "Enter some number" << std::endl; //  pisanie do stdout - terminala 
             int number;
-            // czyta z stdin - z klawiatury
-            /* 
-                Czyta z klawiatury 
-                Czeka aż user wpisze, i przekonwertuje na dany typ
-                Zła konwersaja to bląd i cin ustawia flage błędu na failbit
+            /*  czyta z stdin - z klawiatury
+                    czeka aż user wpisze, i przekonwertuje na dany typ
+                zła konwersja to bląd i cin ustawia flage błędu na failbit
             */ 
             std::cin >> number; 
             if (!std::cin) {
-                std::cin.clear(); // czyści buffor
+                std::cin.clear();  // czyści buffor
                 std::cin.ignore(); // wyrzucenie śmieci z buffora
-                //  cerr - od razu wypisze bez buforowania
-                std::cerr << " Provided number is not a integer" << std::endl;
+                std::cerr          //  cerr - od razu wypisze bez buforowania
+                    << "Provided number is not a integer";
                 return;
             }
             else {
-                // clog jest pod informacje diagnostyczne
-                std::cout << "Provided number: [" << number << "]. \n" << std::endl; 
-                std::clog << "[LOG-INFO] User provide number: " << number << std::endl;
+                std::cout << "Provided number: [" << number << "].\n"; 
+                std::clog // clog do informacji diagnostycznych
+                    << "[LOG-INFO] User provide number: " 
+                    << number << std::endl;
             }
         }
-        void show_streams(){
-            StandardStream stream;
-            stream.input_stream_example();
-            stream.output_stream_example();
-            // stream.standard_stream()
-        }
-        void FileStream::writing_overriting(){
-            // tworzy nowy albo czyści
-            // domyślne tryby std::ios::out | std::ios::trunc
+
+        /*-------------FileStream methods----------------*/
+        void FileStream::write_data_out(){
+            /* tworzy nowy plik albo czyści , domyślne tryby
+                std::ios::out | std::ios::trunc */
             std::ofstream out("notes.txt");
             if(!out){
                 std::cout << "Cannot open for override";
@@ -83,99 +73,68 @@ namespace Knowledge {
             }
             out << "[INFO] File stream in here!\n [NEXT] end\n<->";
             std::filesystem::remove("notes.txt");
-            // out.close(); // after went out of func
-        }
+        }  // out.close(); // after went out of func
 
-        void FileStream::appending(){
-            // dopisuje std::ios::app - append
-            std::ofstream append_out("notes.txt", std::ios::app);
+        void FileStream::write_data_out_by_append(){
+            std::ofstream append_out("notes.txt", std::ios::app); // dopisuje std::ios::app - append
             if(!append_out){
                 std::cout << "Cannot open to append";
                 return;
             }
             append_out << "\n[NEW] one and last";
-            std::filesystem::remove("notes.txt");
         }
-        void FileStream::reading_by_lines(){
+
+        void FileStream::read_from_in(){
             std::ifstream in("notes.txt");
             if (!in){
-                std::cerr << "Cannot open notes.txt";
+                std::cerr << "Cannot open notes.txt\n";
                 return;
             }
             std::string line;
             int index = 0;
-            /*
-                pojedyncze pobranie to 
+            /* getline() - pojedyncze pobranie to 
                 std::string first_line;
                 std::getline(in, first_line);
-                // bierze z buffora pierwszą linie i wstawia w zmienną 
+                bierze z buffora pierwszą linie i wstawia w zmienną 
             */
             while (std::getline(in, line)){
                 std::cout << "Line " << index++ << " content: " << line << ".\n"; 
             }
+            std::filesystem::remove("notes.txt");
         }
 
-        void MemoryStream::reading_from_string(){
+        /*-------------MemoryStream methods----------------*/
+        void MemoryStream::load_string_into_buffor(){
             std::string text = "12 34 5 61\n";
-            /*
-                Tekst trafia do buffora
-                    bo chcesz na nim potem robić jakieś rzeczy
-                    jakbyś czytał plik 
+            /* Tekst trafia do buffora
+                bo chcesz na nim potem robić jakieś rzeczy
+                jakbyś czytał plik 
             */
             std::istringstream in(text);
             int a,b ,c, d;
             in >> a >> b >> c >> d;
-
-            std::cout << "a=" << a << ", b=" << b << ", c=" << c << ", d=" << d << '\n';
+            std::cout << "a=" << a 
+                      << ", b=" << b 
+                      << ", c=" << c 
+                      << ", d=" << d << '\n';
         }
 
-        void MemoryStream::writng_building_string(){
+        void MemoryStream::load_data_into_buffor(){
             std::ostringstream out;
             out << "Result: " << 27 << std::endl;
             std::string text = out.str(); // pobiera z buffora
             std::cout << "Content after loading from buffor " << text << std::endl;
         } 
 
-        void MemoryStream::both_string_operation(){
+        void MemoryStream::read_and_write_data_to_buffor(){
             std::stringstream sstream;
             sstream << "123 451";
             int first, second;
             sstream >> first >> second;
             std::cout << (first + second) << '\n';
         }
-        
-        void simple_tasks(){
-            // otwórz app.log w trybie append 
-            //  dopisz linie z aktualnym czasem i started\n;
-            std::ofstream out_data("app.txt");
-            if(!out_data){
-                std::cout << "Cannot open app.log";
-                return;
-            }
-            else{
-                std::cout << "Writing to it";
-                time_t current_date = time(0);
-                char* datetime = ctime(&current_date);
-                out_data << "[" << datetime << "]: Started \n";
-            }
-            std::filesystem::remove("app.txt");
-        }
 
-        void show_file_stream(){
-            StandardStream sstream_obj;
-            // sstream_obj.standard_stream();
-            FileStream fstream_obj;
-            fstream_obj.writing_overriting();
-            fstream_obj.appending();
-            fstream_obj.reading_by_lines();
-            MemoryStream mstream;
-            mstream.reading_from_string();
-            mstream.writng_building_string();
-            mstream.both_string_operation();
-            logger.info() << "\n-----------------------------\n";
-            simple_tasks();
-        }
-
+        /*-------------FileSystemManagment methods----------------*/
         fs::path FileSystemManagment::create_paths(){
             // tworzenie ścieżek
             fs::path user_path = "/home/user";
@@ -183,52 +142,97 @@ namespace Knowledge {
             fs::path scores_path = user_path / "home" / "scores.txt";
             return scores_path;
         }
-        void FileSystemManagment::get_slices(fs::path score_path){
-            /* wyciaganie kawałków ze ścieżki*/
-            logger.debug() 
-                << "Filename: "   << score_path.filename()    << std::endl
-                << "Identifier: " << score_path.stem()        << std::endl
-                << "Extension: "  << score_path.extension()   << std::endl
-                << "Parent : "    << score_path.parent_path() << std::endl;
-            // normalizacja i konwersje
-            // abosultna ścieżka, bez sprawdzania czy istnieje
-            fs::path absolute = fs::absolute(score_path);
-            fs::path with_symlinc = fs::canonical(score_path);
-            absolute.string();           // std::string (na UI/logi)
+        void FileSystemManagment::paths_management(fs::path path)
+        {
+            logger.info() << "Getting basic elements of paths: (slices)\n";
+            logger.debug() << "[PATHS PARTS]\n"
+                << "Filename: "   << path.filename()    << std::endl
+                << "Identifier: " << path.stem()        << std::endl
+                << "Extension: "  << path.extension()   << std::endl
+                << "Parent : "    << path.parent_path() << std::endl;
+            
+            /*  absolute - nie sprawdza czy istnieje 
+                cannonical - rzuca wyjatek
+                weakly_cannonical - nie rzuca  */
+            fs::path absolute = fs::absolute(path);
+            fs::path cannonical = fs::weakly_canonical(path);
+            logger.debug()
+                << "[FULL PATHS]\n"
+                << "  Absolute path : " << absolute    << '\n'
+                << "  Canonical     : " << cannonical  << "\n\n";
+            /* aktualne środowisko pracy */
             // bierzące katalogi, gdzie jesteśmy
-            // fs::current_path();
-            // fs::temp_directory_path(); // /tmp dir
+            logger.debug()
+                << "  Current path  : " << fs::current_path()       << '\n'
+                << "  Temp dir      : " << fs::temp_directory_path() << "\n";
         }
 
-        void FileSystemManagment::file_states(fs::path file_path){
-            bool path_exists = fs::exists(file_path); // czy istnieje 
-            bool is_regular = fs::is_regular_file(file_path); // zwykły plik
-            // fs::is_directory(file_path);
-            // fs::file_size(file_path);
-            auto path_time = fs::last_write_time(file_path);
-            // czy wskazują na ten sam obiekt
-            // fs::equivalent(file_path, fs::path("other.txt")); 
+        void FileSystemManagment::file_states(fs::path path){
+            logger.info() << "[FILE STATES]\n";
+            /*Czy istnieje i jakim jest plikiem*/
+            bool exists   = fs::exists(path);
+            bool is_file  = fs::is_regular_file(path);
+            bool is_dir   = fs::is_directory(path);
+            bool is_empty = fs::is_empty(path);
+            logger.debug()
+                << "  Exists        : " << std::boolalpha << exists << '\n'
+                << "  Is file       : " << is_file << '\n'
+                << "  Is directory  : " << is_dir << "\n"
+                << "  Is empty      : " << is_empty << "\n";
+
+            std::uintmax_t file_size = fs::file_size(path);
+            if (exists) {
+                /* 
+                czas ostatniej akutalizacji:
+                    auto path_time = fs::last_write_time(path);
+                czy wskazują na ten sam obiekt
+                    fs::equivalent(path, fs::path("other.txt")); 
+                */
+            }
         }
         
         void FileSystemManagment::modification(fs::path file_path){
-            // tworzenie katalogów
-            fs::create_directory(file_path);
-            fs::create_directories(file_path);
-            // usuwanie pliku / pustego katalogu
+            /* modyfikacja plików i katalogów
+                create_directory - mkdir nazwa, zwraca boolean jesli istnieje
+                create_directories - mkdir -p
+
+                remove - usuwa plik lub pusty katalog
+                remove_all - rekurencyjne rm -rf 
+
+                rename - linux mv - zmienia nazwe i przenosi gdzie chemy  
+                copy(source, destination, option)
+                    fs::copy_options::none
+                    fs::copy_options::overwrite_existing
+                    fs::copy_options::skip_existing
+                    fs::copy_options::recursive (dla katalogów)
+
+                iteracja: 
+                    directory_iterator - płaska, tylko bezposredni katalog
+                    recursive_directory_iterator - rekurencyjna, wchodzi w podkatalogi
+                permissions - nadawnie uprawnienia:
+                    auto statsu =- 
+                    perms - jakie uprawnienia ustawiasz
+                        owner | group | other --- all | write | read | exite
+                    fs::perm_options::add
+                        add remove replace
+            */
+            bool already_exists = fs::create_directory(file_path);
+            bool dirs_exists    = fs::create_directories(file_path);
+
             fs::remove(file_path);
-            fs::remove_all(file_path); // rm -rf rekurencyjne
-            // zmian nazwy
-            fs::rename(file_path, fs::path("other.txt"));
-            // kopiowanie
-            fs::copy( // src, dst, option 
+            fs::remove_all(file_path);
+
+            fs::rename(file_path / "old.txt", fs::path("other.txt") / "new.txt" );
+            fs::rename(file_path / "dir1", fs::path("other.txt") / "dir2/dir1_moved");
+
+            fs::copy(
                 file_path, fs::path("other/files"),
                 fs::copy_options::overwrite_existing 
-            ); // sa też inne opcje 
-            // iteracja
+            );
             for (const auto& file: fs::directory_iterator(file_path)){
                 const fs::path& path = file.path();
             }
-            // rekurencyjnie
+
             for(const auto& file_rec: fs::recursive_directory_iterator(file_path)){\
                 const fs::path& path = file_rec.path();
             }
@@ -252,13 +256,6 @@ namespace Knowledge {
             catch (const std::exception& ex){
                 logger.error() << "Error while reading resources: " << ex.what() << std::endl; 
             }
-        }
-        void show_file_system_managment(){
-            FileSystemManagment managment;
-            // managment.get_file_from_resources();
-            fs::path score_path = managment.create_paths();
-            managment.get_slices(score_path);
-            managment.file_states(score_path);
         }
     }
     namespace AliasesAndTypes {
