@@ -6,8 +6,8 @@
 
 namespace Knowledge {
     
+/*#--------------StreamsManagement NAMESPACE---------------------------------#*/
     namespace StreamsManagement {
-        
         /*-------------StandardStream methods----------------*/
         void StandardStream::print_list(std::ostream& os, const std::vector<int>& items){
             int index = 1;
@@ -136,12 +136,13 @@ namespace Knowledge {
 
         /*-------------FileSystemManagment methods----------------*/
         fs::path FileSystemManagment::create_paths(){
-            // tworzenie ścieżek
+            /*  tworzenie ścieżek
+                operator / - składa ścieżki */
             fs::path user_path = "/home/user";
-            // operator / - składa ścieżki
             fs::path scores_path = user_path / "home" / "scores.txt";
             return scores_path;
         }
+
         void FileSystemManagment::paths_management(fs::path path)
         {
             logger.info() << "Getting basic elements of paths: (slices)\n";
@@ -182,12 +183,10 @@ namespace Knowledge {
 
             std::uintmax_t file_size = fs::file_size(path);
             if (exists) {
-                /* 
-                czas ostatniej akutalizacji:
+                /* czas ostatniej akutalizacji:
                     auto path_time = fs::last_write_time(path);
                 czy wskazują na ten sam obiekt
-                    fs::equivalent(path, fs::path("other.txt")); 
-                */
+                    fs::equivalent(path, fs::path("other.txt")); */
             }
         }
         
@@ -258,37 +257,134 @@ namespace Knowledge {
             }
         }
     }
+
+/*#--------------AliasesAndTypes NAMESPACE---------------------------------#*/
     namespace AliasesAndTypes {
-        // std::variant
-        void resolve_variant_types(){
-            std::variant<std::string, int> possibilites;
-            if (std::holds_alternative<int>(possibilites)){
-                logger.info() 
-                    << "Variant holds int type" 
-                    << std::get<int>(possibilites) << std::endl;
+
+    /*-------------AliasesPlayground methods----------------*/
+        void AliasesPlayground::basic_aliases(){
+            logger.info() << "BASIC ALIASES\n";
+            typedef unsigned long int UL_int;
+            using Ldouble = long double;
+            using Callback = void(*)(int);
+            UL_int bts_id = 125612512516324673;
+            Ldouble meta_numb = 512.512095102518260166;
+            Callback cb = [](int x) {
+                logger.debug() << "Callback called with x = " << x << "\n";
+            };
+
+            logger.debug() 
+                << "UL_int bts_id = " << bts_id << "\n"
+                << "Ldouble meta_numb = " << meta_numb << "\n";
+
+            cb(12);
+        }
+        void AliasesPlayground::template_aliases(){
+            logger.info() << "TEMPLATE ALIASES\n";
+            TypeVec<int> numbers{1,5,612,26};
+            StringMap<double> factors{
+                {"pi", 3.51251},
+                {"e", 2.61241}
+            };
+            logger.debug() << "TypeVec<int> numbers:" << std::endl;
+            for (int numb : numbers) {
+                logger.debug() << "  " << numb << std::endl;
             }
-            else {
-                logger.info() 
-                    << "Variant holds string type" 
-                    << std::get<std::string>(possibilites) << std::endl;
+
+            logger.debug() << "StringMap<double> factors:" << std::endl;
+            for (const auto& [key, value]: factors){
+                logger.debug() << " " << key << "-" << value << '\n';
             }
         }
-        void casting_example(){
-            VariableCasting casting;
-            casting.static_casting();
-            int x = 10;
-            const int* some_var = &x;
-            casting.const_casting(some_var);
-            std::cout << "After casting" << x << "\n";
-            casting.reinterpret_casting();
-            casting.dynamic_casting();
+        
+        void AliasesPlayground::strong_types(){
+            logger.info() << "STRONG TYPES" << std::endl;
+            UserIdAlias id1 = 10;
+            UserIdAlias id2 = 20;
+
+            UserId strong1{10};
+            UserId strong2{20};
+
+            logger.debug()
+                << "UserIdAlias u1 = " << id1 << std::endl
+                << "UserIdAlias u2 = " << id2 << std::endl
+                << "UserId strong1.value = " << strong1.value << std::endl
+                << "UserId strong2.value = " << strong2.value << std::endl;
         }
-        // Pointers
+
+        /* std::variant - Bezpieczna unia
+            - czyli zmiennado przechwycenie jednego z wielu typów
+                przetrzymuje jedną wartość z listy typów
+               syntax std::variant<typ1, typ2, typx> zmienna;
+            Sprawdzenie jaki typ trzymany jest aktualnie
+                std::holds_alternative<typ_sprawdzany>(zmienna_wariantowa) {}
+            Index przechowywane typu (liczony jako kolejność z definicji)
+            pobieranie zawartości
+                std::get<typ>(zmienna)
+                std::get_if<typ>(zmienna) bezpieczniejsza wersja
+                std::visit(lambda) - użyteczne do 
+                    narzedzie które odpala odpowiednia lambde w zalęzności od typu
+                    jak siedzi w środku
+        */
+        void AliasesPlayground::play_with_variant_save_union(){
+            logger.info() << "VARIANT PLAYGROUND\n"; 
+            std::variant<std::string, int, double> values;
+            bool holds_integer = std::holds_alternative<int>(values);
+            int variant_index = values.index();
+            values = 1;
+            logger.debug() << 
+                "Does hold it integer " << std::boolalpha << holds_integer << std::endl;
+            if (holds_integer){
+                logger.debug() 
+                    << "Variant holds int type, which is index nr" << variant_index << '\n'
+                    << "Value of integer is" <<  std::get<int>(values) << '\n';
+                if (auto val = std::get_if<std::string>(&values)) {
+                    logger.debug() << *val;
+                }
+            }
+            std::visit(
+                [](auto&& value){
+                    logger.info() << "Received from variant: " << value << "\n"; 
+                },
+                values
+            );
+        }
+         void AliasesPlayground::play_with_optional(){
+            /*  optional 
+                    może przechowywać wartość albo wartosc albo nullopt 
+                    zamiast zwracać -1 0 lub nullptr tylko
+                        albo<T> albo nic
+                tworzenie
+                    std::optional<typ> zmienna = wartosc;
+                    auto d = std::make_optional(wartosc);
+                wyciaganie wartosci
+                    zmienna.value() ale rzuci wyjatek jesli brak wartosci
+                    *zmienna - poprzez dereferencje
+                    zmienna.value_or(wartosc_jesli_null_opt)
+                modyfikacja:
+                    zmienna.reset() - czyści wartosc
+                    zmienna.emplace() - wstawia nowa
+            */
+            std::optional<int> numb = 42;
+            std::optional<int> other = std::nullopt;
+            bool has_numb_value = numb.has_value();
+            if (has_numb_value){
+                logger.info()
+                    << "Value via .value(): " << numb.value() << std::endl
+                    << "Value via *numb   : " << *numb << std::endl;
+            }
+            int number = numb.value_or(-1);
+            logger.info() << "Number (value_or): " << number << std::endl;
+            numb.reset();
+            numb.emplace(51);
+        }
+        
+    /*-------------Pointers methods----------------*/
         void Pointers::simple_poiners(){
-            /*
-                numb = wartosc 
+            /*  numb = wartosc 
                 ptr - adres pamieci
-                *ptr - dereferencja- idz pod adres i wex wartosc
+                *ptr - dereferencja - idz pod adres i wex wartosc
+                -> to to samo co (*pointer).metoda()
             */
             int numb = 412;
             int* numb_ptr = &numb; // &adres
@@ -298,12 +394,9 @@ namespace Knowledge {
             std::cout << "Dreference after chage: " << *numb_ptr << std::endl;
         }
 
-        /*
-            -> to to samo co (*pointer).metoda()
-        */
         void Pointers::pointers_to_structures(){
             Person woman(21);
-            Person* struct_ptr = &woman; //adres obiektu
+            Person* struct_ptr = &woman; // adres obiektu
             struct_ptr->introduce();
 
         }
@@ -314,17 +407,14 @@ namespace Knowledge {
             delete ptr;
         }
 
-        /*
-            std::unique_ptr
+        /*  std::unique_ptr
                 wyłączna własność obiektu
                 tylko on może przechowywać adres obiektu
 
             syntax:
                 std::unique_ptr<typ> nazwa =
                     std::make_unique<Typ>(obiekt)
-            {
-                
-            } Po wyjściu ze scopa automatycznie jest wywoływany destruktor
+            {} Po wyjściu ze scopa automatycznie jest wywoływany destruktor
             
             Nie można kopiować do danego obiektu miedzy pointerami
             Zdefiniowany obiekt należy już tylko do tego pointera
@@ -339,8 +429,7 @@ namespace Knowledge {
             auto f2 = std::move(marek);
         }
         
-        /*
-            shared_ptr<>  make_shared<>(obiekt);
+        /*  shared_ptr<>  make_shared<>(obiekt);
                 wiele pointerów może korzystać z obiektu
         */
         void Pointers::shared_pointer(){
@@ -355,36 +444,12 @@ namespace Knowledge {
             std::cout << "SQL amount: " << sql_db->accounts << "\n";
             std::cout << "Using the connection\n";
         }
-        /*
-            weak_ptr
+        /* weak_ptr
                 służy do współpracy z shared_ptr
                 obserwator który nie zwieksza licznika
             TODO: later
         */
         void Pointers::weak_pointer(){} 
-
-        void pointer_example(){
-            Pointers points;
-            points.simple_poiners();
-            points.pointers_to_structures();
-            points.dynamic_memory();
-            points.unique_pointer();
-            points.shared_pointer();
-            // points.weak_pointer();
-        }
-        void check_optional(){
-            // optional
-            // albo wartosc typu albo nullopt 
-            std::optional<int> maybe = 42;
-            std::optional<int> other = std::nullopt; 
-            if (maybe.has_value()){
-                std::cout << "Value " << maybe.value() << std::endl;
-                std::cout << "Value v2" << *maybe << std::endl;
-            }
-            int number = maybe.value_or(-1);
-            std::cout << "Number : " << number;
-
-        }
 
         // Enumy
         // mapowanie enuma

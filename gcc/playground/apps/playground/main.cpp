@@ -16,31 +16,62 @@ void logger_example(){
     
 void KNOWLEAGE_INTRODUCTION() {
     namespace Streams = Knowledge::StreamsManagement;
+    std::string dots = "\n----------------------------------------------\n";
     // ------------------------------------------------------
-    logger.info() << "STANDARD STREAM INTRODUCTION" << std::endl;
+
+    logger.info() << dots << "STANDARD STREAM INTRODUCTION" << std::endl;
     using Standard = Streams::StandardStream;
     Standard std_stream;
     // std_stream.standard_input(); 
     std_stream.standard_output();
     // ------------------------------------------------------
-    logger.info() << "FILE STREAM INTRODUCTION" << std::endl;
+    logger.info() << dots << "FILE STREAM INTRODUCTION" << std::endl;
     Streams::FileStream file_stream;
     file_stream.write_data_out();
     file_stream.write_data_out_by_append();
     file_stream.read_from_in();
     // ------------------------------------------------------
-    logger.info() << "MEMORY STREAM INTRODUCTION" << std::endl;
+    logger.info() << dots << "MEMORY STREAM INTRODUCTION" << std::endl;
     Streams::MemoryStream memory_stream;
     memory_stream.load_string_into_buffor();
     memory_stream.load_data_into_buffor();
     memory_stream.read_and_write_data_to_buffor();
-    logger.info() << "FILE SYSTEM MANAGEMENT INTRODUCTION" << std::endl;
+    // ------------------------------------------------------
+    logger.info() << dots << "FILE SYSTEM MANAGEMENT INTRODUCTION" << std::endl;
     Streams::FileSystemManagment fsystem_management;
     std::filesystem::path file_path = fsystem_management.create_paths();
     fsystem_management.paths_management(file_path);
-    fsystem_management.file_states(file_path);
+    // fsystem_management.file_states(file_path);
     // fsystem_management.modification(file_path);
     fsystem_management.get_file_from_resources();
+    // ------------------------------------------------------
+    logger.info() << dots << "ALIASES AND TYPES INTRODUCTION" << std::endl;
+    namespace aliases = Knowledge::AliasesAndTypes;
+    aliases::AliasesPlayground aliases_playground;
+    aliases_playground.basic_aliases();
+    aliases_playground.template_aliases();
+    aliases_playground.strong_types();
+    aliases_playground.play_with_variant_save_union();
+    aliases_playground.play_with_optional();
+    // ------------------------------------------------------
+    logger.info() << dots << "VARIABLE CASTING INTRODUCTION" << std::endl;
+    aliases::VariableCasting var_casting;
+    var_casting.static_casting();
+    int x = 10;
+    const int* some_var = &x;
+    var_casting.const_casting(some_var);
+    logger.debug() << "After casting" << x << "\n";
+    var_casting.reinterpret_casting();
+    var_casting.dynamic_casting();
+    // ------------------------------------------------------
+    logger.info() << dots << "POINTERS INTRODUCTION" << std::endl;
+    aliases::Pointers pointers;
+    pointers.simple_poiners();
+    pointers.pointers_to_structures();
+    pointers.dynamic_memory();
+    pointers.unique_pointer();
+    pointers.shared_pointer();
+
 }
 
 void parser_task(){
@@ -89,7 +120,6 @@ void knowleadge_playground(){
     // Knowledge::Functions::show_all_functions();
     // Knowledge::Structures::all();
     // Knowledge::Preprocesor::all();
-    // Knowledge::AliasesAndTypes::casting_example();
     // Knowledge::AliasesAndTypes::pointer_example();
     // Knowledge::AliasesAndTypes::enums_example();
     // Knowledge::AliasesAndTypes::check_optional();

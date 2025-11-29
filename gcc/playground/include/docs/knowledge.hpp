@@ -39,9 +39,9 @@
 */
 namespace Knowledge {
 
+/*#--------------StreamsManagement NAMESPACE---------------------------------#*/
     namespace StreamsManagement {
-        /*
-        Strumień
+        /* Strumień
             - kanał przepływu danych , obiekt zarządzający tym przepływem
             - dane przepływają:
                 wchodzą i wychodzą do miejsc takich jak
@@ -77,9 +77,9 @@ namespace Knowledge {
                         std::fstream
                         std::stringstream
         */
+// #####----------StandardStream class------------#####
         class StandardStream {
-        /*
-           Strumienie standardowe
+        /* Strumienie standardowe
             cin  - wejscie  - czyta z klawiatury
             cout - wyjscie  - pisze na standardowe wyjscie - terminal
             cerr - wyjscie  - pisze błędy bez buforowania
@@ -105,9 +105,9 @@ namespace Knowledge {
                 void standard_output();
                 void standard_input();
         };
+// #####----------FileStream class------------#####
         class FileStream {
-        /*
-            Strumienie plikowe <fstream>
+        /* Strumienie plikowe <fstream>
                 ifstream - wejscie - czytanie z pliku
                 ofstream - wyjscie - pisanie do pliku
                 fstream  -  oba    - czytanie i pisanie
@@ -128,14 +128,12 @@ namespace Knowledge {
                 void write_data_out_by_append();
                 void read_from_in();
         };
-
+// #####----------MemoryStream class------------#####
         class MemoryStream {
-        /*
-            Strumienie w pamięci <sstream>, 
+        /* Strumienie w pamięci <sstream>, 
             - służą do pracy z tekstem w pamieci,
                 mamy bufor tekstu z wieloma liniami 
                 | istringstream | ostringstream |
-        
             Buffor - po co jak i gdzie i co to jest 
                 Bufor to tymczasowa pamieć (RAM)
                     w której gromadzimy dane zanim 
@@ -154,19 +152,18 @@ namespace Knowledge {
                 void load_data_into_buffor();
                 void read_and_write_data_to_buffor();
         };
-        
-        /*
-            filesystem:
-                standardowe funkcje do pracy
-                    z plikami / scieżkami / katalogami
-                najcześciej sie używa aliasu do namespaca
-                namespace fs = std::filesystem
-
-            Ścieżki:
-                fs::path
-        */
+// #####----------FileSystemManagment class------------#####
         namespace fs = std::filesystem;
         class FileSystemManagment {
+            /* filesystem:
+                    standardowe funkcje do pracy
+                        z plikami / scieżkami / katalogami
+                    najcześciej sie używa aliasu do namespaca
+                    namespace fs = std::filesystem
+    
+                Ścieżki:
+                    fs::path
+            */
             public:
                 fs::path create_paths();
                 void paths_management(fs::path score_path);
@@ -174,94 +171,100 @@ namespace Knowledge {
                 void modification(fs::path file_path);
                 void get_file_from_resources();
         };
-        
-        // -------------------
-        // | Temat                                                       | Po co                                                 
-        // | ----------------------------------------------------------- | ------------------------------------------------------
-        // | `std::cin.ignore()` i `clear()`                             | obsługa błędów i czyszczenie bufora                   
-        // | `std::getline()`                                            | czyta całą linię, łącznie ze spacjami                 
-        // | `std::ios::binary`                                          | praca z plikami binarnymi (np. structy)               
-        // | manipulatory (`std::setw`, `std::setprecision`, `std::hex`) | ładne formatowanie liczb                              
-        // | `std::tie(std::cin, nullptr)`                               | odłącza `cout` od `cin`, żeby przyspieszyć I/O        
-        // | `rdbuf()`                                                   | przekierowywanie strumieni (np. `clog` → `cout`)      
-        // | wyjątki na streamach (`exceptions()`)                       | wykrywanie błędów przez `throw`, nie przez `if (!cin)`
-
     }
+    
+/*#--------------AliasesAndTypes NAMESPACE---------------------------------#*/
     namespace AliasesAndTypes {
         // stosuejmy pascal case - czyli duża litera i potem małe
-
-            /* aliasy podstawowe*/
-        // stary sposób (C- style)
-        typedef unsigned int Uint32;
         
-        // nowoczesny sposób (c++1++)
-        using ULL = unsigned long long;
+        /*
+            Podstawowe aliasy: syntaxy
+                typedef typ NazwaAliasu;
+                using NazwaAliasu = typ
+                using NazwaAliasuFUnckji = typ(*)(typ argumentu)
 
-        // aliasowanie funkcji
-        using Callback = void(*)(int); // wskaźnik do funkcji 
-            //  to podpytać -- narazie nie 
+            Aliasy szablonowe:
+                template<typename NazwaTypu>
+                using NazwaAliasu = std::vector<NazwaTypu>
+            
+            Silne typy:
+                unikalny typ - using UserIdAlias = int; 
+                - struct UserId {};
+                - class classUser{};
 
-            /*aliasy szablonowe*/
-        
-        // skrót dla vectora dowolnego typu
+            Alias dla przestrzeni nazw:
+                -namespace NazwaAliasu = NazwaNamespacu;
+                do funkcji w przestrzeni nazw
+                  -using NazwaAliasuFunckji = NazwaNamespacu::funkcja;
+            variant, pozwala dać możliwośc wyboru typu
+                ten typ albo ten typ
+                - std::variant<std::string, intQ possibilities;
+            
+            klasyczny union
+                pudełko na kilka typów
+                union Nazwa { int a, double b...};
+        */
+        // #####----------BASIC ALIASES------------##### 
+        inline void basic_aliases_definition(){
+            typedef unsigned int Uint32;
+            using ULL = unsigned long long;
+            using Callback = void(*)(int);// zamiast  void f(int)
+        }
+        // #####----------TEMPLATE ALIASES------------#####
         template<typename T>
         using TypeVec = std::vector<T>;
 
-        //  skrót lda mapy string : dowolny typ
         template<typename T>
         using StringMap = std::map<std::string, T>;
+            
 
-            /*Silne typy */
-        // unikalny typ
+        // #####----------STRONG ALIASES------------#####
         using UserIdAlias = int; 
-        
-        // nowy typ, niezmienialny
         struct UserId {
             int value;
             explicit UserId(int value) : value(value){}
         };
 
-        // alias przestrzeni nazw poprzez
-        // syntax: namespace NazwaAliasu =  Namespace1::Namespac32;
-        namespace KMD = Knowledge::StreamsManagement;
-        // alias do funckji w rpzestrzeni nazw
-        using StreamReader = Knowledge::StreamsManagement::StandardStream;
-
-        /*
-            variant, pozwala dać możliwośc wyboru typu
-                 ten typ albo ten typ
-                 
-            std::variant<std::string, intQ possibilities;
-        */
-        void resolve_variant_types();
-        /*
-           klasyczny union
-            pudełko na kilka typów
-            union Nazwa { int a, double b...};
-        */
-        union PossibleTypes {
-            int i;
-            double d;
-            char c;
+        // #####----------NAMESPACE ALIASES------------#####
+        inline void namespace_aliases_definition(){
+            namespace KMD = Knowledge::StreamsManagement;
+            using StreamReader = Knowledge::StreamsManagement::StandardStream;
+        }
+        // #####----------MULTIPLE TYPES ALIASES------------#####
+        inline void multiple_types_aliases_definition(){
+            union PossibleTypes {
+                int i;
+                double d;
+                char c;
+            };
+            struct TaggedValue {
+                PossibleTypes value;
+            };
+        }
+        // #####----------AliasesPlayground class------------#####
+        class AliasesPlayground {
+            public:
+                static void basic_aliases();
+                static void template_aliases();
+                static void strong_types();
+                static void play_with_variant_save_union();
+                static void play_with_optional();
         };
-        struct TaggedValue {
-            PossibleTypes value;
-        };
 
-        /*
-            Castowanie - rzutowanie
-                świadoma zamiana jakiegos typu 
-            Kompilator albo automatycznie rzutuje zmienną   
-                albo chce żebyśmy świadomie rzutowali
-            4 typy castów
-                static_cast
-                const_cast
-                reinterpret_cast
-                dynamic_cast
-                (typ) -> stary styl z C 
-        */
-       //Implicit conversion - automatyczne rzutowanie
         class VariableCasting {
+            /*  Castowanie - rzutowanie
+                     zamiana jakiegos typu 
+                Kompilator albo automatycznie rzutuje zmienną   
+                    albo chce żebyśmy świadomie rzutowali
+                4 typy castów
+                    - static_cast
+                    - const_cast
+                    - reinterpret_cast
+                    - dynamic_cast
+                    - (typ) -> stary styl z C 
+    
+                Implicit conversion - automatyczne rzutowanie
+            */
         public:
             double pi_double = 3.14562;
             
@@ -269,24 +272,22 @@ namespace Knowledge {
                 int converted_pi = pi_double;
                 std::cout<< "Converted "<<  converted_pi << "\n";
             }
-             /*
-                static_cast 
-                    normalne, bezpieczne castowanie typów pokrewnych
-                        int na double
-                        char na int itp.
-                        wskaźnika na typ bazowy w klasach
-                    Syntax:
-                        static_cast<na_jaki_typ>(jaką zmienną)
+            /* static_cast 
+               -normalne, bezpieczne castowanie typów pokrewnych
+                    int na double
+                    char na int itp.
+                    wskaźnika na typ bazowy w klasach
+                Syntax:
+                    static_cast<na_jaki_typ>(jaką zmienną)
             */
             inline void static_casting(){
                 double var = 3.1561261;
                 int static_var = static_cast<int>(var); 
                 std::cout<< "Converted "<<  static_var << "\n";
             }
-             /*
-            const_cast
-                usuwanie lub dodawanie const
-                używane tylko do manipulowania const
+            /*  const_cast
+                    usuwanie lub dodawanie const
+                    używane tylko do manipulowania const
                 np: gdy masz funckje const ale potrzebuje tam cos zmienic
             */
             inline void const_casting(const int* value){
@@ -294,8 +295,7 @@ namespace Knowledge {
                 *pointer = 99; // nie polecane, ale możliwe
                 std::cout << *pointer << "\n";
             }
-             /*
-                reinterpret_cast 
+            /*  reinterpret_cast 
                     nie zmienia danych, tylko zmienia
                     sposób ich ich interpetacji w pamieci
                     Używany do niskopoziomowgo kodu
@@ -307,8 +307,7 @@ namespace Knowledge {
                 char* ptr = reinterpret_cast<char*>(&value);
                 std::cout << *ptr << "\n";
             }
-            /*
-                dynamic_cast
+            /*  dynamic_cast
                     rzutowanie obiektów miedzy klasami w OOP
                     Przy dziedziczeniu i polimorfizmie
             */
@@ -329,7 +328,7 @@ namespace Knowledge {
                 }
             }
         };
-        void casting_example();
+
         struct Person {
             int _age;
             Person(int age) : _age(age) {}
@@ -338,7 +337,7 @@ namespace Knowledge {
                 std::cout << "age: " << _age << std::endl;
             }
         };
-        
+
         struct Connection {
             std::string name;
             int accounts;     
@@ -347,30 +346,24 @@ namespace Knowledge {
         };
 
         class Pointers {
-            /*
-                wskąźnik, czyli
+            /*  wskąźnik, czyli
                     zmienna która przechowuje adres obiektu /zmiennej
+                Dynamiczne tworzenie obiektów
+                    należy samemu zarządzać pamiecią 
+                    i ją potem zwalniać poprzez delete
+                Smart pointers - bezpieczne wskaźniki
+                    z klasy memory
+                    automatycznie zarządzają pamiecią
             */
             public:
                 void simple_poiners();
                 void pointers_to_structures();
-                /*
-                    Dynamiczne tworzenie obiektów
-                        należy samemu zarządzać pamiecią 
-                        i ją potem zwalniać poprzez delete
-                */
                 void dynamic_memory();
-                /*
-                    Smart pointers - bezpieczne wskaźniki
-                        z klasy memory
-                        automatycznie zarządzają pamiecią
-                */
                 void unique_pointer();
                 void shared_pointer();
                 void weak_pointer();
 
         };
-        void pointer_example();
         void check_optional();
         namespace Enums {
             /*
