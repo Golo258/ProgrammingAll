@@ -6,9 +6,9 @@
 
 namespace Knowledge {
     
-/*#--------------StreamsManagement NAMESPACE---------------------------------#*/
+/*--------------StreamsManagement namespace---------------------------------*/
     namespace StreamsManagement {
-        /*-------------StandardStream methods----------------*/
+/*----------StreamsManagement::StandardStream class methods------------*/
         void StandardStream::print_list(std::ostream& os, const std::vector<int>& items){
             int index = 1;
             for (const auto& item: items){
@@ -61,8 +61,7 @@ namespace Knowledge {
                     << number << std::endl;
             }
         }
-
-        /*-------------FileStream methods----------------*/
+/*----------StreamsManagement::FileStream class methods------------*/
         void FileStream::write_data_out(){
             /* tworzy nowy plik albo czyści , domyślne tryby
                 std::ios::out | std::ios::trunc */
@@ -103,7 +102,7 @@ namespace Knowledge {
             std::filesystem::remove("notes.txt");
         }
 
-        /*-------------MemoryStream methods----------------*/
+/*----------StreamsManagement::MemoryStream class methods------------*/
         void MemoryStream::load_string_into_buffor(){
             std::string text = "12 34 5 61\n";
             /* Tekst trafia do buffora
@@ -134,7 +133,7 @@ namespace Knowledge {
             logger.debug() << (first + second) << '\n';
         }
 
-        /*-------------FileSystemManagment methods----------------*/
+/*----------StreamsManagement::FileSystemManagment class methods------------*/
         fs::path FileSystemManagment::create_paths(){
             /*  tworzenie ścieżek
                 operator / - składa ścieżki */
@@ -258,10 +257,9 @@ namespace Knowledge {
         }
     }
 
-/*#--------------AliasesAndTypes NAMESPACE---------------------------------#*/
+/*--------------AliasesAndTypes NAMESPACE---------------------------------*/
     namespace AliasesAndTypes {
-
-    /*-------------AliasesPlayground methods----------------*/
+/*----------AliasesAndTypes::AliasesPlayground class methods------------*/
         void AliasesPlayground::basic_aliases(){
             logger.info() << "BASIC ALIASES\n";
             typedef unsigned long int UL_int;
@@ -349,7 +347,8 @@ namespace Knowledge {
                 values
             );
         }
-         void AliasesPlayground::play_with_optional(){
+
+        void AliasesPlayground::play_with_optional(){
             /*  optional 
                     może przechowywać wartość albo wartosc albo nullopt 
                     zamiast zwracać -1 0 lub nullptr tylko
@@ -378,7 +377,8 @@ namespace Knowledge {
             numb.reset();
             numb.emplace(51);
         }
-    /*-------------CastingPlayground methods----------------*/
+
+/*----------AliasesAndTypes::CastingPlayground class methods------------*/
         void CastingPlayground::implicit_conversion(){
             double pi_double = 3.14562;
             int converted_pi = pi_double;
@@ -415,7 +415,7 @@ namespace Knowledge {
             }
         }
 
-    /*-------------Pointers methods----------------*/
+/*----------AliasesAndTypes::PointersPlayground class methods------------*/
         void PointersPlayground::basic_pointer(){
             /*  numb = wartosc 
                 ptr - adres pamieci
@@ -462,7 +462,8 @@ namespace Knowledge {
                 << "SQL amount: " << sql_db->accounts << "\n"
                 << "Using the connection\n";
         }
-    /*#--------------Enums NAMESPACE---------------------------------#*/
+
+/*----------------AliasesAndTypes::Enums NAMESPACE---------------------------*/
         namespace Enums {
             
             std::string EnumPlayground::request_method_to_string(RequestMethod method) {
@@ -473,6 +474,7 @@ namespace Knowledge {
                     default:                    return "UNKNOWN";
                 }
             }
+
             std::optional<RequestMethod> EnumPlayground::string_to_request_method(const std::string& method_str) {
                 if (method_str == "GET")    return  RequestMethod::GET;
                 if (method_str == "POST")   return  RequestMethod::POST; 
@@ -542,44 +544,77 @@ namespace Knowledge {
                 }
             }
         }
-
+        
         namespace Templates {
-            void show_tamples(){
-                add_int(1,1);
-                add_double(1.5, 1.5);
+            void TemplatePlayground::basic_redundancy_difference() {
+                logger.debug() << "[Templates] basic_redundancy_difference()\n";
+                //  zduplikowane podejście - dwie osobne funkcje do dodawanie
+                int sum_int = add_int(1,1);
+                double sum_double = add_double(1.5, 1.5);
+                logger.debug()
+                    << "add_int(1, 1) = " << sum_int << "\n"
+                    << "add_double(1.5, 1.5) = " << sum_double << "\n";
 
                 // z użyciem templata
-                int add_int = add(1,2);
-                double add_double = add(1.5, 15.7);
-                std::string add_string = add(
+                int generic_int = generic_add(1,2);
+                double generic_double = generic_add(1.5, 15.7);
+                std::string generic_string = generic_add(
                     std::string("Hi "), std::string("there")
                 );
-                auto bigger = max_of(5, 9);        // int
-                auto longer = max_of<std::string>("his", "yo"); // string
-                auto different = add_different(
-                    12, 515.5125
-                );
-                // dowolny typ pudełka
-                Box<int> health(100);
-                Box<double> accuracy(99.5);
-                Box<std::string> nickname("Golo");
+                logger.debug()
+                    << "generic_add<int>(1, 2) = " << generic_int << "\n"
+                    << "generic_add<double>(1.5, 15.7) = " << generic_double << "\n"
+                    << "generic_add<std::string>(\"Hi \", \"there\") = "
+                    << generic_string << "\n";
+            }
 
-                logger.debug() << "HP: " << health.get() << "\n";
-                logger.debug() << "ACC: " << accuracy.get() << "\n";
-                logger.debug() << "Nick: " << nickname.get() << "\n";
+            void TemplatePlayground::template_functions() {
+                logger.info() << "[Templates] template_functions\n"; 
+                /*  automatyczna dedukacja typu - int
+                    jawne typowanie <typ>*/
+                auto bigger = max_of(5, 9); 
+                auto longer = max_of<std::string>("his", "yo");
+                logger.debug()
+                    << "max_of(5, 9) = " << bigger << "\n"
+                    << "max_of<string>(\"his\", \"yo\") = " << longer << "\n";
                 
-                Pair<std::string, int> player_score("Grzesiuniunia", 999);
-                logger.debug() << player_score.get_key() << ": " 
-                          << player_score.get_value() << "\n";
-                
-                Container<int> numbers(3);
+                auto different_types = add_different(12.51, 125);
+                logger.debug()
+                    << "add_different(12, 515.5125) = " << different_types << "\n";
+            }
+            void TemplatePlayground::template_classes() {
+                logger.info() << "[Templates] classes: \n";
+                GenericBox<int> health(100);
+                GenericBox<double> accuracy(51.5);
+                GenericBox<std::string> nickname("Johny");
+                logger.debug() 
+                    << "HP: ["   << health.get()   << "] | "
+                    << "ACC: ["  << accuracy.get() << "] | " 
+                    << "Nick: [" << nickname.get() << "] \n";
+                // Para typów generycznych
+                GenericPair<std::string, int> player_score("Golo", 125);
+                logger.debug() 
+                    << "Key: "   << player_score.get_key() << ": " 
+                    << "Value: " << player_score.get_value() << "\n";
+            }
+
+            void TemplatePlayground::template_as_vector_type(){
+                logger.debug() << "[Templates] template_as_vector_type \n";
+                GenericItemsContainer<int> numbers(5);
                 numbers.add(10);
                 numbers.add(1256);
+                logger.debug() << "All numbers reserved:\n";
                 numbers.print_all_items();
-                Container<int> numbers_inicialized{10, 1256};
+                GenericItemsContainer<int> numbers_inicialized{10, 1256};
+                logger.debug() << "Numbers initialized:\n";
                 numbers_inicialized.print_all_items();
-                Container<int> filled_zeros(3, 0);
+                logger.debug() << "Numbers filled with zeros:\n";
+                GenericItemsContainer<int> filled_zeros(3, 0);
                 filled_zeros.print_all_items();
+
+                logger.debug()
+                    << "Active containers: "
+                    << GenericItemsContainer<int>::get_active_containers() << "\n";
             }
         }
     }

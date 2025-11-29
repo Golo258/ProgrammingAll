@@ -37,9 +37,9 @@
         - tworzenie requestów do api, i parsowanie tego
             - tworzenie własnego API, ale to nie wiem czy nie lepiej w pythonie
 */
+/*--------------Knowledge NAMESPACE---------------------------------*/
 namespace Knowledge {
-
-/*#--------------StreamsManagement NAMESPACE---------------------------------#*/
+/*--------------StreamsManagement NAMESPACE---------------------------------*/
     namespace StreamsManagement {
         /* Strumień
             - kanał przepływu danych , obiekt zarządzający tym przepływem
@@ -77,7 +77,7 @@ namespace Knowledge {
                         std::fstream
                         std::stringstream
         */
-// #####----------StandardStream class------------#####
+/*----------StreamsManagement::StandardStream class definition------------*/
         class StandardStream {
         /* Strumienie standardowe
             cin  - wejscie  - czyta z klawiatury
@@ -105,7 +105,7 @@ namespace Knowledge {
                 void standard_output();
                 void standard_input();
         };
-// #####----------FileStream class------------#####
+/*----------StreamsManagement::FileStream class definition------------*/
         class FileStream {
         /* Strumienie plikowe <fstream>
                 ifstream - wejscie - czytanie z pliku
@@ -128,7 +128,7 @@ namespace Knowledge {
                 void write_data_out_by_append();
                 void read_from_in();
         };
-// #####----------MemoryStream class------------#####
+/*----------StreamsManagement::MemoryStream class definition------------*/
         class MemoryStream {
         /* Strumienie w pamięci <sstream>, 
             - służą do pracy z tekstem w pamieci,
@@ -144,7 +144,7 @@ namespace Knowledge {
                 zanim coś z nimi zrobisz
             std::cin - bufor wejsciowy 
                 system trzyma znaki które wpisuje zanim pogram je pobierze
-            std::cout - bufor wyjściowy
+            logger.debug() - bufor wyjściowy
                 tekst trafia do buffora, a dopiero potem do terminala
         */
             public:
@@ -152,7 +152,7 @@ namespace Knowledge {
                 void load_data_into_buffor();
                 void read_and_write_data_to_buffor();
         };
-// #####----------FileSystemManagment class------------#####
+/*----------StreamsManagement::FileSystemManagment class definition------------*/
         namespace fs = std::filesystem;
         class FileSystemManagment {
             /* filesystem:
@@ -173,7 +173,7 @@ namespace Knowledge {
         };
     }
     
-/*#--------------AliasesAndTypes NAMESPACE---------------------------------#*/
+/*--------------AliasesAndTypes NAMESPACE---------------------------------*/
     namespace AliasesAndTypes {
         // stosuejmy pascal case - czyli duża litera i potem małe
         
@@ -204,13 +204,13 @@ namespace Knowledge {
                 pudełko na kilka typów
                 union Nazwa { int a, double b...};
         */
-        // #####----------BASIC ALIASES------------##### 
+        // ----------BASIC ALIASES------------ 
         inline void basic_aliases_definition(){
             typedef unsigned int Uint32;
             using ULL = unsigned long long;
             using Callback = void(*)(int);// zamiast  void f(int)
         }
-        // #####----------TEMPLATE ALIASES------------#####
+        // ----------TEMPLATE ALIASES------------
         template<typename T>
         using TypeVec = std::vector<T>;
 
@@ -218,19 +218,19 @@ namespace Knowledge {
         using StringMap = std::map<std::string, T>;
             
 
-        // #####----------STRONG ALIASES------------#####
+        // ----------STRONG ALIASES------------
         using UserIdAlias = int; 
         struct UserId {
             int value;
             explicit UserId(int value) : value(value){}
         };
 
-        // #####----------NAMESPACE ALIASES------------#####
+        // ----------NAMESPACE ALIASES------------
         inline void namespace_aliases_definition(){
             namespace KMD = Knowledge::StreamsManagement;
             using StreamReader = Knowledge::StreamsManagement::StandardStream;
         }
-        // #####----------MULTIPLE TYPES ALIASES------------#####
+        // ----------MULTIPLE TYPES ALIASES------------
         inline void multiple_types_aliases_definition(){
             union PossibleTypes {
                 int i;
@@ -241,7 +241,7 @@ namespace Knowledge {
                 PossibleTypes value;
             };
         }
-        // #####----------AliasesPlayground class------------#####
+/*----------AliasesAndTypes::AliasesPlayground class definition------------*/
         class AliasesPlayground {
             public:
                 static void basic_aliases();
@@ -250,8 +250,7 @@ namespace Knowledge {
                 static void play_with_variant_save_union();
                 static void play_with_optional();
         };
-
-        // #####----------CastingPlayground class------------#####
+/*----------AliasesAndTypes::CastingPlayground class definition------------*/
         class CastingPlayground {
             /*  Castowanie - rzutowanie - zamiana jakiegos typu 
             Kompilator albo automatycznie rzutuje zmienną   
@@ -291,13 +290,13 @@ namespace Knowledge {
             };
             struct Derived : Base {
                 inline void say(){
-                    std::cout << "Something\n";
+                    logger.debug() << "Something\n";
                 }
             };
             void convert_dynamic_cast();
         };
 
-
+/*----------AliasesAndTypes::PointersPlayground class definition------------*/
         class PointersPlayground {
             /*  wskąźnik, czyli
                     zmienna która przechowuje adres obiektu /zmiennej
@@ -327,17 +326,17 @@ namespace Knowledge {
                 struct Person {
                     int _age;
                     Person(int age) : _age(age) {}
-                    ~Person() { std::cout << "End of story\n"; }
+                    ~Person() { logger.debug() << "End of story\n"; }
                     void introduce(){
-                        std::cout << "age: " << _age << std::endl;
+                        logger.debug() << "age: " << _age << std::endl;
                     }
                 };
 
                 struct Connection {
                     std::string name;
                     int accounts;     
-                    Connection() { std::cout << "Openning connection \n"; }
-                    ~Connection() { std::cout << "Closing connection \n"; }
+                    Connection() { logger.debug() << "Openning connection \n"; }
+                    ~Connection() { logger.debug() << "Closing connection \n"; }
                 };
                 void basic_pointer();
                 void pointer_to_structure();
@@ -345,7 +344,7 @@ namespace Knowledge {
                 void unique_pointer();
                 void shared_pointer();
         };
-    /*#--------------ENUMS NAMESPACE---------------------------------#*/
+/*--------------AliasesAndTypes::Enums namespace---------------------------------*/
         namespace Enums {
             /*  Enum - typ wyliczeniowy
                     nadaje nazwane stałe wartościom liczbowym
@@ -399,6 +398,7 @@ namespace Knowledge {
                 BLUE  = 0x40,
                 BLACK = 0x00
             };
+/*----------AliasesAndTypes::Enums::EnumPlayground class methods------------*/
             class EnumPlayground {
                 public:
                     std::string request_method_to_string(RequestMethod method);
@@ -410,125 +410,111 @@ namespace Knowledge {
                     void mapping_enum_to_string();    
             };
         }
+/*--------------AliasesAndTypes::Templates NAMESPACE---------------------------------*/
         namespace Templates {
-            /*
-                Co to jest template:
-                    to sposób na pisanie uniwersalnego kod
-                        dla wielu typów, bez duplikowania funkcji 
-                Wewnątrz:
-                    kompilator nie wie jaki jest typ od razu
-                    kiedy wywołujesz z argumentami
-                        to on wtedy podstawia dany typ i generuje kod
-                Każdy typ to osobna wersja funkcji
-                    instancja szabonu
-                
-                Ważne
-                    Typy muszą wspierać operacje użyte w funkcji
-                    np:  Jeśli robimy operacje a + b
-                    to kompilator wymaga żeby typ miał operator +
+            /* Co to jest template:
+                to sposób na pisanie uniwersalnego kod
+                    dla wielu typów, bez duplikowania funkcji 
+            Wewnątrz:
+                kompilator nie wie jaki jest typ od razu
+                Generuje kod wtedy gdy wywołujemy funkcje z 
+                konkretynymi argumentami o danych typach
+                    podstawia wtedy dany typ i generuje kod
+            Każdy typ to osobna wersja funkcji
+                instancja szabonu
 
-                    można samemu postawić typ
-                        add<int>(3, 5);
-                        ale kompilator sam sie domyślna
-                Konwencje nazywania typu w templacie:
-                    T (Type)
-                    TValue
-                    TKey
-                    TElement
-                    TData
-                    TReturn
-                FUNKCJE SZABLONOWE
+            !!WAZNE!!
+            Typy muszą wspierać operacje użyte w funkcji
+            np:  Jeśli robimy operacje a + b
+            to kompilator wymaga żeby typ miał operator +
+                można samemu postawić typ
+                    add<int>(3, 5);
+                    ale kompilator sam sie domyślna
+                
+            Konwencje nazywania typu w templacie:
+                T (Type) | TReturn  
+                TValue   | TKey
+                TElement | TData
+            
+            Szablony funkcji:
+                template<typename T>
+                T nazwa_funkcji(const T& a, const T& b);
+            
+            Jeśli potrzebujemy mieć typy mieszane 
+                to do definicji dajemy kilka typów
+                template<typename Type_a, typename Type_b>
+                
+            KLASY SZABLONOWE
+                kompilator widzi że dana klasa to template
+                towrzy kopie kodu wtedy gdy użyjemy innego typu
+                każdy typ ma osobną implementacje
+                    tak jak funkcje szablonowe
+
+            Uniwersalny przepis na dany obiekt
+                T to miejsce na typ który wstawiamy później
+            Kiedy używamy z danym typem
+                kopmilator tworzy wersje klasy i wszedzie wrzuca swój typ
             */ 
-            //  Zamiast  
+            //  Zamiast pisać dwie różne funkcje
             inline int add_int(int a, int b ) { return a + b; }
             inline double add_double(double a, double b) {return a + b; }
-            // Piszemy jedną wersje
-            template<typename Type>
-            Type add(Type a, Type b){
-                return a + b;
-            }
+            
+            template<typename Type> // Piszemy jedną wersje
+            Type generic_add(Type a, Type b){ return a + b; }
 
-            // funkcja max_of
             template<typename Type>
             Type max_of(const Type& prev, const Type& next){
                 return (prev > next) ? prev : next;
             }
-            /*
-            jeśli chcemy mieć typy mieszane to nie można zrobić
-                add(2, 3.5) tylko dajemy kilka typów
-            */ 
+            
             template<typename Type_a, typename Type_b>
             auto add_different(Type_a first, Type_b second){
                 return first + second;
             }
-            /*
-                KLASY SZABLONOWE
-                    kompilator widzi że Box to template
-                    towrzy kopie kodu wtedy gdy użyjemy innego typu
-                    każdy typ ma osobną implementacje
-                        tak jak funkcje szablonowe
 
-                Uniwersalny przepis na dany obiekt
-                T to miejsce na typ który wstawiamy później
-                Kiedy używamy z danym typem
-                    kopmilator tworzy wersje klasy i wszedzie wrzuca swój typ
-            */
-            template<typename T>
-            class Box {
+            template<typename TData>
+            class GenericBox {
                 private: 
-                    T _value;
+                    TData _value;
                 public:
-                    Box(T value) : _value(value){}
-
-                    T get() const {
-                        return _value;
-                    }
-                    void set(T new_value){
-                        _value = new_value;
-                    }
+                    GenericBox(TData value) : _value(value){}
+                    TData get() const { return _value; }
+                    void set(TData new_value){ _value = new_value; }
             };
-            // z dwoma typami
+
             template <typename TKey, typename TValue>
-            class Pair {
+            class GenericPair {
                 private:
                     TKey _key;
                     TValue _value;
                 public:
-                    Pair(TKey key, TValue value)
+                    GenericPair(TKey key, TValue value)
                         : _key(key), _value(value) {}
-                    TKey get_key() const {
-                        return _key;
-                    }
-                    TValue get_value() const {
-                        return _value;
-                    }
+                    TKey get_key() const { return _key; }
+                    TValue get_value() const { return _value; }
             };
 
-            // Klasa container
+            // Klasa GenericItemsContainer
             template <typename TItem>
-            class Container {
+            class GenericItemsContainer {
                 private:
                     std::vector<TItem> _items;
                     inline static int containers_amount = 0; //statyczne pole musi być zaincjalowane przed
                     
                 public:
-                    Container(){
-                        containers_amount++;
-                    } 
-                    ~Container(){
-                        containers_amount--;
-                    }
-                    Container(size_t size){
+                    GenericItemsContainer() { containers_amount++; } 
+                    ~GenericItemsContainer(){ containers_amount--; }
+                    GenericItemsContainer(size_t size){
                         _items.reserve(size);
                         containers_amount++;
                     }
                     // wypełnia n kopiami 'value'
-                    Container(std::size_t n, const TItem& value) {
+                    GenericItemsContainer(std::size_t n, const TItem& value) {
                         _items.assign(n, value);    
                         containers_amount++;
                     }
 
-                    Container(std::initializer_list<TItem> items) 
+                    GenericItemsContainer(std::initializer_list<TItem> items) 
                         : _items(items) {
                         containers_amount++;
                     }
@@ -539,11 +525,19 @@ namespace Knowledge {
                     
                     void print_all_items() const {
                         for (const TItem& item: _items){
-                            std::cout << "Item [" << item << "]\n"; 
+                            logger.debug() 
+                                << "Item [" << item << "]\n"; 
                         }
                     }
+                    static int get_active_containers(){ return containers_amount; }
             };
-            void show_tamples();
+            class TemplatePlayground {
+                public:
+                    void basic_redundancy_difference();
+                    void template_functions();
+                    void template_classes();
+                    void template_as_vector_type();
+            };
         }
     }
     namespace NameSpacesKnow {
@@ -660,7 +654,7 @@ namespace Knowledge {
         */
         #define DEBUG_MODE 
         #ifdef DEBUG_MODE // jesli jest zdefinowane
-            #define LOG(x) std::cout << "[DEBUG]" << x << "\n"
+            #define LOG(x) logger.debug() << "[DEBUG]" << x << "\n"
         #else
             #define LOG(x)
         #endif
@@ -675,11 +669,11 @@ namespace Knowledge {
             w kodzie potem można używać
                 #idef VERSION
                     #if VERSION == 3
-                        std::cout << "Wersja 3!\n";
+                        logger.debug() << "Wersja 3!\n";
                     #elif VERSION == 2
-                        std::cout << "Wersja 2!\n";
+                        logger.debug() << "Wersja 2!\n";
                     #else
-                        std::cout << "Nieznana wersja\n";
+                        logger.debug() << "Nieznana wersja\n";
                     #endif
                 #endif
             Inne:
@@ -890,7 +884,7 @@ namespace Knowledge {
                 /*
                     wszystkie dostępy jak w A są zachowane 
                      B b;
-                    std::cout << b.pub;  // działa
+                    logger.debug() << b.pub;  // działa
                     // b.prot; nie działa (protected)
                     // b.priv; nie działa (private)
                 */
@@ -941,7 +935,7 @@ namespace Knowledge {
                     EmailNotification(std::string email)
                         : _email(std::move(email)) {}
                     void send(const std::string& msg) const override {
-                        std::cout << "[EMAIL] To: " << _email << std::endl 
+                        logger.debug() << "[EMAIL] To: " << _email << std::endl 
                             << "Content: " << msg << std::endl; 
                     } 
             };
@@ -953,7 +947,7 @@ namespace Knowledge {
                         : _phone_number(phone_number){}
 
                     void send(const std::string& msg) const override {
-                        std::cout << "[SMS] To number: " << _phone_number
+                        logger.debug() << "[SMS] To number: " << _phone_number
                             << "\nMsg content: " << msg << "\n";
                     }
             };
@@ -999,19 +993,19 @@ namespace Knowledge {
 
             struct Compressor : IProcessor {
                 void process(const std::string& input) override {
-                    std::cout << "[COMPRESSOR] Compressing data: " << input << '\n';
+                    logger.debug() << "[COMPRESSOR] Compressing data: " << input << '\n';
                 }
             };
 
             struct Encryptor : IProcessor {
                 void process(const std::string& input) override {
-                    std::cout << "[ENCRYPTOR] Encrypting data: " << input << '\n';
+                    logger.debug() << "[ENCRYPTOR] Encrypting data: " << input << '\n';
                 }
             };
 
             struct Logger : IProcessor {
                 void process(const std::string& input) override {
-                    std::cout << "[LOGGER] Saving data to logs: " << input << '\n';
+                    logger.debug() << "[LOGGER] Saving data to logs: " << input << '\n';
                 }
             };
 

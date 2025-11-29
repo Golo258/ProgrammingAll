@@ -13,7 +13,7 @@ void logger_example(){
     logger.warn()  << "Uwaga  to tylko demo\n";
     logger.error() << "Błąd testowy\n";
 }
-    
+
 void KNOWLEAGE_INTRODUCTION() {
     namespace Streams = Knowledge::StreamsManagement;
     std::string dots = "\n----------------------------------------------\n";
@@ -73,7 +73,7 @@ void KNOWLEAGE_INTRODUCTION() {
     pointers_playground.unique_pointer();
     pointers_playground.shared_pointer();
     // ------------------------------------------------------
-    namespace enums = Knowledge::AliasesAndTypes::Enums;
+    namespace enums = aliases::Enums;
     logger.info() << dots << "ENUMS INTRODUCTION" << std::endl;
     enums::EnumPlayground enums_playground;
     enums_playground.basic_enum_attribute_check();
@@ -81,6 +81,14 @@ void KNOWLEAGE_INTRODUCTION() {
     enums_playground.enum_class_hex_attribute_value();
     enums_playground.enum_as_vector_type_iteration();
     enums_playground.mapping_enum_to_string();
+    // ------------------------------------------------------
+    namespace templates = aliases::Templates;
+    logger.info() << dots << "TEMPLATES INTRODUCTION" << std::endl;
+    templates::TemplatePlayground template_playground;
+    template_playground.basic_redundancy_difference();
+    template_playground.template_functions();
+    template_playground.template_classes();
+    template_playground.template_as_vector_type();
 
 }
 
@@ -130,11 +138,6 @@ void knowleadge_playground(){
     // Knowledge::Functions::show_all_functions();
     // Knowledge::Structures::all();
     // Knowledge::Preprocesor::all();
-    // Knowledge::AliasesAndTypes::pointer_example();
-    // Knowledge::AliasesAndTypes::enums_example();
-    // Knowledge::AliasesAndTypes::check_optional();
-    // Knowledge::AliasesAndTypes::Templates::show_tamples();
-
 }
 
 int main() {
