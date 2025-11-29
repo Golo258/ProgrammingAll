@@ -251,66 +251,41 @@ namespace Knowledge {
                 static void play_with_optional();
         };
 
-        class VariableCasting {
-            /*  Castowanie - rzutowanie
-                     zamiana jakiegos typu 
-                Kompilator albo automatycznie rzutuje zmienną   
-                    albo chce żebyśmy świadomie rzutowali
-                4 typy castów
-                    - static_cast
-                    - const_cast
-                    - reinterpret_cast
-                    - dynamic_cast
-                    - (typ) -> stary styl z C 
-    
-                Implicit conversion - automatyczne rzutowanie
-            */
-        public:
-            double pi_double = 3.14562;
-            
-            inline void implicit_conversion(){
-                int converted_pi = pi_double;
-                std::cout<< "Converted "<<  converted_pi << "\n";
-            }
-            /* static_cast 
-               -normalne, bezpieczne castowanie typów pokrewnych
-                    int na double
-                    char na int itp.
-                    wskaźnika na typ bazowy w klasach
-                Syntax:
-                    static_cast<na_jaki_typ>(jaką zmienną)
-            */
-            inline void static_casting(){
-                double var = 3.1561261;
-                int static_var = static_cast<int>(var); 
-                std::cout<< "Converted "<<  static_var << "\n";
-            }
-            /*  const_cast
+        // #####----------CastingPlayground class------------#####
+        class CastingPlayground {
+            /*  Castowanie - rzutowanie - zamiana jakiegos typu 
+            Kompilator albo automatycznie rzutuje zmienną   
+                albo chce żebyśmy świadomie rzutowali
+            Typy castów:
+                - implicit conversion - automatyczne rzutowanie
+                - (typ) -> stary styl z C 
+                - static_cast:
+                    normalne, bezpieczne castowanie typów pokrewnych
+                        int na double
+                        char na int itp.
+                        wskaźnika na typ bazowy w klasach
+                    Syntax:
+                        static_cast<na_jaki_typ>(jaką zmienną)
+                - const_cast
                     usuwanie lub dodawanie const
                     używane tylko do manipulowania const
-                np: gdy masz funckje const ale potrzebuje tam cos zmienic
-            */
-            inline void const_casting(const int* value){
-                int* pointer = const_cast<int*>(value);
-                *pointer = 99; // nie polecane, ale możliwe
-                std::cout << *pointer << "\n";
-            }
-            /*  reinterpret_cast 
+                    np: gdy masz funckje const ale potrzebuje tam cos zmienic
+
+                - reinterpret_cast
                     nie zmienia danych, tylko zmienia
                     sposób ich ich interpetacji w pamieci
                     Używany do niskopoziomowgo kodu
                     sieciowych, bibliotek systemowych
-                Mało używany
-            */
-            inline void reinterpret_casting(){
-                int value = 65;
-                char* ptr = reinterpret_cast<char*>(&value);
-                std::cout << *ptr << "\n";
-            }
-            /*  dynamic_cast
+                    Mało używany
+                - dynamic_cast
                     rzutowanie obiektów miedzy klasami w OOP
                     Przy dziedziczeniu i polimorfizmie
             */
+        public:
+            void implicit_conversion();
+            void convert_static_cast();
+            void convert_const_cast(const int* value);
+            void convert_reinterpret_cast();
             struct Base {
                 virtual ~Base() = default;
             };
@@ -319,65 +294,86 @@ namespace Knowledge {
                     std::cout << "Something\n";
                 }
             };
-            // TODO: powrót po nauce dziedziczenia itp
-            inline void dynamic_casting(){
-                Base* base = new Derived;
-                Derived* derived = dynamic_cast<Derived*>(base);
-                if (derived) {
-                    derived->say();
-                }
-            }
+            void convert_dynamic_cast();
         };
 
-        struct Person {
-            int _age;
-            Person(int age) : _age(age) {}
-            ~Person() { std::cout << "End of story\n"; }
-            void introduce(){
-                std::cout << "age: " << _age << std::endl;
-            }
-        };
 
-        struct Connection {
-            std::string name;
-            int accounts;     
-            Connection() { std::cout << "Openning connection \n"; }
-            ~Connection() { std::cout << "Closing connection \n"; }
-        };
-
-        class Pointers {
+        class PointersPlayground {
             /*  wskąźnik, czyli
                     zmienna która przechowuje adres obiektu /zmiennej
-                Dynamiczne tworzenie obiektów
-                    należy samemu zarządzać pamiecią 
-                    i ją potem zwalniać poprzez delete
-                Smart pointers - bezpieczne wskaźniki
-                    z klasy memory
-                    automatycznie zarządzają pamiecią
+            Dynamiczne tworzenie obiektów
+                należy samemu zarządzać pamiecią 
+                i ją potem zwalniać poprzez delete
+            Smart pointers - bezpieczne wskaźniki
+                z klasy memory
+                automatycznie zarządzają pamiecią
+            
+            Typy:
+                std::unique_ptr
+                    wyłączna własność obiektu
+                        tylko on może przechowywać adres obiektu
+                    syntax:
+                        std::unique_ptr<typ> nazwa = std::make_unique<Typ>(obiekt)
+                    Po wyjściu ze scopa automatycznie jest wywoływany destruktor
+                    Nie można kopiować obiektu pomiedzy innymi pointerami
+                    Zdefiniowany obiekt należy już tylko do tego danego pointera
+                    Ale można przekazać wartość poprzez
+                        std::move(pointer);
+
+                shared_ptr<>  make_shared<>(obiekt);
+                    wiele pointerów może korzystać z obiektu
             */
-            public:
-                void simple_poiners();
-                void pointers_to_structures();
-                void dynamic_memory();
+           public:
+                struct Person {
+                    int _age;
+                    Person(int age) : _age(age) {}
+                    ~Person() { std::cout << "End of story\n"; }
+                    void introduce(){
+                        std::cout << "age: " << _age << std::endl;
+                    }
+                };
+
+                struct Connection {
+                    std::string name;
+                    int accounts;     
+                    Connection() { std::cout << "Openning connection \n"; }
+                    ~Connection() { std::cout << "Closing connection \n"; }
+                };
+                void basic_pointer();
+                void pointer_to_structure();
+                void allocate_memory_dynamic();
                 void unique_pointer();
                 void shared_pointer();
-                void weak_pointer();
-
         };
-        void check_optional();
+    /*#--------------ENUMS NAMESPACE---------------------------------#*/
         namespace Enums {
-            /*
-                Enum - typ wyliczeniowy
+            /*  Enum - typ wyliczeniowy
                     nadaje nazwane stałe wartościom liczbowym
                     Zamiast pisać dane liczby 
                         to mają one określony sens
                 Każdy element to domyslnie int 
                     zaczynający się od 0
-                
                 Można przypisać konkretne wartości do typów
-                    enum Nazwa {
-                        typ = wartosc;
-                    }
+                Stary styl definiowania:
+                    enum Nazwa { typ = wartosc; }
+                
+                Nowoczesny styl i typ definiowania:
+                    enum class - jest on silnie typowany
+                        nie miesza sie z int
+                        nie wchodzi w globalny namespace
+                        wymaga jawnego rzutowania 
+                Aby dostać sie do wartość 
+                    wymagane jest rzutowanie na inta
+                można obrać jaki jest typ bazowy 
+                    rozmiar / zarkes 
+                
+                jak jest sam enum Something {}
+                    to wszystkie wartości które są zdefinowane
+                    są wrzucone prosto do globalnej przestrzeni nazw
+                        jaky na luzie, a mogą byc potem konflikty
+                    i wtedy można sie odwołać czysto do WARNING
+                    a nie trzeba do Status::WARNING
+                        co jest niebezpieczne imo
             */
             enum Status {
                 OK,       // 0
@@ -390,33 +386,30 @@ namespace Knowledge {
                 NOT_FOUND = 404,
                 INTERNAL  = 500
             };
-            /*
-                nowoczesny enum class - silnie typowany
-                    nie miesza sie z int
-                    nie wchodzi w globalny namespace
-                    wymaga jawnego rzutowania 
-                Aby dostać sie do wartość 
-                    wymagane jest rzutowanie na inta
-                można obrać jaki jest typ bazowy 
-                    rozmiar / zarkes 
-            */
+
             enum class RequestMethod {
                 GET,
                 POST,
                 DELETE
             };
-            //  można przypisać hexa
+
             enum class Color : uint8_t {
-                RED   = 0xFF,
+                RED   = 0xFF,//  można przypisać hexa
                 GREEN = 0x80,
                 BLUE  = 0x40,
                 BLACK = 0x00
             };
-            std::string method_to_string(Enums::RequestMethod method);
-            std::optional<Enums::RequestMethod> string_to_method(const std::string& method_str);
-            
+            class EnumPlayground {
+                public:
+                    std::string request_method_to_string(RequestMethod method);
+                    std::optional<RequestMethod> string_to_request_method(const std::string& method_str);
+                    void basic_enum_attribute_check();
+                    void enum_class_value_retrieval();
+                    void enum_class_hex_attribute_value();
+                    void enum_as_vector_type_iteration();
+                    void mapping_enum_to_string();    
+            };
         }
-        void enums_example();
         namespace Templates {
             /*
                 Co to jest template:

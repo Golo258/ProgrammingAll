@@ -54,23 +54,33 @@ void KNOWLEAGE_INTRODUCTION() {
     aliases_playground.play_with_variant_save_union();
     aliases_playground.play_with_optional();
     // ------------------------------------------------------
-    logger.info() << dots << "VARIABLE CASTING INTRODUCTION" << std::endl;
-    aliases::VariableCasting var_casting;
-    var_casting.static_casting();
+    logger.info() << dots << "CASTING INTRODUCTION" << std::endl;
+    aliases::CastingPlayground casting_playground;
+    casting_playground.implicit_conversion();
+    casting_playground.convert_static_cast();
     int x = 10;
     const int* some_var = &x;
-    var_casting.const_casting(some_var);
+    casting_playground.convert_const_cast(some_var);
     logger.debug() << "After casting" << x << "\n";
-    var_casting.reinterpret_casting();
-    var_casting.dynamic_casting();
+    casting_playground.convert_reinterpret_cast();
+    casting_playground.convert_dynamic_cast();
     // ------------------------------------------------------
     logger.info() << dots << "POINTERS INTRODUCTION" << std::endl;
-    aliases::Pointers pointers;
-    pointers.simple_poiners();
-    pointers.pointers_to_structures();
-    pointers.dynamic_memory();
-    pointers.unique_pointer();
-    pointers.shared_pointer();
+    aliases::PointersPlayground pointers_playground;
+    pointers_playground.basic_pointer();
+    pointers_playground.pointer_to_structure();
+    pointers_playground.allocate_memory_dynamic();
+    pointers_playground.unique_pointer();
+    pointers_playground.shared_pointer();
+    // ------------------------------------------------------
+    namespace enums = Knowledge::AliasesAndTypes::Enums;
+    logger.info() << dots << "ENUMS INTRODUCTION" << std::endl;
+    enums::EnumPlayground enums_playground;
+    enums_playground.basic_enum_attribute_check();
+    enums_playground.enum_class_value_retrieval();
+    enums_playground.enum_class_hex_attribute_value();
+    enums_playground.enum_as_vector_type_iteration();
+    enums_playground.mapping_enum_to_string();
 
 }
 

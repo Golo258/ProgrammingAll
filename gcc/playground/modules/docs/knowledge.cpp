@@ -40,7 +40,7 @@ namespace Knowledge {
             std::filesystem::remove("numbers_list.txt");
         }
         void StandardStream::standard_input() {
-            std::cout << "Enter some number" << std::endl; //  pisanie do stdout - terminala 
+            logger.debug() << "Enter some number" << std::endl; //  pisanie do stdout - terminala 
             int number;
             /*  czyta z stdin - z klawiatury
                     czeka aż user wpisze, i przekonwertuje na dany typ
@@ -55,7 +55,7 @@ namespace Knowledge {
                 return;
             }
             else {
-                std::cout << "Provided number: [" << number << "].\n"; 
+                logger.debug() << "Provided number: [" << number << "].\n"; 
                 std::clog // clog do informacji diagnostycznych
                     << "[LOG-INFO] User provide number: " 
                     << number << std::endl;
@@ -68,7 +68,7 @@ namespace Knowledge {
                 std::ios::out | std::ios::trunc */
             std::ofstream out("notes.txt");
             if(!out){
-                std::cout << "Cannot open for override";
+                logger.debug() << "Cannot open for override";
                 return;
             }
             out << "[INFO] File stream in here!\n [NEXT] end\n<->";
@@ -78,7 +78,7 @@ namespace Knowledge {
         void FileStream::write_data_out_by_append(){
             std::ofstream append_out("notes.txt", std::ios::app); // dopisuje std::ios::app - append
             if(!append_out){
-                std::cout << "Cannot open to append";
+                logger.debug() << "Cannot open to append";
                 return;
             }
             append_out << "\n[NEW] one and last";
@@ -98,7 +98,7 @@ namespace Knowledge {
                 bierze z buffora pierwszą linie i wstawia w zmienną 
             */
             while (std::getline(in, line)){
-                std::cout << "Line " << index++ << " content: " << line << ".\n"; 
+                logger.debug() << "Line " << index++ << " content: " << line << ".\n"; 
             }
             std::filesystem::remove("notes.txt");
         }
@@ -113,7 +113,7 @@ namespace Knowledge {
             std::istringstream in(text);
             int a,b ,c, d;
             in >> a >> b >> c >> d;
-            std::cout << "a=" << a 
+            logger.debug() << "a=" << a 
                       << ", b=" << b 
                       << ", c=" << c 
                       << ", d=" << d << '\n';
@@ -123,7 +123,7 @@ namespace Knowledge {
             std::ostringstream out;
             out << "Result: " << 27 << std::endl;
             std::string text = out.str(); // pobiera z buffora
-            std::cout << "Content after loading from buffor " << text << std::endl;
+            logger.debug() << "Content after loading from buffor " << text << std::endl;
         } 
 
         void MemoryStream::read_and_write_data_to_buffor(){
@@ -131,7 +131,7 @@ namespace Knowledge {
             sstream << "123 451";
             int first, second;
             sstream >> first >> second;
-            std::cout << (first + second) << '\n';
+            logger.debug() << (first + second) << '\n';
         }
 
         /*-------------FileSystemManagment methods----------------*/
@@ -378,9 +378,45 @@ namespace Knowledge {
             numb.reset();
             numb.emplace(51);
         }
-        
+    /*-------------CastingPlayground methods----------------*/
+        void CastingPlayground::implicit_conversion(){
+            double pi_double = 3.14562;
+            int converted_pi = pi_double;
+            logger.debug()
+                << "Implicit convert: "<<  converted_pi << "\n";
+        }
+
+        void CastingPlayground::convert_static_cast(){
+            double var = 3.1561261;
+            int static_var = static_cast<int>(var); 
+            logger.debug()
+                << "Static convert: "<<  static_var << "\n";
+        }
+
+        void CastingPlayground::convert_const_cast(const int* value){
+            int* pointer = const_cast<int*>(value);
+            *pointer = 99; // nie polecane, ale możliwe
+            logger.debug()
+                << *pointer << "\n";
+        }
+
+        void CastingPlayground::convert_reinterpret_cast(){
+            int value = 65;
+            char* ptr = reinterpret_cast<char*>(&value);
+            logger.debug()
+                << *ptr << "\n";
+        }
+
+        void CastingPlayground::convert_dynamic_cast(){
+            Base* base = new Derived;
+            Derived* derived = dynamic_cast<Derived*>(base);
+            if (derived) {
+                derived->say();
+            }
+        }
+
     /*-------------Pointers methods----------------*/
-        void Pointers::simple_poiners(){
+        void PointersPlayground::basic_pointer(){
             /*  numb = wartosc 
                 ptr - adres pamieci
                 *ptr - dereferencja - idz pod adres i wex wartosc
@@ -388,135 +424,125 @@ namespace Knowledge {
             */
             int numb = 412;
             int* numb_ptr = &numb; // &adres
-            std::cout << "Numb " << numb << std::endl;
-            std::cout << "Numb address " << numb_ptr << std::endl;
+            logger.debug() << "Numb " << numb << std::endl;
+            logger.debug() << "Numb address " << numb_ptr << std::endl;
             *numb_ptr = 100;
-            std::cout << "Dreference after chage: " << *numb_ptr << std::endl;
+            logger.debug() << "Dereference after chage: " << *numb_ptr << std::endl;
         }
 
-        void Pointers::pointers_to_structures(){
+        void PointersPlayground::pointer_to_structure(){
             Person woman(21);
-            Person* struct_ptr = &woman; // adres obiektu
+            Person* struct_ptr = &woman;
             struct_ptr->introduce();
-
         }
-        
-        void Pointers::dynamic_memory(){
+
+        void PointersPlayground::allocate_memory_dynamic(){
             int* ptr = new int(10); // tworzy int w pamieci
-            std::cout << *ptr << std::endl;
+            logger.debug() << *ptr << std::endl;
             delete ptr;
         }
-
-        /*  std::unique_ptr
-                wyłączna własność obiektu
-                tylko on może przechowywać adres obiektu
-
-            syntax:
-                std::unique_ptr<typ> nazwa =
-                    std::make_unique<Typ>(obiekt)
-            {} Po wyjściu ze scopa automatycznie jest wywoływany destruktor
-            
-            Nie można kopiować do danego obiektu miedzy pointerami
-            Zdefiniowany obiekt należy już tylko do tego pointera
-            Ale można przekazać wartość poprzez
-                std::move(pointer);
-        */
-        void Pointers::unique_pointer(){
+        void PointersPlayground::unique_pointer(){
             std::unique_ptr<Person> marek = 
                 std::make_unique<Person>(51);
-            std:: cout << "Person " << marek->_age << " is doing something\n";
+            logger.debug()
+                << "Person " << marek->_age << " is doing something\n";
             // auto f2 = marek; compilation fail
             auto f2 = std::move(marek);
         }
-        
-        /*  shared_ptr<>  make_shared<>(obiekt);
-                wiele pointerów może korzystać z obiektu
-        */
-        void Pointers::shared_pointer(){
+    
+        void PointersPlayground::shared_pointer(){
             std::shared_ptr<Connection> sql_db, mongo_db;
             sql_db = std::make_shared<Connection>();
             sql_db->name = "SQL db";
             sql_db->accounts = 1;
-            
             mongo_db = sql_db; // współdzielenie jednego obiektu
             mongo_db->accounts = 2;
-            std::cout << "Mongo db: " << mongo_db->name << "\n";
-            std::cout << "SQL amount: " << sql_db->accounts << "\n";
-            std::cout << "Using the connection\n";
+            logger.debug()
+                << "Mongo db: " << mongo_db->name << "\n"
+                << "SQL amount: " << sql_db->accounts << "\n"
+                << "Using the connection\n";
         }
-        /* weak_ptr
-                służy do współpracy z shared_ptr
-                obserwator który nie zwieksza licznika
-            TODO: later
-        */
-        void Pointers::weak_pointer(){} 
-
-        // Enumy
-        // mapowanie enuma
-        std::string Enums::method_to_string(Enums::RequestMethod method) {
-            switch (method) {
-                case Enums::RequestMethod::GET:      return "GET";
-                case Enums::RequestMethod::POST:     return "POST";
-                case Enums::RequestMethod::DELETE:   return "DELETE";
-                default:                             return "UNKNOWN";
+    /*#--------------Enums NAMESPACE---------------------------------#*/
+        namespace Enums {
+            
+            std::string EnumPlayground::request_method_to_string(RequestMethod method) {
+                switch (method) {
+                    case RequestMethod::GET:    return "GET";
+                    case RequestMethod::POST:   return "POST";
+                    case RequestMethod::DELETE: return "DELETE";
+                    default:                    return "UNKNOWN";
+                }
             }
-        }
-
-        std::optional<Enums::RequestMethod> Enums::string_to_method(const std::string& method_str) {
-            if (method_str == "GET")    return  Enums::RequestMethod::GET;
-            if (method_str == "POST")   return  Enums::RequestMethod::POST; 
-            if (method_str == "DELETE") return  Enums::RequestMethod::DELETE;
-            return std::nullopt;
-        }
-        void enums_example(){
-            /*
-                jak jest sam enum
-                    to wszystkie wartości które są zdefinowane
-                    są wrzucone prosto do globalnej przestrzeni nazw
-                        jaky na luzie, a mogą byc potem konflikty
-                    i wtedy można sie odwołać czysto do WARNING
-                    a nie trzeba do Status::WARNING
-                        co jest niebezpieczne imo
-            */
-            Enums::Status well = Enums::WARNING;
-            if (well == Enums::ERROR){
-                std::cout << "There occurs an error\n";
-            }
-            else{
-                std::cout << "Value: " << well << " and its ok\n";
-            }
-            // Enums::Status err = (Enums::Status)100;  są konflikty z innymi
-            Enums::RequestMethod method = Enums::RequestMethod::GET;
-            // Wymagane jest rzutowanie na inta
-            int code = static_cast<int>(method);
-            std::cout << "Request method code: " << code << std::endl;
-            Enums::Color color = Enums::Color::GREEN;
-            std::cout << "Hex color: "
-                << std::hex << static_cast<uint8_t>(color) 
-                << std::endl;
-
-            // iterowanie po enumie ( hack na fora)
-            constexpr std::array<Enums::RequestMethod, 3> all_requests = {
-                Enums::RequestMethod::GET,
-                Enums::RequestMethod::DELETE,
-                Enums::RequestMethod::POST
-            };
-            for (auto request: all_requests){
-                std::cout << "Request: " << static_cast<int>(request) << std::endl;
-            }
-            // mapowanie 
-            std::string method_str = Enums::method_to_string(method);
-            std::cout << "Converted method: " << method_str << "\n";
-            // alais do skrótów
-            using REQUEST_METHOD = Enums::RequestMethod;
-            REQUEST_METHOD get_method = REQUEST_METHOD::GET;
-            auto mapped_from_string = Enums::string_to_method(method_str);
-            if (mapped_from_string != std::nullopt){
-                REQUEST_METHOD mapped_value = mapped_from_string.value();
-                std::cout << "Method: " << static_cast<int>(mapped_value) << std::endl;
+            std::optional<RequestMethod> EnumPlayground::string_to_request_method(const std::string& method_str) {
+                if (method_str == "GET")    return  RequestMethod::GET;
+                if (method_str == "POST")   return  RequestMethod::POST; 
+                if (method_str == "DELETE") return  RequestMethod::DELETE;
+                return std::nullopt;
             }
             
-        }   
+            void EnumPlayground::basic_enum_attribute_check() {
+                logger.info() << "[Basic enum attribute check]" << std::endl;
+                Status well = WARNING;
+                Status status_by_number = (Status)100;
+                if (well == ERROR || status_by_number == ERROR)
+                    logger.debug()
+                        << "There occurs an error\n";
+                else
+                    logger.debug()
+                        << "Value: " << well 
+                        << " and its ok\n";
+                // są konflikty z innymi
+            }
+            
+            void EnumPlayground::enum_class_value_retrieval() {
+                logger.info() << "[Enum class value retrieval]" << std::endl;
+                RequestMethod method = RequestMethod::GET;
+                int method_code = static_cast<int>(method);
+                logger.debug() 
+                    << "Request method code: " 
+                        << method_code << std::endl;
+            }
+            
+            void EnumPlayground::enum_class_hex_attribute_value() {
+                logger.info() << "[Class hex value]" << std::endl;
+                Color color = Color::GREEN;
+                logger.debug() 
+                    << "Hex color: "
+                    << std::hex << static_cast<uint8_t>(color) 
+                    << std::endl;
+            }
+
+            void EnumPlayground::enum_as_vector_type_iteration(){
+                logger.info() << "[Vector<Enum type> iteration]" << std::endl;
+                constexpr std::array<RequestMethod, 3> all_requests = {
+                    RequestMethod::GET,
+                    RequestMethod::DELETE,
+                    RequestMethod::POST
+                };
+                for (auto request: all_requests){
+                    logger.debug() 
+                        << "Request: (int) " << static_cast<int>(request)
+                        << ", As (string) " << request_method_to_string(request)
+                        << std::endl;
+                }
+            }
+
+            void EnumPlayground::mapping_enum_to_string(){
+                logger.info() << "[Mapping enum]" << std::endl;
+                RequestMethod method = RequestMethod::GET;
+                std::string method_str = request_method_to_string(method);
+                logger.info()
+                    << "Converted method to string: " << method_str
+                    << std::endl;
+                RequestMethod get_method = RequestMethod::GET;
+                auto mapped_from_string = string_to_request_method(method_str);
+                if (mapped_from_string != std::nullopt){
+                    RequestMethod mapped_value = mapped_from_string.value();
+                    logger.debug() << "Method: " << static_cast<int>(mapped_value) << std::endl;
+                }
+            }
+        }
+
         namespace Templates {
             void show_tamples(){
                 add_int(1,1);
@@ -538,12 +564,12 @@ namespace Knowledge {
                 Box<double> accuracy(99.5);
                 Box<std::string> nickname("Golo");
 
-                std::cout << "HP: " << health.get() << "\n";
-                std::cout << "ACC: " << accuracy.get() << "\n";
-                std::cout << "Nick: " << nickname.get() << "\n";
+                logger.debug() << "HP: " << health.get() << "\n";
+                logger.debug() << "ACC: " << accuracy.get() << "\n";
+                logger.debug() << "Nick: " << nickname.get() << "\n";
                 
                 Pair<std::string, int> player_score("Grzesiuniunia", 999);
-                std::cout << player_score.get_key() << ": " 
+                logger.debug() << player_score.get_key() << ": " 
                           << player_score.get_value() << "\n";
                 
                 Container<int> numbers(3);
@@ -560,26 +586,26 @@ namespace Knowledge {
     namespace NameSpacesKnow {
         namespace Begin{
             void print(){
-                std::cout << "Namespace Begin \n";
+                logger.debug() << "Namespace Begin \n";
             }
         }
         namespace End{
             void print(){
-                std::cout << "Namespace End \n";
+                logger.debug() << "Namespace End \n";
             }
         }
         void Out::Inner::read(){
-            std::cout << "Reading in Inner\n";
+            logger.debug() << "Reading in Inner\n";
         }
         void Out::Inner::write(){
-            std::cout << "Writing in Inner\n";
+            logger.debug() << "Writing in Inner\n";
         }
         struct API::Vector_v1{
             float x;
             float y;
         };
         void API::append_list(Vector_v1 vector){
-            std::cout << "Appending to list from inline\n";
+            logger.debug() << "Appending to list from inline\n";
         }
         class API::v2::Vector_v2 {
             private:
@@ -595,7 +621,7 @@ namespace Knowledge {
                 }
         };
         void API::v2::append_list(Vector_v2 vector) {
-            std::cout << "Appending to list from api v2\n";
+            logger.debug() << "Appending to list from api v2\n";
         }
     }
     namespace Preprocesor {
@@ -605,9 +631,9 @@ namespace Knowledge {
 
         void all(){
             double area = circle_area(5);
-            std::cout << "Area: " << area << std::endl;
+            logger.debug() << "Area: " << area << std::endl;
             // usage of SQUARE macro
-            std::cout << SQUARE(4) << std::endl;
+            logger.debug() << SQUARE(4) << std::endl;
             LOG("Program startuje!");
         }
         
@@ -620,7 +646,7 @@ namespace Knowledge {
                 velocity = 50; // this.velocity
             }
             void PrivateSpec::compare(const PrivateSpec& diff){
-                std::cout << "Comparing: [" << velocity - diff.velocity << "]\n";  
+                logger.debug() << "Comparing: [" << velocity - diff.velocity << "]\n";  
                 velocity = diff.velocity;
             }
             //--------------------
@@ -677,7 +703,7 @@ namespace Knowledge {
                     _notes_file_hook.close();
                     logger.info() << "Hook closed properly\n";
                 }
-                std::cout << "Hook deleted\n";
+                logger.debug() << "Hook deleted\n";
             }
         }
         namespace Utility {
@@ -727,26 +753,26 @@ namespace Knowledge {
         }
         namespace Structures {
             void Employee::print() const {
-                std::cout << name 
+                logger.debug() << name 
                     << " (" << age << " lat) - " 
                     << salary << " PLN\n";
             }
             Employee::Employee(std::string name, int age, double salary)
                 : name(std::move(name)), age(age), salary(salary)
             {
-                std::cout << "Employee " << name << "created successfully\n";
+                logger.debug() << "Employee " << name << "created successfully\n";
             }
             void Stats::show_stats() const {
-                std::cout << "HP: " << hp
+                logger.debug() << "HP: " << hp
                       << " | ATK: " << attack
                       << " | DEF: " << defense << '\n';
             }
             void Player::introduce() const {
-                std::cout << "Player: " << name << " (lvl " << level << ")\n";
+                logger.debug() << "Player: " << name << " (lvl " << level << ")\n";
                 stats.show_stats();
             }
             void show_player(const Player& player){
-                std::cout << "=== PLAYER ===" << std::endl;
+                logger.debug() << "=== PLAYER ===" << std::endl;
                 player.introduce();
                 // player.level++;  object == const - not allowed
             }
@@ -790,29 +816,29 @@ namespace Knowledge {
         namespace Inheritance {
             Animal::Animal(int legs)
                 : _legs(legs){
-                std::cout << "Animal created\n";
+                logger.debug() << "Animal created\n";
             }
             Dog::Dog()
                 : Animal(4) // default value for base construct
             {
                 _name = "Burek";
-                std::cout << "Default dog created\n";
+                logger.debug() << "Default dog created\n";
             }
             Dog::Dog(std::string name)
                 : Animal(4), _name(std::move(name))  // default value for base construct
             {
-                std::cout << "Regular dog created\n";
+                logger.debug() << "Regular dog created\n";
             }
             Dog::Dog(int legs, std::string name)
                 : Animal(legs), _name(std::move(name))
             {
-                std::cout << "Dog with amount of legs\n";
+                logger.debug() << "Dog with amount of legs\n";
             }
             int Animal::count_legs() {
                 return _legs;
             }
             void Dog::introduce(){
-                std::cout << "Dog " << _name 
+                logger.debug() << "Dog " << _name 
                     << ", legs: " << count_legs() << "\n"; 
             }
 
@@ -1081,13 +1107,13 @@ namespace Knowledge {
             std::regex pattern("other");
             //  przeszukujemy gdziekolwiek
             if (std::regex_search(text, pattern)){
-                std::cout << "Other found in text\n";
+                logger.debug() << "Other found in text\n";
             }
 
             // sprawdzanie całego stringa
             std::regex specific_pattern("^some [=]{2}.*");
             if (std::regex_match(text, specific_pattern)){
-                std::cout << "Specific found\n";
+                logger.debug() << "Specific found\n";
             }
             // wyciąganie dopasowań
             // match[x] → grupy z nawiasów ()
@@ -1095,9 +1121,9 @@ namespace Knowledge {
             std::regex matching_pattern(R"(user:\s*(\w+),\s*id:\s*(\d+))");
             std::smatch match;
             if (std::regex_search(data, match, matching_pattern)) {
-                std::cout << "Whole: " << match[0] << std::endl;
-                std::cout << "User: " << match[1] << std::endl;
-                std::cout << "Id: " << match[2] << std::endl;
+                logger.debug() << "Whole: " << match[0] << std::endl;
+                logger.debug() << "User: " << match[1] << std::endl;
+                logger.debug() << "Id: " << match[2] << std::endl;
             }
             // pisanie wzorców - najlepiej z literą R (raw string literal):
             std::regex r_date(R"(\d{2,4}-\d{2}-\d{2})"); // np. 2025-11-08
@@ -1111,12 +1137,12 @@ namespace Knowledge {
             auto it = std::sregex_iterator(other.begin(), other.end(), r);
             auto end = std::sregex_iterator();
             for (; it != end; it++){
-                 std::cout << "Name: " << (*it)[1] << ", score: " << (*it)[2] << '\n';
+                 logger.debug() << "Name: " << (*it)[1] << ", score: " << (*it)[2] << '\n';
             }
             // zamiana regex_replace
             std::regex r_numbs("Ala");
             std::string changed = std::regex_replace(other, r_numbs, "Ola");
-            std::cout << "Changed " << changed << std::endl;
+            logger.debug() << "Changed " << changed << std::endl;
 
             //  z  grupami
             std::string variables = "x=10; y=20;";
@@ -1124,7 +1150,7 @@ namespace Knowledge {
             std::string changed_vars = std::regex_replace(
                 variables, group_replace, "$1 -> $2"
             );
-            std::cout << "Changed vars: " << changed_vars << std::endl;
+            logger.debug() << "Changed vars: " << changed_vars << std::endl;
             // sprawdzenie czy zawiera wiecej niż jedną litere
             std::regex multiple(R"(a{2,})");
             // conajmniej 2 litery a
@@ -1135,7 +1161,7 @@ namespace Knowledge {
             std::string two = one; // kopia, nowe dane w pamieci
 
             std::string_view msg;
-            std::cout << "[INFO] " << msg << "\n";
+            logger.debug() << "[INFO] " << msg << "\n";
             //  explanation class
             std::string text = " some funny tricky text\n";
             StringOperation str_operation(text);
@@ -1160,7 +1186,7 @@ namespace Knowledge {
             std::vector<int> copy = zeros;
             std::vector<int> moved = std::move(numbers);
 
-            std::cout << copy.size() << " " << copy.capacity() << "\n";
+            logger.debug() << copy.size() << " " << copy.capacity() << "\n";
             return inicialized;
         }
         
@@ -1294,7 +1320,7 @@ namespace Knowledge {
             std::map<int, int> copy = filled_scores;
             // przeniesienie (oddanie bez kopiowania)
             std::map<int, int> moved = std::move(empty_scores);
-            std::cout << "Copy size: " << copy.size() << std::endl;
+            logger.debug() << "Copy size: " << copy.size() << std::endl;
             
             // dodawanie nowych elementów
             filled_scores[12] = 51;
@@ -1311,8 +1337,8 @@ namespace Knowledge {
 
         void MapExamples::pair_know(){
             std::pair<std::string, int> single_score = {"Bob", 561};
-            std::cout << single_score.first << std::endl;
-            std::cout << single_score.second << std::endl;
+            logger.debug() << single_score.first << std::endl;
+            logger.debug() << single_score.second << std::endl;
             
             // po inicjalizacji moge 
             std::pair<int, int> result_numbers;
@@ -1351,11 +1377,11 @@ namespace Knowledge {
                 jesli nie - to scores.end()
             */
             if (scores.find(1) != scores.end()){
-                std::cout << "1 not exists\n";
+                logger.debug() << "1 not exists\n";
             }
             // 20 contains
             // if (scores.contains(1)){
-                // std::cout << "1 exists\n";
+                // logger.debug() << "1 exists\n";
             // }
             // usuwanie
             scores.erase(1);
@@ -1368,12 +1394,12 @@ namespace Knowledge {
         }
         void MapExamples::iteration(std::map<int, int> scores){
             for (auto &pair : scores) {
-                std::cout << pair.first << " => " << pair.second << std::endl;
+                logger.debug() << pair.first << " => " << pair.second << std::endl;
             }
 
             // (C++17)
             for (auto &[name, score] : scores) {
-                std::cout << name << " ma wynik " << score << std::endl;
+                logger.debug() << name << " ma wynik " << score << std::endl;
             }
         }
         void MapExamples::sort_and_algorithms(){}
@@ -1408,10 +1434,10 @@ namespace Knowledge {
                 }
             */
            // od razu wykonana (bo () na końcu).
-            []() { std::cout << "In the lambda\n"; }(); 
+            []() { logger.debug() << "In the lambda\n"; }(); 
             // z zaczepieniem o zmienną
             auto hook = []() {
-                std::cout << "With hook\n";
+                logger.debug() << "With hook\n";
             };
             hook(); // wywołanie
             // z argumentami
@@ -1457,20 +1483,20 @@ namespace Knowledge {
             }
         }
         void print_square(int radius){
-            std::cout << "Square: " << radius * radius << std::endl;
+            logger.debug() << "Square: " << radius * radius << std::endl;
         }
 
         void LambdaFunction::show_function_examples(){
             repeat(5, print_square);
             repeat(5,
                 [](int i) {
-                    std::cout << "With lambda\n";
+                    logger.debug() << "With lambda\n";
                 }
             );
             // jeden parametr
             std::function<void(int)> single_param_call;
             single_param_call = [] (int single) {
-                std::cout << "Number: " << single << std::endl;
+                logger.debug() << "Number: " << single << std::endl;
             };
             // double
             std::function<void(int, std::string)> double_param_call;
@@ -1487,9 +1513,9 @@ namespace Knowledge {
                 sprawdza czy dany znak reprezentuje cyfre
                     '0' - '9'
             */
-            std::cout << std::isdigit('5') << "\n";  // 1 (true)
-            std::cout << std::isdigit('a') << "\n";  // 0 (false)
-            std::cout << std::isdigit(53) << "\n";   // też true, bo 53 to kod ASCII '5'
+            logger.debug() << std::isdigit('5') << "\n";  // 1 (true)
+            logger.debug() << std::isdigit('a') << "\n";  // 0 (false)
+            logger.debug() << std::isdigit(53) << "\n";   // też true, bo 53 to kod ASCII '5'
             // std::isdigit(123); // NIE działa jak myślisz
         }
         
