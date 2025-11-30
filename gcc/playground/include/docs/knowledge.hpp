@@ -519,10 +519,7 @@ namespace Knowledge {
                         containers_amount++;
                     }
 
-                    void add(const TItem& item){
-                        _items.emplace_back(item);    
-                    }
-                    
+                    void add(const TItem& item){ _items.emplace_back(item); }
                     void print_all_items() const {
                         for (const TItem& item: _items){
                             logger.debug() 
@@ -540,6 +537,8 @@ namespace Knowledge {
             };
         }
     }
+
+/*----------------NameSpacesKnow NAMESPACE---------------------------*/
     namespace NameSpacesKnow {
         /*
         Namespacy wytłumaczenie
@@ -607,26 +606,121 @@ namespace Knowledge {
         }
 
     }    
-    namespace Preprocesor {
-        /*
-            Preproces 
-                to etap który działa zanim kod C++ trafi do kompilatora
-                czyta plik źródłowy i dokonuje zamian tekstowych
-            Zanim skompiluje kod, preprocesor:
-                rozwija #include 
-                podstawia #define 
-                #usuwa fragmenty zależne od #ifdef #ifndef
-                przetwarz #pragma itd
-                g++ -E main.cpp -- jak to działa
+
+/*----------------CompileTime NAMESPACE---------------------------*/
+    namespace CompileTime {
+        /* W C++ są dwa czasy:
+        Compile Time - czyli rzeczy które dzieją sie podczas kompilacji
+            - kompilator możę liczyć pewne rzeczy od razu
+            - dzieki czemu program działa szybciej
+            - albo pozwala na rzeczy, które wymagają stałych wartości
+            np:  constexpr int x = 5 + 5; policzone zanim program sie uruchomi
+
+        Run Time - czyli wszystko co sie dzieje kiedy program sie wykonuje
+            int a = user_input()
+            int b = a +_5; // liczy podczas działania programu
+        
+        constexpr - mówi do kompilatora
+            zrób wszystko co sie da już podczas kompilacji
+            syntax: constexpr typ nazwa_zmiennej = wartość;
+                wartosc musi być znana w czasie kompilacji
+            wartosci z constexpr mogą działać też w runtime
+
+        constexpr functions:
+            prefix przed funckją mówi nam że:
+            funkcja może zostać policzona podczas kompilacji
+            ale tylko jesli warunki na to pozwalają
+                czyli jesli wartosci zmiennych są znane w compile-time
+            jesli nie to C++ automatycznie wybierze runtime
+
+        consteval - natychmiastowa funkcjia
+            mówi do kompilatora że musi być ona policzona w compile-time
+            nie wolno wywoływać jej w runtime
+            wymurza wyliczenie wartość w compile_time
+        
+        constinit - zmienna musi być zainicjalizowana w compile-time
+            potem może być zmieniana, musi być statyczna
+            nie musi być constexpr
+            Przydatne w inicjalizacji stałych globalnych zmiennych
+        
+        constexpr w klasach:
+            w konstrutrze
+            w metodach
+            w operatorach
+            w obiektach klasy/ struktur / templatów
         */
-        // makra symboliczne 
+
+        constexpr int factorial(int numb){
+            return (numb <= 1) ? 1 : numb * factorial(numb - 1);
+        }
+
+        consteval int make_id(int x){
+            return x * 10;
+        }
+
+        inline constinit int global_counter = 0; 
+        struct Point {
+            int x;
+            int y;
+            constexpr Point(int a, int b)
+                : x(a), y(b){}
+            
+            constexpr int length_squared() const {
+                return (x * x) + (y * y); 
+            }
+        };
+
+        class CompilePlayground {
+            public:
+                void compile_time_basic_definition();
+                void compile_time_functions();
+                void only_compile_time_functions();
+                void only_compile_time_inicialization();
+                void compile_time_in_classes();
+        };
+
+    }
+/*----------------Preprocesor NAMESPACE---------------------------*/
+    namespace Preprocesor {
+        /*  Preproces 
+            to etap który działa zanim kod C++ trafi do kompilatora
+            czyta plik źródłowy i dokonuje zamian tekstowych
+        Zanim skompiluje kod, preprocesor:
+            rozwija #include 
+            podstawia #define 
+            #usuwa fragmenty zależne od #ifdef #ifndef
+            przetwarz #pragma itd
+            g++ -E main.cpp -- jak to działa
+            
+        Makra symboliczne:
+            syntax: #define  nazwa_makra wartosc 
+        Makra funkcyjne -  czyli funkcje bez typów i kompilacji
+            synax: #define  nazwa_funkcji(parametry) (operacje na parametrach)
+        Makra warunkowe
+            pozwalają kompilować rózne kawałki kodu
+            w zależności od warunków
+            - #ifdef x // jesli x jest zdefinowane
+            - #ifndef x // jesli x nie jest zdefinowane
+            - #endif  -konie cwarunku
+            - #undef x - usuń definicje
+            - include guard
+            - #pragma once - zabezpieczenie przez wielokrotnym includowanie
+                #ifndef LOGGER_HPP // zamiast tego 
+                    #define LOGGER_HPP
+                    ... kod
+                #endif
+        Parametry przekazywane z kompilatora: kompilacja z parametrem
+            -D np: g++ -Dversion=3 main.cpp 
+            to tak jakby kompilator dodał na początku pliku
+                #define version 3
+            Inne:
+                #error	  ręczne przerwanie kompilacji
+                #warning  ostrzeżenie podczas kompilacji
+        */
         #define PI 3.141624
         double circle_area(double radius);
         void all();
-        /*
-            Makra funkcyjne
-                czyli funkcje bez typów i kompilacji
-        */
+       
         #define SQUARE(x) ( (x) * (x))
         // w nowoczesnym pisze sie 
         template <typename MathType>
@@ -634,56 +728,26 @@ namespace Knowledge {
             return var * var;
         }
 
-        /* 
-            Makra warunkowe
-                pozwalają kompilować rózne kawałki kodu
-                w zależności od warunków
-            #ifdef x // jesli x jest zdefinowane
-            #ifndef x // jesli x nie jest zdefinowane
-            #endif  -konie cwarunku
-            #undef x - usuń definicje
-
-            include guard
-                #pragma once - zabezpieczenie przez wielokrotnym includowanie
-                zamiast 
-                    #ifndef LOGGER_HPP
-                        #define LOGGER_HPP
-                        
-                    ... kod
-                    #endif
-        */
         #define DEBUG_MODE 
         #ifdef DEBUG_MODE // jesli jest zdefinowane
             #define LOG(x) logger.debug() << "[DEBUG]" << x << "\n"
         #else
             #define LOG(x)
         #endif
-        
-        /*
-            Parametry przekazywane z kompilatora:
-                kompilacja z parametrem
-                -D
-                np: g++ -Dversion=3 main.cpp 
-            to tak jakby kompilator dodał na początku pliku
-                #define version 3
-            w kodzie potem można używać
-                #idef VERSION
-                    #if VERSION == 3
-                        logger.debug() << "Wersja 3!\n";
-                    #elif VERSION == 2
-                        logger.debug() << "Wersja 2!\n";
-                    #else
-                        logger.debug() << "Nieznana wersja\n";
-                    #endif
-                #endif
-            Inne:
-                #error	ręczne przerwanie kompilacji
-                #warning	ostrzeżenie podczas kompilacji
-        */
 
+        #ifdef VERSION
+            #if VERSION == 3
+                logger.debug() << "Wersja 3!\n";
+            #elif VERSION == 2
+                logger.debug() << "Wersja 2!\n";
+            #else
+                logger.debug() << "Nieznana wersja\n";
+            #endif
+        #endif
     }
+
     namespace ClassKnow {
-        /*
+        /* 
             Klasy:
                 - domyslnie mają wszystkie pola prywatne
                 - w struct publiczne

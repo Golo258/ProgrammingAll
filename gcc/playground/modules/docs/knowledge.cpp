@@ -618,6 +618,8 @@ namespace Knowledge {
             }
         }
     }
+
+/*----------------NameSpacesKnow NAMESPACE---------------------------*/
     namespace NameSpacesKnow {
         namespace Begin{
             void print(){
@@ -629,24 +631,27 @@ namespace Knowledge {
                 logger.debug() << "Namespace End \n";
             }
         }
+
         void Out::Inner::read(){
             logger.debug() << "Reading in Inner\n";
         }
+
         void Out::Inner::write(){
             logger.debug() << "Writing in Inner\n";
         }
+
         struct API::Vector_v1{
             float x;
             float y;
         };
+
         void API::append_list(Vector_v1 vector){
             logger.debug() << "Appending to list from inline\n";
         }
+
         class API::v2::Vector_v2 {
-            private:
-                float x;
-                float y;
-        
+            float x;
+            float y;
             public:
                 float get_x(){
                     return x;
@@ -655,10 +660,92 @@ namespace Knowledge {
                     return y;
                 }
         };
+
         void API::v2::append_list(Vector_v2 vector) {
             logger.debug() << "Appending to list from api v2\n";
         }
     }
+
+/*----------------CompileTime NAMESPACE---------------------------*/
+    namespace CompileTime {
+        
+        void CompilePlayground::compile_time_basic_definition(){
+            logger.info() << "[COMPILE BASICS]\n";
+            //  constexpr vs c const 
+            const int const_value = 512;
+            logger.debug()
+                << "const int value: " << const_value << "\n";
+                // << wartosc nie zmienna, ale nie w comple time
+
+            constexpr int board_number = 125;
+            constexpr std::array<int, 4> numbers {
+                151, 625, 5125, board_number 
+            }; 
+            logger.debug() 
+                << "constexpr int board_number" << board_number ; 
+
+            for (auto& numb: numbers){
+                logger.debug()
+                    << "Value from compile numbers: " << numb << "\n";
+            }
+            // mogą działać w runtime
+            int x = 561226;
+            int runtime_sum = board_number + x;
+            logger.debug()
+                << "runtime_sum = board_number + x = " << runtime_sum << "\n";
+        }
+        void CompilePlayground::compile_time_functions() {
+            logger.info() << "[COMPILE TIME FUNCTIONS ]\n";
+            constexpr int fac_result_ct = factorial(12);
+            logger.debug() 
+                << "constexpr func factorial(5): "
+                << fac_result_ct << "\n";
+            int run_time_value = 51;
+            int fac_result_rt = factorial(run_time_value);
+            logger.debug()
+                << "constexpr func factorial(rt_value): "
+                << fac_result_rt << "\n";
+        }
+        void CompilePlayground::only_compile_time_functions() {
+            logger.info() << "[CONSTEVAL FUNCTIONS]\n";
+            constexpr int id = make_id(51);
+            int x = 5;
+            // int id_rt = make_id(x); // nie, bo wymaga ct value 
+            logger.debug()
+                << "constexpr make_id(7): "
+                << id << "\n";
+        }
+        void CompilePlayground::only_compile_time_inicialization() {
+            logger.info() << "[CONSTINIT EXPLANATION]\n";
+            logger.debug() <<
+                "Var counter already inicialized in ct: "
+                << global_counter << "\n";
+            // moze byc zmienialna
+            global_counter++;
+            logger.debug()
+                << "Po zmianie: "
+                << global_counter << "\n";
+        }
+        void CompilePlayground::compile_time_in_classes() {
+            logger.info() << "[CONSTEXPR IN CLASSES]\n";
+            constexpr Point p1(3, 4);            // compile-time obiekt
+            constexpr int len = p1.length_squared(); // compile-time obliczenie
+            logger.debug()
+                << "compile time point length: "
+                << len << "\n";
+
+            // --- runtime obiekt ---
+            int a = 5;
+            Point p2(a, 10);     // runtime konstrukcja
+            int len2 = p2.length_squared(); // runtime wywołanie
+            logger.debug()
+                << "run time point length: "
+                <<  len2 << "\n";
+
+        }
+    }
+
+/*----------------Preprocesor NAMESPACE---------------------------*/
     namespace Preprocesor {
         double circle_area(double radius){
             return PI * radius * radius; 
