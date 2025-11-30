@@ -106,6 +106,24 @@ void KNOWLEAGE_INTRODUCTION() {
     compile_playground.compile_time_functions();
     compile_playground.only_compile_time_functions();
     compile_playground.only_compile_time_inicialization();
+
+    // ------------------------------------------------------
+    namespace class_know = Knowledge::ClassKnow;
+    logger.info() << dots << "CLASSESS INTRODUCTION" << std::endl;
+    namespace class_specificators = class_know::Specificators;
+    logger.info() << dots << "SPECIFICATORS INTRODUCTION" << std::endl;
+    class_specificators::SpecificatorPlayground spec_playground;
+    spec_playground.private_spec_introduce();
+    spec_playground.public_spec_introduce();
+    spec_playground.protected_spec_introduce();
+    
+    // ------------------------------------------------------
+    logger.info() << dots << "LIFE CYCLE INTRODUCTION" << std::endl;
+    class_know::LifeCycle::LifeCyclePlayground life_cycle_playground;
+    life_cycle_playground.basic_constructor();
+    life_cycle_playground.basic_destructor();
+    logger.info() << dots << std::endl;
+    class_know::GettersAndSetters::demonstrate_gates();
 }
 
 void parser_task(){

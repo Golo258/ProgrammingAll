@@ -745,72 +745,80 @@ namespace Knowledge {
             #endif
         #endif
     }
-
+/*----------------ClassKnow NAMESPACE---------------------------*/
     namespace ClassKnow {
-        /* 
-            Klasy:
-                - domyslnie mają wszystkie pola prywatne
-                - w struct publiczne
+        /*  Klasy:
+            - domyslnie mają wszystkie pola prywatne
+            Struktury mają dostęp publiczny
         */
+/*----------------ClassKnow::Specificators NAMESPACE---------------------------*/
         namespace Specificators {
-        /*
-            Specyfikatory dostępu:
-                - mówią, kto  może dotykać rzeczy w środku klasy
-                    --> jej zmiennych i metod
+        /*  Specyfikatory dostępu:
+            - mówią, kto  może dotykać rzeczy w środku klasy
+            - jej zmiennych i metod
             Jak drzwi do domu:
-                - otwarte dla wszystkich - public
-                - tylko dla domowników   - protected
-                - zamkniete na klucz     - private
+            - otwarte dla wszystkich - public
+            - tylko dla domowników   - protected
+            - zamkniete na klucz     - private
         */
-            /*---------- PRIVATE - tajemnica klasy --------
-                    dostep mają tylko metody tej klasy
-                    z zewnątrz nikt nie może tego dotknąć
-                    - metody mogą czytać/zapisywaćpola innych
-                        obiektów tej samej klasy
+        
+            class PrivateSpecificator {
+            /* PRIVATE -  tajemnica klasy
+                dostep mają tylko metody tej klasy
+                z zewnątrz nikt nie może tego dotknąć
+                - metody mogą czytać/zapisywać pola innych
+                    obiektów tej samej klasy
             */
-            class PrivateSpec {
                 private:
                     int velocity = 0; // with default 
                 public:
                     void start();
-                    void compare(const PrivateSpec& diff);
+                    void compare(const PrivateSpecificator& diff);
             };
 
-            /*------------ PUBLIC ------------
-                Każdy kto ma obiekt może wywołać odczytać 
-                Widoczne dla użytkownika rzeczy
-            */
-            class PublicSpec {
+            class PublicSpecificator {
+                /*  PUBLIC:
+                    Każdy kto ma obiekt może wywołać odczytać 
+                    Widoczne dla użytkownika rzeczy
+                */
                 public:
                     double scores;
                     void set_and_show();
             };
             
-            /* ---------- PROTECTED --------------
-                Opócz metod, też klasy pochodne (dziedziczące)
-                    mają dostęp do pól i metod
-                Ale z zewnątrz obiekt nie ma (jak w private)
-
-            */
-            class ProtectedSpec {
+            class ProtectedSpecificator {
+                /* PROTECTED
+                    Opócz metod, też klasy pochodne (dziedziczące)
+                        mają dostęp do pól i metod
+                    Ale z zewnątrz obiekt nie ma dostępu tak jak w private
+                */
                 protected:
                     int shield = 100;
                 public:
                     void show_shield() const;
             };
 
-            class ProtectedChild : public ProtectedSpec {
+            class ProtectedChild : public ProtectedSpecificator {
                 public:
                     void damage();
             };
+
+            class SpecificatorPlayground {
+                public:
+                    void private_spec_introduce();
+                    void public_spec_introduce();
+                    void protected_spec_introduce();
+            };
         }
+
+/*----------------ClassKnow::LifeCycle NAMESPACE---------------------------*/
         namespace LifeCycle {
-            /* ----- KONSTRUKTOR -----
+            class Constructor {
+                /* KONSTRUKTOR:
                 Metoda tworząca i inicjalizująca obiket
                     NazwaKlasy obiekt; -- wołany przy tworzeniu obiektu
                 Dostęp konstruktora musi być publiczny 
-            */
-            class Constructor {
+                */
                 private:
                     std::string _name;
                     int _threshold = 12;
@@ -818,14 +826,16 @@ namespace Knowledge {
                     Constructor(); // default
                     Constructor(std::string name); // with parameter
                     Constructor(std::string name, int threshold); // lista inicjalizacyjna
+
+                    void introduce();
             };
 
-            /* ----- DESTRUKTOR -----
+            class Destructor {
+                /* DESTRUKTOR:
                 Metoda czyszcząca obiekt gdy kończy sie scope
                     i obiekt jest usuwany
                 { } - wołany jest przy końcu bloku 
-            */
-            class Destructor {
+                */
                 private: 
                     std::ofstream _notes_file_hook; // // dopisuje
                 public:
@@ -834,17 +844,24 @@ namespace Knowledge {
                     Destructor(std::string path);
                     ~Destructor(); 
             };
+            class LifeCyclePlayground {
+                public:
+                    void basic_constructor();
+                    void basic_destructor();
+            };
         }
-        namespace Utility {
-            /* ------- GETTERS | SETTERS -----------   
+
+/*----------------ClassKnow::Utility NAMESPACE---------------------------*/
+        namespace GettersAndSetters {
+            class AccessGates {
+                /* GETTERS && SETTERS   
                 Kiedy pola są prywatne
                     gdy z zewnątrz nie można ich ruszyć
                     są jak bramki dostępu do wnętrza klasy 
                 Umożliwiają one 
                     odczyt wartość - getter
-                    nadanie i kontrole wartości - setter
-            */
-            class AccessGates {
+                    nadanie i kontrola wartości - setter
+                */
                 private:
                     int _amount;
                     std::vector<int> _gates;
@@ -857,34 +874,30 @@ namespace Knowledge {
 
                     void set_amount(int new_amount);
                     void set_gates(std::vector<int>& new_gates);
-        
             };
-
+            void demonstrate_gates();
         }
+
+/*---------------ClassKnow::Structures NAMESPACE---------------------------*/
         namespace Structures {
-            /*
-                Struct - własny typ danych
-                    grupuje kilka powiązanych wartości
-                    dostęp wszystko jest public
-                zamiast 
-                    std::string name;
-                    int age;
-                    double salary;
+            /*  Struct - własny typ danych
+                grupuje kilka powiązanych wartości
+                dostęp wszystko jest public
+
+                Może zawierać pola, metody, konstruktor
+                    tak samo jak klasa
+                Struktury mogą być zagniędżone
             */
-        
-            // można zrobić
             struct Employee {
                 // pola structury
                 std::string name;
                 int age;
                 double salary;
-                // metody struktury
                 void print() const;
-                // konstruktor - do tworzenia obiektów
                 Employee() = default;
                 Employee(std::string name, int age, double salary);
             };
-            // Zagnieżdżone struktury
+
             struct Stats {
                 int hp;
                 int attack;
@@ -898,6 +911,10 @@ namespace Knowledge {
                 Stats stats;
                 void introduce() const;
             };
+            struct StructuresPlayground {
+                void structure_with_contructor();
+            };
+
             void show_player(const Player& player);
             void creation_and_access();
             void all();

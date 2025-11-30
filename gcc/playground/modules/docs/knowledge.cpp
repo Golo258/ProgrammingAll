@@ -758,48 +758,105 @@ namespace Knowledge {
             logger.debug() << SQUARE(4) << std::endl;
             LOG("Program startuje!");
         }
-        
     }
+
+/*----------------ClassKnow NAMESPACE---------------------------*/
     namespace ClassKnow {
 
+/*----------------ClassKnow::Specificators NAMESPACE---------------------------*/
         namespace Specificators {
-            //--------------------
-            void PrivateSpec::start(){
+            
+/*----------Specificators::PrivateSpecificator class methods------------*/
+            void PrivateSpecificator::start(){
                 velocity = 50; // this.velocity
             }
-            void PrivateSpec::compare(const PrivateSpec& diff){
+
+            void PrivateSpecificator::compare(const PrivateSpecificator& diff){
                 logger.debug() << "Comparing: [" << velocity - diff.velocity << "]\n";  
                 velocity = diff.velocity;
             }
-            //--------------------
-            void PublicSpec::set_and_show(){
+
+/*----------Specificators::PrivateSpecificator class methods------------*/
+            void PublicSpecificator::set_and_show(){
                 scores = 51.2;
                 logger.info() << "Scores: " << scores << std::endl;
             }
-            //--------------------
-            void ProtectedSpec::show_shield() const {
+
+/*----------Specificators::ProtectedSpecificator class methods------------*/
+            void ProtectedSpecificator::show_shield() const {
                 logger.debug() << "Shield value: " << shield << std::endl;
             }
             void ProtectedChild::damage() {
                 shield -= 10; // has access
                 show_shield(); // has access
             }
+
+/*----------Specificators::SpecificatorPlayground class methods------------*/
+            void SpecificatorPlayground::private_spec_introduce(){
+                logger.info() << "[PRIVATE SPECIFICATOR]\n";
+                PrivateSpecificator priv_spec_a, priv_spec_b;
+                priv_spec_a.start();
+                logger.debug()
+                    << "Bład Kompilacji jesli próbujemy"
+                    << " dostać sie do atrybutu klasy \n";
+                /*
+                    Błąd kompilacji, nie można dostać się do prywatnego atrybutu
+                    second.velocity = 12;  
+                */
+                priv_spec_a.compare(priv_spec_b);
+            }
+
+            void SpecificatorPlayground::public_spec_introduce(){
+                logger.info() << "[PUBLIC SPECIFICATOR]\n";
+                PublicSpecificator allowed;
+                allowed.set_and_show();
+                allowed.scores = 12.5;
+                logger.debug() 
+                    << "Dostep do wszystkich metod i pól klasy\n";
+            }
+
+            void SpecificatorPlayground::protected_spec_introduce(){
+                logger.info() << "[PROTECTED SPECIFICATOR]\n";
+                ProtectedSpecificator family;
+                family.show_shield();
+                ProtectedChild child;
+                child.damage();
+                logger.debug() 
+                    << "Dostep do pól przez klasy dziedziczące \n";
+                // child.shield -= 10;  jak z private, błąd komplacji
+            }
         }
+
+/*----------------ClassKnow::LifeCycle NAMESPACE---------------------------*/
         namespace LifeCycle {
-            // -----------------------
+
+/*----------LifeCycle::Constructor class methods------------*/
             Constructor::Constructor(){
                 _name = "none";
                 logger.info() << "Default object created\n";
             }
+
             Constructor::Constructor(std::string name){
                 _name = name;
-                logger.info() << "Object with " << name << " name created\n";
+                logger.info() 
+                    << "Object with " << name << " name created\n";
             }
+
             Constructor::Constructor(std::string name, int threshold)
                 : _name(name), _threshold(threshold){
-                logger.info() << "Object inicialized with list (" << name << ", " << threshold <<  " params created\n";
+                logger.info() 
+                    << "Object inicialized with list (" 
+                    << name << ", " 
+                    << threshold <<  " params created\n";
             }
-            // -----------------------
+            void Constructor::introduce(){
+                logger.debug()
+                    << "Constructor attributes: ["
+                    << _name << ", "
+                    << _threshold << "]\n";
+            }
+        
+/*----------LifeCycle::Destructor class methods------------*/
             Destructor::Destructor(){
                 _notes_file_hook.open("notes.txt");
                 if (!_notes_file_hook){
@@ -810,6 +867,7 @@ namespace Knowledge {
                     logger.info() << "Hook to file notes.txt applicated\n";
                 }
             }
+
             Destructor::Destructor(std::string path){
                 _notes_file_hook.open(path);
                 if (!_notes_file_hook){
@@ -820,6 +878,7 @@ namespace Knowledge {
                     logger.info() << "Hook to file " << path << "applicated\n";
                 }
             }
+
             Destructor::~Destructor(){
                 if(_notes_file_hook.is_open()){
                     _notes_file_hook.close();
@@ -827,8 +886,31 @@ namespace Knowledge {
                 }
                 logger.debug() << "Hook deleted\n";
             }
+
+/*----------LifeCycle::LifeCyclePlayground class methods------------*/
+            void LifeCyclePlayground::basic_constructor(){
+                logger.info() << "[CONSTRUCTOR INTRODUCTION]\n";
+                Constructor default_one;
+                Constructor with_parameter("Pretty");
+                Constructor inicialized_list("Not bad", 15);
+                default_one.introduce();
+                with_parameter.introduce();
+                inicialized_list.introduce();
+            }
+
+            void LifeCyclePlayground::basic_destructor(){
+                logger.info() << "[DESTRUCTOR INTRODUCTION]\n";
+                Destructor destructor;
+                Destructor destructor_with_param("other.json");
+                logger.debug()
+                    << "Destroy object after reach the score\n";
+            }
         }
-        namespace Utility {
+
+/*----------------ClassKnow::GettersAndSetters NAMESPACE---------------------------*/
+        namespace GettersAndSetters {
+
+/*----------GettersAndSetters::AccessGates class methods------------*/
             AccessGates::AccessGates(int amount, int item){
                 if (amount < 0){
                     throw std::invalid_argument(
@@ -847,10 +929,8 @@ namespace Knowledge {
             std::vector<int> AccessGates::get_gates() const {
                 return _gates;
             }
-            // 
 
-            void AccessGates::
-            set_amount(int new_amount){
+            void AccessGates::set_amount(int new_amount){
                 if (new_amount < 0){
                     std::cerr << "Vector cannot have negative amount of elements\n";
                     return;
@@ -872,27 +952,57 @@ namespace Knowledge {
                     }
                 }
             }
+            void demonstrate_gates(){
+                logger.debug() << "[Getters & Setters INTRODUCTION]\n";
+                AccessGates gates(5, 12);
+                logger.debug() 
+                    << "Gates amount: " << gates.get_amount() << "\n"
+                    << "Size of gates: " << gates.get_gates().size() << "\n";
+                gates.set_amount(15);
+                std::vector<int> new_gates{15, 62, 73, 21};
+                gates.set_gates(new_gates);
+                logger.debug() 
+                    << "Gates item: " << gates.get_gates().at(1) << "\n";
+            }
         }
+
+/*---------------ClassKnow::Structures NAMESPACE---------------------------*/
         namespace Structures {
+
+/*----------Structures::Employee structure methods------------*/
             void Employee::print() const {
                 logger.debug() << name 
                     << " (" << age << " lat) - " 
                     << salary << " PLN\n";
             }
-            Employee::Employee(std::string name, int age, double salary)
-                : name(std::move(name)), age(age), salary(salary)
-            {
-                logger.debug() << "Employee " << name << "created successfully\n";
+
+            Employee::Employee(
+                std::string name,
+                int age,
+                double salary
+            )  : name(std::move(name)), age(age), salary(salary){
+                logger.debug() 
+                    << "Employee [" 
+                    << name   << ", "
+                    << age    << ", " 
+                    << salary << ", " 
+                    << "] - created successfully\n";
             }
+
             void Stats::show_stats() const {
-                logger.debug() << "HP: " << hp
-                      << " | ATK: " << attack
-                      << " | DEF: " << defense << '\n';
+                logger.debug() 
+                    << "Stats: [HP: " << hp
+                    << " | ATK: " << attack
+                    << " | DEF: " << defense << ']\n';
             }
+
             void Player::introduce() const {
-                logger.debug() << "Player: " << name << " (lvl " << level << ")\n";
+                logger.debug() 
+                    << "Player: " << name 
+                    << " (lvl " << level << ")\n";
                 stats.show_stats();
             }
+
             void show_player(const Player& player){
                 logger.debug() << "=== PLAYER ===" << std::endl;
                 player.introduce();
@@ -935,6 +1045,8 @@ namespace Knowledge {
                 creation_and_access();
             }
         }
+
+/*---------------ClassKnow::Inheritance NAMESPACE---------------------------*/
         namespace Inheritance {
             Animal::Animal(int legs)
                 : _legs(legs){
@@ -965,6 +1077,8 @@ namespace Knowledge {
             }
 
         }
+
+/*---------------ClassKnow::Polymorphism NAMESPACE---------------------------*/
         namespace Polymorphism {
             void broadcast(
                 const std::vector<
@@ -1009,43 +1123,8 @@ namespace Knowledge {
             }
 
         }
+        
         void demonstrate_classes(){
-            // --------------------------------
-            Specificators::PrivateSpec first, second;
-            first.start();
-            /*
-                Błąd kompilacji, nie można dostać się do prywatnego atrybutu
-                second.velocity = 12;  
-            */
-            first.compare(second);
-            first.compare(second); // after change 
-            Specificators::PublicSpec allowed;
-            // --------------------------------
-            allowed.set_and_show();
-            allowed.scores = 12.5;
-            logger.debug() << "Allowed scores " << allowed.scores << std::endl;
-            Specificators::ProtectedSpec family;
-            family.show_shield();
-            Specificators::ProtectedChild child;
-            child.damage();
-            // child.shield -= 10;  jak z private, błąd komplacji
-            // --------------------------------
-            LifeCycle::Constructor default_one;
-            LifeCycle::Constructor with_parameter("Pretty");
-            LifeCycle::Constructor inicialized_list("Not bad", 15);
-            // --------------------------------
-            LifeCycle::Destructor destructor;
-            LifeCycle::Destructor destructor_witH_param("other.json");
-            // --------------------------------
-            Utility::AccessGates gates(5, 12);
-            logger.info() << "Amount: " << gates.get_amount() << std::endl;
-            logger.info() << "Size of gates: " << gates.get_gates().size() << std::endl;
-            gates.set_amount(15);
-            std::vector<int> new_gates{15, 62, 73, 21};
-            gates.set_gates(new_gates);
-            logger.info() << "Gates item: " << gates.get_gates().at(1) << std::endl;
-            // --------------------------------
-            // Inheritance
             Inheritance::Dog burek;
             burek.introduce();    
             Inheritance::Dog drago("Drago");
