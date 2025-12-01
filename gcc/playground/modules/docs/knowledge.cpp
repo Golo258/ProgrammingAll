@@ -993,7 +993,7 @@ namespace Knowledge {
                 logger.debug() 
                     << "Stats: [HP: " << hp
                     << " | ATK: " << attack
-                    << " | DEF: " << defense << ']\n';
+                    << " | DEF: " << defense << "]\n";
             }
 
             void Player::introduce() const {
@@ -1003,107 +1003,97 @@ namespace Knowledge {
                 stats.show_stats();
             }
 
-            void show_player(const Player& player){
-                logger.debug() << "=== PLAYER ===" << std::endl;
-                player.introduce();
-                // player.level++;  object == const - not allowed
-            }
-            void creation_and_access(){
-                // poprzez pojedyncze wstawianie wartości
-                Employee man;
-                man.name = "Man";
-                man.age = 31;
-                man.salary = 512612.55;
-                logger.info() << "Employee " << man.name << " earns " << man.salary << " PLN\n";
+            void StructuresPlayground::creation_ways(){
+                logger.info() << "[Structure creation]\n";
+                Employee default_one;
+                // mamy dostep wiec możemy ustawiać wartości
+                default_one.name = "default_one";
+                default_one.age = 31;
+                default_one.salary = 512612.55;
+                logger.info() 
+                    << "Employee " << default_one.name 
+                    << " earns " << default_one.salary << " PLN\n";
                 // poprzez liste inicjalizacyjną
-                Employee second{
-                    "Mark", 53, 4666.66
-                };
-                second.print();
+                Employee list_init{"Mark", 53, 4666.66};
+                list_init.print();
                 // braced initialization
-                Employee basia = {"Basia", 22, 7200.0};
-                basia.print();
+                Employee braced_init = {"Basia", 22, 7200.0};
+                braced_init.print();
                 // z konstruktorem
-                Employee john("John", 21, 215.22);
-                john.print();
+                Employee with_constructor("John", 21, 215.22);
+                with_constructor.print();
+            }
+            
+            void StructuresPlayground::nested_structs(){
+                logger.info() << "[NEsted Structures]\n";
                 // zagnieżdżone struktury
                 Stats base_stats{100, 25, 10};
                 Player mage{"Lord", 7, base_stats};
                 // inicjalizacja pojedyncza 
-                Player warior{
-                    "Odyn", // name
-                    7,                // level
-                    {120, 40, 15}     // stats: hp, attack, defense
-                };
+                Player warior{"Odyn",7, {120, 40, 15}};
                 mage.introduce();
                 warior.introduce();
-                // zmiana statystyk
-                mage.stats.hp = 50;
+                mage.stats.hp = 50; // zmiana statystyk
                 mage.stats.show_stats();
-            }
-            void all(){
-                creation_and_access();
             }
         }
 
 /*---------------ClassKnow::Inheritance NAMESPACE---------------------------*/
         namespace Inheritance {
+
+/*----------Inheritance::Animal class methods------------*/
             Animal::Animal(int legs)
                 : _legs(legs){
                 logger.debug() << "Animal created\n";
             }
-            Dog::Dog()
-                : Animal(4) // default value for base construct
-            {
+
+/*----------Inheritance::Dog class methods------------*/
+            Dog::Dog() : Animal(4) {
+                 // default value for base construct
                 _name = "Burek";
-                logger.debug() << "Default dog created\n";
-            }
-            Dog::Dog(std::string name)
-                : Animal(4), _name(std::move(name))  // default value for base construct
-            {
-                logger.debug() << "Regular dog created\n";
-            }
-            Dog::Dog(int legs, std::string name)
-                : Animal(legs), _name(std::move(name))
-            {
-                logger.debug() << "Dog with amount of legs\n";
-            }
-            int Animal::count_legs() {
-                return _legs;
-            }
-            void Dog::introduce(){
-                logger.debug() << "Dog " << _name 
-                    << ", legs: " << count_legs() << "\n"; 
+                logger.debug() 
+                    << "Default dog created\n";
             }
 
+            Dog::Dog(std::string name)
+                : Animal(4), _name(std::move(name))  {
+                logger.debug() 
+                    << "Regular dog created\n";
+            }
+
+            Dog::Dog(int legs, std::string name)
+                : Animal(legs), _name(std::move(name)){
+                logger.debug() 
+                    << "Dog with amount of legs\n";
+            }
+
+            void Dog::introduce(){
+                logger.debug() 
+                    << "Dog " << _name 
+                    << ", legs: " << count_legs() << '\n'; 
+            }
+            void inheritance_introduction(){
+                logger.info() << "[INHERITANCE INTRODUCTION]\n";
+                Inheritance::Dog burek;
+                burek.introduce();    
+                Inheritance::Dog drago("Drago");
+                drago.introduce();       
+                Inheritance::Dog diff(3, "Damaged");
+                diff.introduce();
+            }
         }
 
 /*---------------ClassKnow::Polymorphism NAMESPACE---------------------------*/
         namespace Polymorphism {
-            void broadcast(
-                const std::vector<
-                    std::unique_ptr<Notification>
-                >& notifications,
-                const std::string& message  
-            ){
-                for (const auto& notif: notifications){
-                    notif->send(message);
+
+/*----------Polymorphism::CastingPlayground class methods------------*/
+
+            void broadcast(const Notifications& notifications, const std::string& message){
+                for (const auto& notify: notifications){
+                    notify->send(message);
                 }
             }
 
-            void show_broadcast(){
-                std::vector<
-                    std::unique_ptr<Notification>
-                > notifications;
-                notifications.push_back(
-                    std::make_unique<EmailNotification>("golo338@gmail.com")
-                );
-                notifications.push_back(
-                    std::make_unique<SmsNotification>("golo338@gmail.com")
-                );
-                broadcast(notifications, "Senor, como esta uested?");
-            }
-            
             void pipeline(
                 const std::vector<std::unique_ptr<IProcessor>>& steps,
                 const std::string& input_text
@@ -1112,8 +1102,22 @@ namespace Knowledge {
                     step->process(input_text);
                 }
             }
-            
-            void show_pipeline_steps(){
+
+            void show_polymorphism(){
+                logger.debug() << "[Polymorhpysm INTROCUTION]\n";
+                Notifications notifications;
+                notifications.push_back(
+                    std::make_unique<EmailNotification>("golo338@gmail.com")
+                );
+                notifications.push_back(
+                    std::make_unique<SmsNotification>("golo338@gmail.com")
+                );
+                logger.debug()
+                    << "Brodcast is starting\n";
+                broadcast(notifications, "Senor, como esta uested?");
+                // --------------
+                logger.debug()
+                    << "Interface pipeline started:\n";
                 std::vector<std::unique_ptr<IProcessor>> steps;
                 steps.push_back(std::make_unique<Compressor>());
                 steps.push_back(std::make_unique<Encryptor>());
@@ -1121,68 +1125,15 @@ namespace Knowledge {
 
                 pipeline(steps, "Confidential data");
             }
-
         }
-        
-        void demonstrate_classes(){
-            Inheritance::Dog burek;
-            burek.introduce();    
-            Inheritance::Dog drago("Drago");
-            drago.introduce();       
-            Inheritance::Dog diff(3, "Damaged");
-            diff.introduce();
-            //Polymorphism 
-            Polymorphism::show_broadcast();
-            Polymorphism::show_pipeline_steps();
-        }
-        
     }
+
+/*----------------ExceptionsKnow NAMESPACE---------------------------*/
     namespace ExceptionsKnow {
-        ExceptionHandling::ExceptionHandling(int arg)
-            : _arg(arg) {
-                throwing_one();
-            }
-        void ExceptionHandling::throwing_one(){
-            if (_arg < 0) {
-                throw std::invalid_argument("Arg must be >= 0");
-            }
-            else if (_arg == 5){
-                throw CustomException("Should not be 5");
-            }
-            else {
-                THROW_CUSTOM("Other exception type", 1111);
-            }
-        }
-        void show_all_exceptions() {
-            // --------------------------------------
-            try{
-                ExceptionHandling handling(-2);
-            }
-            catch(const std::invalid_argument& arg_err){
-                logger.error() << "Argument error: " << arg_err.what() << "\n";
-            }
-            catch(const std::exception& reg_err){
-                logger.error() << "Other error: " << reg_err.what() << "\n";
-            }
-            catch(...){
-                logger.error() << "Unknown error\n";
-            }
-            // --------------------------------------
-            // custom exception handling
-            try{
-                ExceptionHandling handling_custom(5);
-            }
-            catch(const CustomException::exception& custom_err){
-                logger.error() << "Custom error: " << custom_err.what() << "\n";
-            }
-            // --------------------------------------
-            // custom with fields
-            try{
-                ExceptionHandling handling_custom(12);
-            }
-            catch(const CustomWithFields& custom_adv_err){
-                logger.error() << "Custom error: " << custom_adv_err.what() << "\n";
-            }
+
+/*----------ExceptionsKnow::ExceptionHandling class methods------------*/
+        ExceptionHandling::ExceptionHandling(int arg) : _arg(arg) {
+            throwing_one();
         }
 
         CustomWithFields::CustomWithFields(
@@ -1194,14 +1145,8 @@ namespace Knowledge {
         ): _message(std::move(message)), _code(code), 
             _file(std::move(file_name)), _line(line)
         {
-            //  no i tworzymy wiadomośc błędu
             std::ostringstream exception_message; // bufor do wiadomosci
-            // auto now = std::chrono::system_clock::now();
-            // auto tt = std::chrono::system_clock::to_time_t(now);
-            // std::tm tt{};
-            // localtime_r(&tt, &tm);
             exception_message 
-                // << "[" << std::put_time(&tm, "%F %T") << "] "
                 << "[Code: " << _code << " ]\n"
                 << "[Message (" << _message << ")" 
                 << " called in function " << _function
@@ -1209,27 +1154,97 @@ namespace Knowledge {
                 
             _what = exception_message.str();
         }
+
+        void ExceptionHandling::throwing_one(){
+            if (_arg < 0) {
+                throw std::invalid_argument("Arg must be >= 0");
+            }
+            else if (_arg == 5){
+                throw CustomException("Should not be 5");
+            }
+            else {
+                THROW_CUSTOM("Other exception type", 1111);
+            }
+        }
+        void ExceptionPlayground::simple_throw() {
+            logger.debug() 
+                << "Forced Invalid Argument Exception: \n";
+            try {
+                ExceptionHandling handling(-2);
+            }
+            catch(const std::invalid_argument& arg_err){
+                logger.error() 
+                    << "Argument error: " 
+                        << arg_err.what() << "\n";
+            }
+            catch(const std::exception& reg_err){
+                logger.error() 
+                    << "Other error: " 
+                        << reg_err.what() << "\n";
+            }
+            catch(...){
+                logger.error() << "Unknown error\n";
+            }
+        }
+
+        void ExceptionPlayground::custom_throw() {
+            logger.debug() 
+                << "Custom Exception Handling: \n";
+            try {
+                ExceptionHandling handling_custom(5);
+            }
+            catch(const CustomException::exception& custom_err){
+                logger.error() << "Custom error: " << custom_err.what() << "\n";
+            }
+        }
+
+        void ExceptionPlayground::custom_with_specific_message() {
+            try {
+                ExceptionHandling handling_custom(12);
+            }
+            catch(const CustomWithFields& custom_adv_err){
+                logger.error() << "Custom error: " << custom_adv_err.what() << "\n";
+            }
+        }
+
+       
     }
+
+/*----------------StringKnow NAMESPACE---------------------------*/
     namespace StringKnow {
+
+/*----------StringKnow::StringOperation class methods------------*/
         StringOperation::StringOperation(std::string base)
             : base_text(base) {}
         
-        void StringOperation::access(){
+        void StringOperation::access_string_attributes(){
             // rozmiar
-            logger.info() << "size: "  << base_text.size() << std::endl;
-            logger.info() << "empty: " << base_text.empty() << std::endl;
-            //  dostęp
-            logger.info() << "0: "     << base_text[0] << std::endl;
-            logger.info() << "front: " << base_text.front() << std::endl;
-            logger.info() << "back: "  << base_text.back() << std::endl;
-            logger.info() << "data: "  << base_text.data() << std::endl;
-            logger.info() << "c_str: " << base_text.c_str() << std::endl;
+            logger.info() << "[Access to strings]\n";
+            int word_buffor_size = base_text.size();
+            int word_length = base_text.length();
+            bool is_word_empty = base_text.empty();
+            char first_word_sign = base_text.front();
+            const char* inner_buffor_pointer = base_text.data();
+            const char* save_ended_with_null = base_text.c_str();
+            logger.debug()
+                << "Buffor size: "    << word_buffor_size     << '\n'
+                << "Word Length: "    << word_length          << '\n'
+                << "Is text empty: "  << is_word_empty        << '\n'
+                << "String index: "   << base_text[0]         << '\n'
+                << "First char/id: "  << first_word_sign      << '\n'
+                << "Last char/id: "   << base_text.back()     << '\n'
+                << "Inner pointer: "  << inner_buffor_pointer << '\n'
+                << "Sav=ly ended:"    << inner_buffor_pointer << '\n';
+            
             // formatowanie +20
-            // include <format>
-            // std::string message = std::format("{} {}", "data", "data")
+            #if __has_include(<format>) && __cplusplus >= 202002L
+                #include <format>
+                std::string message = std::format("{} {}", "data", "data")
+            #endif
         }
 
         void StringOperation::modification(){
+            logger.info() << "[String modification]\n";
             std::string backup = base_text;
             base_text.push_back('!'); // dopięcie na koncu / char expected
             base_text += "and more"; // concatenate
@@ -1251,6 +1266,7 @@ namespace Knowledge {
             char lower_case = std::tolower(a_sign);
             char upper_case = std::toupper(lower_case);
         }
+
         void StringOperation::searching(){
             auto sign_position = base_text.find('=');
             size_t pos = base_text.find('-', 15); // zaczyna od danego
@@ -1366,7 +1382,7 @@ namespace Knowledge {
             //  explanation class
             std::string text = " some funny tricky text\n";
             StringOperation str_operation(text);
-            str_operation.access();
+            str_operation.access_string_attributes();
             str_operation.modification();
             str_operation.searching();
             // str_operation.triming_white_spaces();

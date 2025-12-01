@@ -912,38 +912,34 @@ namespace Knowledge {
                 void introduce() const;
             };
             struct StructuresPlayground {
-                void structure_with_contructor();
+                void creation_ways();
+                void nested_structs();
             };
 
-            void show_player(const Player& player);
-            void creation_and_access();
-            void all();
         }
-        namespace Inheritance {
-            /*
-             |-------------------
-             |   DZIEDZICZENIE  |
-             |-------------------
-                Mechanizm dzieki któremu klasa pochodna
-                    dziedziczy pola i metody z bazowej
-                Konstruktory
-                    każda klasa dziedziczy wszystko prócz konstruktorów
-                    nie odziedziczy automatycznie
-                    klasa dziedziczaca musi zaincjalizowac baze
 
-                Najpierw baza potem konstruktor pochodnej
+        namespace Inheritance {
+            /*  /------------------\
+                |   DZIEDZICZENIE  |
+                \------------------/
+            Mechanizm dzieki któremu klasa pochodna
+                dziedziczy pola i metody z bazowej
+            Konstruktory
+                każda klasa dziedziczy wszystko prócz konstruktorów
+                nie odziedziczy automatycznie
+                klasa dziedziczaca musi zaincjalizowac baze
+            Najpierw baza potem konstruktor pochodnej
             */
-            // struktur
             struct Animal {
                 int _legs;
                 public:
                     Animal() = default;
                     Animal(int legs);
-                    int count_legs(); 
+                    inline int count_legs() { return _legs; }
             };
-            struct Dog : Animal { // dziedziczy po Animal
-                std::string _name;
 
+            struct Dog : Animal {
+                std::string _name;
                 public:
                     Dog();
                     Dog(std::string name);
@@ -961,47 +957,68 @@ namespace Knowledge {
                 private:
                     int priv = 3;  // dostępne tylko w A
             };
+
             class B : public A {
                 /*
                     wszystkie dostępy jak w A są zachowane 
-                     B b;
+                    B b;
                     logger.debug() << b.pub;  // działa
-                    // b.prot; nie działa (protected)
-                    // b.priv; nie działa (private)
+                    b.prot; // nie działa (protected)
+                    b.priv; // nie działa (private)
                 */
             };
+
             class C : protected A {
                 /*
                     pub   -> staje się protected
                     prot  -> zostaje procted
-                    priva -> jest niedostepny
-                
+                    private -> jest niedostepny
                     C c;
                     c.pub;  nie działa, bo pub jest protected
                 */
             };
             class D : private A {
-                // wszystko staje sie private
-                // pub | prot | priv 
+                /*wszystko staje sie private
+                pub | prot | priv */
             };
+            void inheritance_introduction();
         }
+
+/*----------------:Polymorphism NAMESPACE---------------------------*/
         namespace Polymorphism {
-            /*
-            Polimorfizm:
-            
+            /* Polimorfizm:
             Koncepcja która pozawala 
-                    obiektowi zachować sie inaczej
-                    w zależności od faktycznego typu obiektu
-                Nadpisujemy override wirtualne metody klasy    
-            
-                Mamy wspólny interfejs
-                    i różne klasy pochodne które robią coś innego
-                a poprzez to możemy traktować je 
-                jako ten sam typ bazowy w petli i kolekcjach
-            
-                Inaczej:
-                    mechanizm języzka który pozwala
-                        wołać metody po wskaźniku/refernecji do klasy bazowej
+                obiektowi zachować sie inaczej
+                w zależności od faktycznego typu obiektu
+            Nadpisujemy override wirtualne metody klasy    
+        
+            Mamy wspólny interfejs
+                i różne klasy pochodne które robią coś innego
+            a poprzez to możemy traktować je 
+            jako ten sam typ bazowy w petli i kolekcjach
+        
+            Inaczej:
+                mechanizm języka który pozwala
+                wołać metody po wskaźniku/refernecji do klasy bazowej
+            Interfejsy, klasy abstrakcyjne
+                umowa (kontrakt) pomiedzy klasami
+                gdzie każda, która dziedziczaca
+                    musi zaimplementować dane metody
+            Interfejs:
+                nie zawiera żadnej logiki
+                ma tylko deklaracje:
+                    jakie metody mają istnieć
+                    jakie argumenty i typy zwracają
+                    ale nie definicje
+                to klasa posiadająca przynajmniej jedną metode
+                    czysto virtualną: virutal typ nazwa() = 0;
+            Interface to szablon projektowy 
+                który mówi że każdy kto implemetuje go 
+                    to musi mieć dane metody
+            Nazewnictwo interfacu:
+                klasa interfacu zaczyna sie od 'I'
+            Zazwyczaj nie ma konstruktora, ani pól
+                nie powinienen przechowywać żadnego stanu
             */
             class Notification {
                 public:
@@ -1009,18 +1026,19 @@ namespace Knowledge {
                     virtual ~Notification() = default;
             };
 
-            // pochodna - email
             class EmailNotification : public Notification {
                 std::string _email;
                 public:
                     EmailNotification(std::string email)
                         : _email(std::move(email)) {}
+
                     void send(const std::string& msg) const override {
-                        logger.debug() << "[EMAIL] To: " << _email << std::endl 
-                            << "Content: " << msg << std::endl; 
+                        logger.debug() 
+                            << "[EMAIL] To: " << _email << std::endl 
+                            << "Content: "    << msg << std::endl; 
                     } 
             };
-            // pochodna - sms
+
             class SmsNotification : public Notification {
                 std::string _phone_number;
                 public:
@@ -1028,43 +1046,19 @@ namespace Knowledge {
                         : _phone_number(phone_number){}
 
                     void send(const std::string& msg) const override {
-                        logger.debug() << "[SMS] To number: " << _phone_number
-                            << "\nMsg content: " << msg << "\n";
+                        logger.debug() 
+                            << "[SMS] To number: " << _phone_number
+                            << "\nMsg content: "   << msg << "\n";
                     }
             };
 
-            void broadcast(
-                const std::vector<
-                    std::unique_ptr<Notification>
-                >& notifications,
+            using Notifications = std::vector<std::unique_ptr<Notification>>;
+
+            void broadcast(const Notifications& notifications,
                 const std::string& message  
             );
-            void show_broadcast();
-            /*
-                Interfejsy, klasy abstrakcyjne
-                umowa (kontrakt) pomiedzy klasami
-                gdzie każda, która dziedziczaca
-                    musi zaimplementować dane metody
-                
-                Inefejs:
-                    nie zawiera żadnej logiki
-                    ma tylko deklaracje:
-                        jakie metody mają istnieć
-                        jakie argumenty i typy zwracają
-                        ale nie definicje
-                Interfejs:
-                    to klasa któa ma przynajmniej jedną metode
-                    czysto virtualną
-                    virutal typ nazwa() = 0;
-                Interface to szablon projektowy 
-                    który mówi że każdy kto implemetuje go 
-                        to musi mieć dane metody
-                Nazewnictwo interfacu:
-                    klasa interfacu zaczyna sie od 'I'
 
-                Zazwyczaj nie ma konstruktora, ani pól
-                    nie powiniene przechowywać żadnego stanu
-            */
+
             struct IProcessor { 
                 virtual void process(
                     const std::string& input
@@ -1074,19 +1068,25 @@ namespace Knowledge {
 
             struct Compressor : IProcessor {
                 void process(const std::string& input) override {
-                    logger.debug() << "[COMPRESSOR] Compressing data: " << input << '\n';
+                    logger.debug() 
+                        << "[COMPRESSOR] Compressing data: " 
+                            << input << '\n';
                 }
             };
 
             struct Encryptor : IProcessor {
                 void process(const std::string& input) override {
-                    logger.debug() << "[ENCRYPTOR] Encrypting data: " << input << '\n';
+                    logger.debug() 
+                        << "[ENCRYPTOR] Encrypting data: " 
+                            << input << '\n';
                 }
             };
 
             struct Logger : IProcessor {
                 void process(const std::string& input) override {
-                    logger.debug() << "[LOGGER] Saving data to logs: " << input << '\n';
+                    logger.debug() 
+                        << "[LOGGER] Saving data to logs: " 
+                            << input << '\n';
                 }
             };
 
@@ -1094,37 +1094,33 @@ namespace Knowledge {
                 const std::vector<std::unique_ptr<IProcessor>>& steps,
                 const std::string& input_text
             );
+            void show_polymorphism();
 
         }
-        void demonstrate_classes();
-        void show_pipeline_steps();
     }
+
+/*----------------ExceptionsKnow NAMESPACE---------------------------*/
     namespace ExceptionsKnow {
-        /*
-            Wyjątek - exception 
-                kontrolowany skok przy błędzie
-                rzucamy poprzez 
-                    throw w miejscu błędu
-                łapiemy poprzez
-                    catch 
+        /* Wyjątek - exception 
+            kontrolowany skok przy błędzie
+            rzucamy poprzez 
+                throw w miejscu błędu
+            łapiemy poprzez
+                catch 
+        Exception posiada w sobie pola takie jak:   
+            message - surowa treść kod (co poszlo nie tak)
+            function - nazwa funckji w której rzucono wyjątek 
+                __func__ jak w pythonie
+            file - plik źródłowy __FILE__
+            line - linia gdzie wystąpił błąd
+            code - kod błędu np 1001
+            what - gotowy złożony komnikat zwracany do what()
         */
         class CustomException : public std::runtime_error {
             public: 
                 using std::runtime_error::runtime_error;
         };
         
-        /*
-            Exception posiada w sobie pola takie jak:   
-                message - surowa treść kod (co poszlo nie tak)
-                function - nazwa funckji w której rzucono wyjątek 
-                    __func__ jak w pythonie
-                file - plik źródłowy __FILE__
-                line - linia gdzie wystąpił błąd
-                code - kod błędu np 1001
-                what - gotowy złożony komnikat zwracany do what()
-        */
-        
-        //TODO definiowanie makr itp, do przerobienia potem
         #define THROW_CUSTOM(msg, code) \
             throw CustomWithFields((msg), (code), __func__, __FILE__, __LINE__)
         
@@ -1135,7 +1131,7 @@ namespace Knowledge {
                 std::string _file;
                 int _line;
                 int _code;
-                std::string _what; 
+                std::string _what;
             public:
                 CustomWithFields(
                     std::string message,
@@ -1148,36 +1144,40 @@ namespace Knowledge {
                 const char* what() const noexcept override {
                     return _what.c_str();
                 }
+
                 std::string diagnostic() const{
                     return _what;
                 }
+
                 int code() const noexcept { return _code; }
         };
+
         class ExceptionHandling {
-            private:
-                int _arg;
+            int _arg;
             public:
                 ExceptionHandling() = default;
                 ExceptionHandling(int arg);
                 void throwing_one();
         };
-        
-        
-        void show_all_exceptions();
+        struct ExceptionPlayground {
+            void simple_throw();
+            void custom_throw();
+            void custom_with_specific_message();
+        };
     }
-    namespace StringKnow{
+
+/*----------------StringKnow::Enums NAMESPACE---------------------------*/
+    namespace StringKnow {
+        /*  std::string 
+        właścieciel danych
+            modyfikowalnyn bufor bajtów /tekst
+            przechowuje własny bufor pamieci
+            kopiuje dane przy przypisaniu
+        std::string_view- lekki, nieposiadający danych
+            widok na ciag znakow
+            Nie kopiuje tekstu, tylko wskazuje na istniejący fragment pamieci
         
-        /*
-            std::string 
-                właścieciel danych
-                    modyfikowalnyn bufor bajtów /tekst
-                przechowuje własny bufor pamieci
-                    kopiuje dane przy przypisaniu
-
-
-            std::string_view- lekki, nieposiadający danych
-                widok na ciag znakow
-                Nie kopiuje tekstu, tylko wskazuje na istniejący fragment pamieci
+        
         */
         class StringOperation {
             private:
@@ -1186,7 +1186,7 @@ namespace Knowledge {
             public:
                 StringOperation() = default;
                 StringOperation(std::string base);
-                void access();
+                void access_string_attributes();
                 void modification();
                 void searching();
                 void triming_white_spaces();

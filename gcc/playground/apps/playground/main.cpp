@@ -124,6 +124,29 @@ void KNOWLEAGE_INTRODUCTION() {
     life_cycle_playground.basic_destructor();
     logger.info() << dots << std::endl;
     class_know::GettersAndSetters::demonstrate_gates();
+    // ------------------------------------------------------    
+    logger.info() << dots << "STRUCTURES INTRODUCTION" << std::endl;
+    class_know::Structures::StructuresPlayground struct_playground;
+    struct_playground.creation_ways();
+    struct_playground.nested_structs();
+    // ------------------------------------------------------    
+    logger.info() << dots;
+    class_know::Inheritance::inheritance_introduction();
+    // ------------------------------------------------------    
+    logger.info() << dots;
+    class_know::Polymorphism::show_polymorphism();
+    // ------------------------------------------------------    
+    logger.info() << dots << "EXCEPTIONS INTRODUCTION" << std::endl;
+    Knowledge::ExceptionsKnow::ExceptionPlayground exception_playground;
+    exception_playground.simple_throw();
+    exception_playground.custom_throw();
+    exception_playground.custom_with_specific_message();
+    // ------------------------------------------------------    
+    logger.info() << dots << "STRINGS INTRODUCTION" << std::endl;
+    std::string text = " some funny tricky text\n";
+    Knowledge::StringKnow::StringOperation str_playground(text);
+    str_playground.access_string_attributes();
+
 }
 
 void parser_task(){
@@ -166,12 +189,8 @@ void parser_task(){
 }
 void knowleadge_playground(){
     // Knowledge::Collections::show_all_methods();
-    // Knowledge::ClassKnow::demonstrate_classes();
     // Knowledge::StringKnow::show_all_string_operation();
-    // Knowledge::ExceptionsKnow::show_all_exceptions();
     // Knowledge::Functions::show_all_functions();
-    // Knowledge::Structures::all();
-    // Knowledge::Preprocesor::all();
 }
 
 int main() {
