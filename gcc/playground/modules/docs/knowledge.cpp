@@ -1206,8 +1206,6 @@ namespace Knowledge {
                 logger.error() << "Custom error: " << custom_adv_err.what() << "\n";
             }
         }
-
-       
     }
 
 /*----------------StringKnow NAMESPACE---------------------------*/
@@ -1323,7 +1321,7 @@ namespace Knowledge {
             if (pos_from_end != std::string::npos) {
                 logger.debug()
                     << "Last = at position " << pos_from_end << '\n'
-                    << "Tail after last '=':" << base_text.substr(pos_from_end + ) << '\n';
+                    << "Tail after last '=':" << base_text.substr(pos_from_end + 1) << '\n';
             }
             size_t first_set = base_text.find_first_of(",;=");
             if (first_set != std::string::npos) {
@@ -1367,80 +1365,277 @@ namespace Knowledge {
             logger.info() << "Left trimmed: " << left_trimmed_string << std::endl;
             logger.info() << "Right trimmed: " << right_trimmed_string << std::endl;
         }
+    }
 
+/*----------------RegexKnowleadge NAMESPACE---------------------------*/
+    namespace RegexKnowleadge {
         /* Klasy regexowe:
-            regex - wzorzec, kompilowany regex
-            smatch - dopasowanie do stringa
-            cmatch - dopasowanie do chara
-            regex_match  - sprawdza czy cały string pasuje
-            regex_search - szuka gdziekolwiek w stringu
-            regex_replace - zamienia wzorzec na inny tekst
-
+            Typy:
+                regex - wzorzec, skompilowany regex
+                smatch - dopasowanie do stringa
+                cmatch - dopasowanie do c-stringa const char*
+            Funkcje:
+                regex_match  - sprawdza czy cały string pasuje do wzorca
+                regex_search - szuka wzorca gdziekolwiek w stringu
+                regex_replace - zamienia dopasowane fragment na innych text
         */
-        void StringOperation::regex_matching(){
-            std::string text = "some == other and_different";
-            // regex - tworzymy pattern do sprawdzenia tekstu
-            std::regex pattern("other");
-            //  przeszukujemy gdziekolwiek
-            if (std::regex_search(text, pattern)){
-                logger.debug() << "Other found in text\n";
+/*----------RegexKnowleadge::RegexPlayground class methods------------*/
+        void RegexPlayground::sign_classes(){
+            /*
+            | Wzorzec | Znaczenie                        | Przykład dopasowania |
+            | ------- | -------------------------------- | -------------------- |
+            | `\d`    | cyfra (0–9)                      | `5`, `3`, `0`        |
+            | `\D`    | wszystko, co NIE jest cyfrą      | `a`, `_`, `#`        |
+            | `\w`    | znak „słowa”: litera, cyfra, `_` | `A`, `z`, `5`, `_`   |
+            | `\W`    | wszystko poza `\w`               | `-`, `?`, `/`        |
+            | `\s`    | whitespace: spacja, tab, \n, \r  | `' '`, `\t`          |
+            | `\S`    | nie-whitespace                   | `a`, `5`, `_`        |
+            */
+            logger.info() << dots << "[Regex sign classes]\n";
+            std::string text = "User42 id=77";
+            std::regex digits(R"(\d+)");
+            if (std::regex_search(text, digits)){
+                logger.debug() << "Found digits\n";
             }
-
-            // sprawdzanie całego stringa
-            std::regex specific_pattern("^some [=]{2}.*");
-            if (std::regex_match(text, specific_pattern)){
-                logger.debug() << "Specific found\n";
+            std::regex word_or_char(R"(\W+)");
+            if (std::regex_search(text, word_or_char)){
+                logger.debug() << "Found word characters\n";
             }
-            // wyciąganie dopasowań
-            // match[x] → grupy z nawiasów ()
-            std::string data = "user: admin, id: 42";
-            std::regex matching_pattern(R"(user:\s*(\w+),\s*id:\s*(\d+))");
-            std::smatch match;
-            if (std::regex_search(data, match, matching_pattern)) {
-                logger.debug() << "Whole: " << match[0] << std::endl;
-                logger.debug() << "User: " << match[1] << std::endl;
-                logger.debug() << "Id: " << match[2] << std::endl;
+            std::regex white_spaces(R"(\s+)");
+            if (std::regex_search(text, white_spaces)){
+                logger.debug() << "Found whitespace\n";
             }
-            // pisanie wzorców - najlepiej z literą R (raw string literal):
-            std::regex r_date(R"(\d{2,4}-\d{2}-\d{2})"); // np. 2025-11-08
-            // flagi, jako drugi argument, case insensitive
-            std::regex r_case(R"(kot)", std::regex_constants::icase); 
             
-            // Iterowanie po dopasowaniach
-            std::string other = "Jan:10, Ala:20, Olek:30";
-            std::regex r(R"((\w+):(\d+))");
-            std::smatch m;
-            auto it = std::sregex_iterator(other.begin(), other.end(), r);
-            auto end = std::sregex_iterator();
-            for (; it != end; it++){
-                 logger.debug() << "Name: " << (*it)[1] << ", score: " << (*it)[2] << '\n';
-            }
-            // zamiana regex_replace
-            std::regex r_numbs("Ala");
-            std::string changed = std::regex_replace(other, r_numbs, "Ola");
-            logger.debug() << "Changed " << changed << std::endl;
+        }
+       
+        void RegexPlayground::anchors(){
+            /*
+            | Wzorzec | Znaczenie        |
+            | ------- | ---------------- |
+            | `^`     | początek stringa |
+            | `$`     | koniec stringa   |
+            */
+            logger.info() << dots << "[Regex anchors]" << '\n';
+            std::string good = "HelloWorld";
+            std::string bad  = "123Hello";
 
-            //  z  grupami
-            std::string variables = "x=10; y=20;";
-            std::regex group_replace(R"((\w)=(\d+))");
-            std::string changed_vars = std::regex_replace(
-                variables, group_replace, "$1 -> $2"
-            );
-            logger.debug() << "Changed vars: " << changed_vars << std::endl;
-            // sprawdzenie czy zawiera wiecej niż jedną litere
-            std::regex multiple(R"(a{2,})");
-            // conajmniej 2 litery a
+            std::regex starts_hello(R"(^Hello)");
+            std::regex ends_world(R"(World$)");
+
+            if (std::regex_match(good, starts_hello))
+                logger.debug() << "'good' starts with Hello\n";
+
+            if (!std::regex_match(bad, starts_hello))
+                logger.debug() << "'bad' does NOT start with Hello\n";
+
+            if (std::regex_match(good, ends_world))
+                logger.debug() << "'good' ends with World\n";
         }
 
-        void show_all_string_operation() {
-            std::string text = " some funny tricky text\n";
-            StringOperation str_operation(text);
-            str_operation.access_string_attributes();
-            str_operation.searching();
-            // str_operation.triming_white_spaces();
-            str_operation.regex_matching();
+        void RegexPlayground::qualifiers(){
+            /*
+            | Wzorzec | Znaczenie             |
+            | ------- | --------------------- |
+            | `*`     | 0 lub więcej          |
+            | `+`     | 1 lub więcej          |
+            | `?`     | 0 lub 1 (opcjonalnie) |
+            | `{n}`   | dokładnie n razy      |
+            | `{n,}`  | co najmniej n razy    |
+            | `{n,m}` | od n do m razy        |
+            */
+            logger.info() << dots << "[Regex qualifiers]" << '\n';
+            std::regex zero_or_more(R"(go*)"); // g, go, goo, gooo
+            std::regex one_or_more(R"(go+)");
+            std::regex optional(R"(colou?r)"); // color OR colour
+
+            std::string ex1 = "goooal";
+            std::string ex2 = "color";
+            std::string ex3 = "colour";
+
+            if (std::regex_search(ex1, one_or_more))
+                logger.debug() << "Found 'go+' pattern\n";
+
+            if (std::regex_search(ex2, optional))
+                logger.debug() << "'color' matches colour/ color variant\n";
+
+            if (std::regex_search(ex3, optional))
+                logger.debug() << "'colour' matches colour/ color variant\n";
+
+            // {n,m}
+            std::regex exactly_three(R"(a{3})"); // exactly "aaa"
+            if (std::regex_search("caaaab", exactly_three))
+                logger.debug() << "Found exactly 'aaa'\n";
+        } 
+
+        void RegexPlayground::groups_alternatives(){
+            /*
+            | Wzorzec     | Znaczenie                                   |                   |
+            | ----------- | ------------------------------------------- | ----------------- |
+            | `( ... )`   | grupa (możesz ją odwoływać jako `$1`, `$2`) |                   |
+            | `a          | b`                                          | albo `a` albo `b` |
+            | `(?: ... )` | grupa bez przechwytywania                   |                   |
+            */
+            logger.info() << dots << "[Regex groups & alternatives]" << '\n';
+            std::string people = "Jan:10, Ala:20, Olek:30";
+            // ( ... ) – grupy przechwytywujące
+            std::regex pair(R"((\w+):(\d+))");
+            std::smatch m;
+            if (std::regex_search(people, m, pair)) {
+                logger.debug()
+                    << "Name: " << m[1] << ", score: " << m[2] << '\n';
+            }
+            // Alternatywa: a|b|c
+            std::regex alt(R"(Jan|Ala|Olek)");
+            if (std::regex_search(people, alt))
+                logger.debug() << "Found name using alternation\n";
+            // (?: ... ) – grupa bez przechwytywania
+            std::regex noncap(R"((?:Jan|Ala):\d+)");
+            if (std::regex_search(people, noncap))
+                logger.debug() << "Found using non-capturing group\n";
+        }
+        
+        void RegexPlayground::signs_sets(){
+            /*
+            | Wzorzec  | Znaczenie               |
+            | -------- | ----------------------- |
+            | `[abc]`  | a LUB b LUB c           |
+            | `[a-z]`  | małe litery a–z         |
+            | `[A-Z]`  | wielkie litery          |
+            | `[0-9]`  | tylko cyfry             |
+            | `[^abc]` | wszystko oprócz a, b, c |
+            */
+            logger.info() << dots << "[Regex sign sets]" << '\n';
+            std::string sample = "FileA.txt";
+
+            // [A-Z] – wielka litera A-Z
+            std::regex capital(R"([A-Z])");
+            if (std::regex_search(sample, capital))
+                logger.debug() << "Found capital letter\n";
+
+            // [^abc] – znak nie będący a, b, c
+            std::regex not_abc(R"([^abc])");
+            if (std::regex_search("z", not_abc))
+                logger.debug() << "'z' is NOT a, b, or c\n";
+
+            // [0-9] – cyfry
+            std::regex digits(R"([0-9]+)");
+            if (std::regex_search("Room42", digits))
+                logger.debug() << "Found digits in string\n";
+        }
+        
+        void RegexPlayground::signs_escape(){
+            /*
+                | Znak     | Musisz pisać |
+                | -------- | ------------ |
+                | `.`      | `\.`         |
+                | `*`      | `\*`         |
+                | `+`      | `\+`         |
+                | `?`      | `\?`         |
+                | `(`, `)` | `\(`, `\)`   |
+                | `{`, `}` | `\{`, `\}`   |
+                | `[`      | `\[`         |
+                | `\`      | `\\`         |
+            */
+            logger.info() << dots << "[Regex escaping]" << '\n';
+            std::string file = "config.yaml";
+
+            // \. – literalna kropka
+            std::regex ext(R"(\.yaml$)");
+            if (std::regex_search(file, ext))
+                logger.debug() << "File ends with .yaml\n";
+
+            // \+ – literalny plus
+            std::regex plus(R"(\+)");
+            if (std::regex_search("a+b", plus))
+                logger.debug() << "Found literal plus\n";
+
+            // \? – literalny znak zapytania
+            std::regex q(R"(\?)");
+            if (std::regex_search("Is this ok?", q))
+                logger.debug() << "Found literal question mark\n";
+        }
+
+        void RegexPlayground::match(){
+            logger.info() << dots << "[Regex FULL match]" << '\n';
+            // 1. Email – cały string musi pasować
+            std::string email = "admin@example.com";
+            std::regex email_pattern(R"(^\w+@\w+\.\w+$)");
+            if (std::regex_match(email, email_pattern)) {
+                logger.debug() << "Email is valid\n";
+            } else {
+                logger.debug() << "Invalid email format\n";
+            }
+            // 2. Data YYYY-MM-DD
+            std::string date = "2025-12-02";
+            std::regex date_pattern(R"(^\d{4}-\d{2}-\d{2}$)");
+
+            if (std::regex_match(date, date_pattern)) {
+                logger.debug() << "Correct date format\n";
+            }
+            // 3. Tylko litery i cyfry
+            std::string name = "User42";
+            std::regex alnum(R"(^[A-Za-z0-9]+$)");
+            if (std::regex_match(name, alnum))
+                logger.debug() << "Name contains only letters and digits\n";
+        }
+        
+        void RegexPlayground::search() {
+            logger.info() << dots << "[Regex SEARCH]" << '\n';
+
+            std::string log_line = "User: admin logged at 2025-12-02 with id=42";
+
+            // 1. Szukanie daty wewnątrz tekstu
+            std::regex date(R"(\d{4}-\d{2}-\d{2})");
+            if (std::regex_search(log_line, date))
+                logger.debug() << "Found date in log line\n";
+
+            // 2. Wyciąganie grup (user + id)
+            std::regex info(R"(User:\s*(\w+).*id=(\d+))");
+            std::smatch m;
+            if (std::regex_search(log_line, m, info)) {
+                logger.debug() << "User: " << m[1] << '\n';
+                logger.debug() << "Id:   " << m[2] << '\n';
+            }
+
+            // 3. Iterowanie po wielu dopasowaniach
+            std::string scores = "Jan:10, Ala:20, Olek:30";
+            std::regex pair(R"((\w+):(\d+))");
+            for (std::sregex_iterator it(
+                    scores.begin(),
+                    scores.end(),
+                    pair
+                ), end; it != end; ++it){
+                logger.debug()
+                    << "Name: " << (*it)[1]
+                    << ", Score: " << (*it)[2] << '\n';
+            }
+        }
+
+        void RegexPlayground::replace_match() {
+            logger.info() << dots << "[Regex REPLACE]" << '\n';
+            // --- 1. Prosta zamiana słowa ---
+            std::string text = "Ala ma kota";
+            std::regex r_name(R"(Ala)");
+            std::string changed = std::regex_replace(text, r_name, "Ola");
+            logger.debug() << "Changed: " << changed << '\n'; // Ola ma kota
+
+            // --- 2. Zamiana z użyciem grup ---
+            std::string vars = "x=10; y=20; z=30;";
+            std::regex group(R"((\w)=(\d+))");
+
+            // $1 – nazwa, $2 – liczba
+            std::string formatted = std::regex_replace(vars, group, "$1 -> $2");
+            logger.debug() << "Formatted vars: " << formatted << '\n';
+            // x -> 10; y -> 20; z -> 30;
+
+            // --- 3. Maskowanie hasła ---
+            std::string log = "login ok, password=SuperSecret123";
+            std::regex pass(R"(password=\w+)");
+            std::string masked = std::regex_replace(log, pass, "password=******");
+            logger.debug() << "Masked: " << masked << '\n';
         }
     }
+
     namespace Collections {
         // --------------------------------//
         //       VECTOR EXAMPLES           //

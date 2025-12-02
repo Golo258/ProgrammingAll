@@ -1166,7 +1166,7 @@ namespace Knowledge {
         };
     }
 
-/*----------------StringKnow::Enums NAMESPACE---------------------------*/
+/*----------------StringKnow NAMESPACE---------------------------*/
     namespace StringKnow {
         /*  std::string 
         właścieciel danych
@@ -1176,8 +1176,6 @@ namespace Knowledge {
         std::string_view- lekki, nieposiadający danych
             widok na ciag znakow
             Nie kopiuje tekstu, tylko wskazuje na istniejący fragment pamieci
-        
-        
         */
         class StringOperation {
             private:
@@ -1207,20 +1205,35 @@ namespace Knowledge {
             logger.debug()
                 << "Text after: "  << text << "\n";
         }
-        void show_all_string_operation();
     }
+/*----------------RegexKnowleadge NAMESPACE---------------------------*/
+    namespace RegexKnowleadge {
+        inline const std::string dots = "\n----------------------------------------------\n";
+        class RegexPlayground {
+            public:
+                void sign_classes();
+                void anchors();
+                void qualifiers(); 
+                void groups_alternatives();               
+                void signs_sets();
+                void signs_escape();
+                void match();
+                void search();
+                void replace_match();
+        };
+    }
+
+/*----------------Collections NAMESPACE---------------------------*/
     namespace Collections {
-        
-        /*
-            Vector - co to jest itp
-                To dynamiczna tablica, ciągły blok pamieci 
-                        zarzadzana automatycznie
-                Działa jak tablica, ale sama powiększa bufor przy dodawaniu
-                Iteratory /pointer / referencje mogą sie uniewaznić
-                    przz realokacji
-                - size()     ile elementów jest faktycznie
-                - capacity() ile elementów mieści bufor
-                - szybko wstawaia na koniec
+        /*  Vector - co to jest itp
+        To dynamiczna tablica, ciągły blok pamieci 
+            zarzadzana automatycznie
+        Działa jak tablica, ale sama powiększa bufor przy dodawaniu
+            Iteratory /pointer / referencje mogą sie uniewaznić
+                przz realokacji
+            - size()     ile elementów jest faktycznie
+            - capacity() ile elementów mieści bufor
+            - szybko wstawaia na koniec
         */
         class VectorExamples{
             public:

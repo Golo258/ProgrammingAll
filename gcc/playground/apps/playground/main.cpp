@@ -148,7 +148,18 @@ void KNOWLEAGE_INTRODUCTION() {
     str_playground.access_string_attributes();
     str_playground.modification_without_return();
     str_playground.modification_with_return();
-    str_playground.modification_with_return();
+    // ------------------------------------------------------    
+    logger.info() << dots << "REGEX INTRODUCTION" << std::endl;
+    Knowledge::RegexKnowleadge::RegexPlayground regex_playground;
+    regex_playground.sign_classes();
+    regex_playground.anchors();
+    regex_playground.qualifiers();
+    regex_playground.groups_alternatives();
+    regex_playground.signs_sets();
+    regex_playground.match();
+    regex_playground.search();
+    regex_playground.replace_match();
+
 }
 
 void parser_task(){
