@@ -66,23 +66,24 @@ add_app(playground ${CMAKE_SOURCE_DIR}/apps/playground/main.cpp)
 # add_app(mytool     ${CMAKE_SOURCE_DIR}/apps/mytool/main.cpp)
 
 # ================== TESTS ==================
-include(CTest)
-enable_testing()
+# UNCOMMENT AFTER TESTS
+# include(CTest)
+# enable_testing()
 
-# doctest header
-include_directories(${CMAKE_SOURCE_DIR}/third_party/doctest)
+# # doctest header
+# include_directories(${CMAKE_SOURCE_DIR}/third_party/doctest)
 
-# [A] Zbierz wszystkie pliki tests/*.cpp automatycznie
-file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
-     ${CMAKE_SOURCE_DIR}/tests/*.cpp)
+# # [A] Zbierz wszystkie pliki tests/*.cpp automatycznie
+# file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
+#      ${CMAKE_SOURCE_DIR}/tests/*.cpp)
 
-add_executable(tests ${TEST_SOURCES})
+# add_executable(tests ${TEST_SOURCES})
 
-target_link_libraries(tests PRIVATE core)
-target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
+# target_link_libraries(tests PRIVATE core)
+# target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
-# [B] Jeśli testy potrzebują resources/, skopiuj je obok binarki testów
-attach_resources(tests "${RES_DIR}")
+# # [B] Jeśli testy potrzebują resources/, skopiuj je obok binarki testów
+# attach_resources(tests "${RES_DIR}")
 
-# add_test(NAME unit COMMAND tests)
-add_test(NAME unit COMMAND tests --order-by=name --success=1)
+# # add_test(NAME unit COMMAND tests)
+# add_test(NAME unit COMMAND tests --order-by=name --success=1)

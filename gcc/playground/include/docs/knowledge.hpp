@@ -1187,12 +1187,27 @@ namespace Knowledge {
                 StringOperation() = default;
                 StringOperation(std::string base);
                 void access_string_attributes();
-                void modification();
+                void modification_without_return();
+                void modification_with_return();
                 void searching();
                 void triming_white_spaces();
                 void regex_matching();
         };
-       void show_all_string_operation();
+        template<typename StrFunc>
+        void log_modification(
+            const std::string& operation_name,
+            std::string& text,
+            StrFunc action
+        ){
+            std::string dots = "\n----------------------------------------------\n";
+            logger.debug() << dots
+                << operation_name << '\n' 
+                << "Text before: " << text << '\n';
+            action(text);
+            logger.debug()
+                << "Text after: "  << text << "\n";
+        }
+        void show_all_string_operation();
     }
     namespace Collections {
         

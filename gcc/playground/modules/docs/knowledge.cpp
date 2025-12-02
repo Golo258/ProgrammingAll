@@ -1218,7 +1218,6 @@ namespace Knowledge {
             : base_text(base) {}
         
         void StringOperation::access_string_attributes(){
-            // rozmiar
             logger.info() << "[Access to strings]\n";
             int word_buffor_size = base_text.size();
             int word_length = base_text.length();
@@ -1243,50 +1242,110 @@ namespace Knowledge {
             #endif
         }
 
-        void StringOperation::modification(){
-            logger.info() << "[String modification]\n";
+        void StringOperation::modification_without_return(){
+            logger.info() << "[String modification without return]\n";
             std::string backup = base_text;
-            base_text.push_back('!'); // dopięcie na koncu / char expected
-            base_text += "and more"; // concatenate
-            base_text.append(" with = specific width", 10); // 10 liczba znaków dodawanego string
-            base_text.insert(5, "in the middle"); // wstawienie w dane miejsce
-            base_text.erase(0, 4); // usuwa od 0 - 4
-            base_text.replace(1, 5, "some"); // podmiana fragmentu
+            log_modification(
+                "push_back() dopisanie znaku na koncu",
+                backup,
+                [](std::string& str){ str.push_back('!'); }
+            );
+            log_modification(
+                "+= dodawanie słów do siebie",
+                backup,
+                [](std::string& str){ str += "and more | "; }
+            );
+            log_modification(
+                "append(str, 10) dodawanie ze sprecyzowaniem długości dodawanej",
+                backup,
+                [](std::string& str){ str.append("add at | the end", 10); }
+            );
+            log_modification(
+                "insert(str, 10), wrzucenie w dane miejsce",
+                backup,
+                [](std::string& str){ str.insert(5, "in the middle | "); }
+            );
+            log_modification(
+                "erase(0, 4), czyszczenie <od, do>",
+                backup,
+                [](std::string& str){ str.erase(0, 4); }
+            );
+            log_modification(
+                "replace(1, 5, str), podmiana fragmentu na innych",
+                backup,
+                [](std::string& str){ str.replace(1, 5, "some"); }
+            );
+        }
+
+        void StringOperation::modification_with_return(){
+            logger.info() << "[String modification with return]\n"; 
             // base_text.clear();
-            logger.info() << "After replacement: " << base_text << std::endl;
-            // bierze fragment i zwraca | zaczyna od 0 i bierze 5 znaków
-            std::string repl = base_text.substr(0, 5); 
-            // od 4 index, 2 znaki 
-            std::string small_repl = base_text.substr(4, 2);
-            // od 7 index, do końca 
-            std::string repl_rest = base_text.substr(7);
-            base_text.reserve(256); // rezerwacja pamieci
-            // upper | lower
+            std::string str_fragment = base_text.substr(0, 5); 
+            logger.debug() 
+                << "substr(from, to) bierze frament, wycina  i zwraca go:  "
+                << str_fragment << '\n';
+            std::string small_frgament = base_text.substr(4, 2);
+            logger.debug() 
+                << "substr(4, 2): " << small_frgament << '\n';
+            
+            std::string from_to_the_rest = base_text.substr(7);
+            logger.debug()
+                << "substr(6), od do konca: " << from_to_the_rest << '\n';
+
+            base_text.reserve(256); // rezerwacja pamieci - zmienia capacity
             char a_sign = 'A';
             char lower_case = std::tolower(a_sign);
             char upper_case = std::toupper(lower_case);
         }
 
         void StringOperation::searching(){
+            logger.info() << "[Searching inside string]\n";
+            logger.debug()
+                << "find(char) zwraca pozycje wystapienia znaku\n";
             auto sign_position = base_text.find('=');
-            size_t pos = base_text.find('-', 15); // zaczyna od danego
             if (sign_position != std::string::npos){
-                std::string key = base_text.substr(0, sign_position);            // [0, pos)
-                std::string value = base_text.substr(sign_position + 1);
-                logger.info() << "Key: " << key << std::endl;
-                logger.info() << "Value: " << value << std::endl;
+                std::string before_eq = base_text.substr(0, sign_position);            // [0, pos)
+                std::string after_eq  = base_text.substr(sign_position + 1);
+                logger.debug() 
+                    << "Before sign: " << before_eq << '\n'
+                    << "After sign: "  << after_eq << '\n';
             }
-            else {
-                logger.error() << "= not found in base \n";
+            logger.debug()
+                << "find(char, nr) szuka znaku, ale od konkretnej pozycji\n";
+            size_t dash_pos = base_text.find('-', 15);
+            if (dash_pos != std::string::npos) {
+                logger.debug()
+                    << "Found '-' at position: " << dash_pos << '\n'
+                    << "Fragment from there: " << base_text.substr(dash_pos) << '\n';
+            } 
+            logger.debug() << "Find variants:\n";
+            size_t pos_from_end = base_text.rfind('='); 
+            if (pos_from_end != std::string::npos) {
+                logger.debug()
+                    << "Last = at position " << pos_from_end << '\n'
+                    << "Tail after last '=':" << base_text.substr(pos_from_end + ) << '\n';
             }
-            base_text.rfind('='); // od konca
-            base_text.find_first_of(",;="); // szuka pierwszego z zestawu
-            base_text.find_first_not_of("\r \n"); // który nie jest w zestawie 
+            size_t first_set = base_text.find_first_of(",;=");
+            if (first_set != std::string::npos) {
+                logger.debug()
+                    << "First one of [',', ';', '='] at: " << first_set
+                    << " (char: '" << base_text[first_set] << "')\n";
+            }
+
+            size_t first_not_ws = base_text.find_first_not_of("\r \n");
+            if (first_not_ws != std::string::npos) {
+                logger.debug()
+                    << "First non whitespace at: " << first_not_ws
+                    << " (char: '" << base_text[first_not_ws] << "')\n";
+            }
             // find_last_of | .find_last_not_of  tak samo tylko ostatni
             
             // boolean - true jesli zaczyna sie
-            base_text.starts_with("conf"); 
-            base_text.ends_with(".yaml");
+            bool starts_conf = base_text.starts_with("conf");
+            bool ends_yaml   = base_text.ends_with(".yaml");
+            logger.debug()
+                << "starts_with(conf): " << std::boolalpha << starts_conf << '\n'
+                << "ends_with(.yaml): "  << std::boolalpha << ends_yaml   << '\n';
             // base_text.contains("fig") 
         }
         void StringOperation::triming_white_spaces(){
@@ -1374,16 +1433,9 @@ namespace Knowledge {
         }
 
         void show_all_string_operation() {
-            std::string one = "one";
-            std::string two = one; // kopia, nowe dane w pamieci
-
-            std::string_view msg;
-            logger.debug() << "[INFO] " << msg << "\n";
-            //  explanation class
             std::string text = " some funny tricky text\n";
             StringOperation str_operation(text);
             str_operation.access_string_attributes();
-            str_operation.modification();
             str_operation.searching();
             // str_operation.triming_white_spaces();
             str_operation.regex_matching();

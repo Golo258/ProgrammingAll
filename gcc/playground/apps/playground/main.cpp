@@ -143,10 +143,12 @@ void KNOWLEAGE_INTRODUCTION() {
     exception_playground.custom_with_specific_message();
     // ------------------------------------------------------    
     logger.info() << dots << "STRINGS INTRODUCTION" << std::endl;
-    std::string text = " some funny tricky text\n";
+    std::string text = " some funny \t tricky text";
     Knowledge::StringKnow::StringOperation str_playground(text);
     str_playground.access_string_attributes();
-
+    str_playground.modification_without_return();
+    str_playground.modification_with_return();
+    str_playground.modification_with_return();
 }
 
 void parser_task(){
