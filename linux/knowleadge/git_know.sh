@@ -316,3 +316,32 @@ Problem z credentialami:
 
     git config --global credential.helper manager-core 
         ustawiasz na takei żeby nie psuł ci casha
+
+
+# Ustawianie ssh i authorizedkeys
+    Windows -> Debian
+        Windows: generowanie klucza:
+            ls $HOME\.ssh 
+            ssh-keytgen -t ed25519 -C "nazwa"
+
+            Set-Service -Name ssh-agent -StartupType Automatic
+            Start-Service ssh-agent
+
+            ssh-add $HOME\.ssh\id_ed25519
+
+        Kopiowanie na linuxa:
+            ssh-copy-id -i $HOME\.ssh\id_ed25519.pub user@host
+            lub 
+            cat $HOME\.ssh\id_ed25519.pub
+            i do ~/.ssh/authorized_keys
+        Ustawianie praw dostępu:
+            chmod 700 ~/.ssh
+            chmod 600 ~/.ssh/authorized_keys
+
+    Linux -> Linux:
+        ssh-keygen -t ed25519 -C "golo@linux"
+        eval "$(ssh-agent -s)"
+        ssh-add ~/.ssh/id_ed25519
+
+    Kopiowanie:
+        ssh-copy-id -i ~/.ssh/id_ed25519.pub user@host
