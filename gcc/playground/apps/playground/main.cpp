@@ -150,7 +150,7 @@ void KNOWLEAGE_INTRODUCTION() {
     str_playground.modification_with_return();
     // ------------------------------------------------------    
     logger.info() << dots << "REGEX INTRODUCTION" << std::endl;
-    Knowledge::RegexKnowleadge::RegexPlayground regex_playground;
+    Knowledge::RegexKnowledge::RegexPlayground regex_playground;
     regex_playground.sign_classes();
     regex_playground.anchors();
     regex_playground.qualifiers();
@@ -160,6 +160,14 @@ void KNOWLEAGE_INTRODUCTION() {
     regex_playground.search();
     regex_playground.replace_match();
 
+    // ------------------------------------------------------    
+    logger.info() << dots << "COLLECTIONS INTRODUCTION" << std::endl;
+    Knowledge::Collections::VectorPlayground vector_playground;
+    vector_playground.creation_ways();
+    vector_playground.access_and_safety();
+    vector_playground.modification_and_memory();
+    vector_playground.iteration();
+    vector_playground.sort_and_algorithms();
 }
 
 void parser_task(){
@@ -200,16 +208,10 @@ void parser_task(){
     }
 
 }
-void knowleadge_playground(){
-    // Knowledge::Collections::show_all_methods();
-    // Knowledge::StringKnow::show_all_string_operation();
-    // Knowledge::Functions::show_all_functions();
-}
 
 int main() {
     std::cout<< "\n<---------------------------------------->\n";
     // parser_task();
-    // knowleadge_playground();
     KNOWLEAGE_INTRODUCTION();
     std::cout << "\n<---------------------------------------->\n";
     return 0;

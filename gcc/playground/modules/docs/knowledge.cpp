@@ -257,7 +257,7 @@ namespace Knowledge {
         }
     }
 
-/*--------------AliasesAndTypes NAMESPACE---------------------------------*/
+/*----------------AliasesAndTypes NAMESPACE---------------------------------*/
     namespace AliasesAndTypes {
 /*----------AliasesAndTypes::AliasesPlayground class methods------------*/
         void AliasesPlayground::basic_aliases(){
@@ -1367,8 +1367,8 @@ namespace Knowledge {
         }
     }
 
-/*----------------RegexKnowleadge NAMESPACE---------------------------*/
-    namespace RegexKnowleadge {
+/*----------------RegexKnowledge NAMESPACE---------------------------*/
+    namespace RegexKnowledge {
         /* Klasy regexowe:
             Typy:
                 regex - wzorzec, skompilowany regex
@@ -1379,7 +1379,7 @@ namespace Knowledge {
                 regex_search - szuka wzorca gdziekolwiek w stringu
                 regex_replace - zamienia dopasowane fragment na innych text
         */
-/*----------RegexKnowleadge::RegexPlayground class methods------------*/
+/*----------RegexKnowledge::RegexPlayground class methods------------*/
         void RegexPlayground::sign_classes(){
             /*
             | Wzorzec | Znaczenie                        | Przykład dopasowania |
@@ -1636,137 +1636,192 @@ namespace Knowledge {
         }
     }
 
+/*----------------Collections NAMESPACE---------------------------*/
     namespace Collections {
-        // --------------------------------//
-        //       VECTOR EXAMPLES           //
-        // --------------------------------//
-        std::vector<int> VectorExamples::creation_ways(){
-            std::vector<int> empty_vec; // pusty
-            std::vector<int> zeros(5); // inicjalizuje zerami
-            std::vector<int> numbers(5, 42); //  5 elementów liczby 42
-            std::vector<int> inicialized{1,5,7,12}; // lista inicjalizacyjna
 
-            // kopia i przeniesienie
-            std::vector<int> copy = zeros;
-            std::vector<int> moved = std::move(numbers);
+    /*----------Collections::VectorPlayground class methods------------*/
+        void VectorPlayground::creation_ways(){
+            logger.info() << "[Vector - CREATION WAYS]\n";
+            std::vector<int> empty_vector; 
+            log_vector_state("Empty vector", empty_vector);
 
-            logger.debug() << copy.size() << " " << copy.capacity() << "\n";
-            return inicialized;
+            std::vector<int> init_with_zeros(5); 
+            log_vector_state("Initialized with zeros", init_with_zeros);
+
+            std::vector<int> filled_with_same_numbers(5, 42);
+            log_vector_state("Initialized with 42 5 times", filled_with_same_numbers);
+            
+            std::vector<int> inicialized_by_list{1,5,7,12};
+            log_vector_state("Init list {5, 42}", inicialized_by_list);
+
+            std::vector<int> zeros_copy = init_with_zeros;
+            log_vector_state("Copy of zeros init", zeros_copy);
+            
         }
         
-        void VectorExamples::access_to_elements(std::vector<int> numbers){
-            logger.info() << "Without checking index:" 
-                << numbers[0] << std::endl;
-            logger.info() << "With checking index:" 
-                << numbers.at(0) << std::endl; // sprawdza czy jest zakres inaczej out_of_range
-            logger.info() << "First one" 
-                << numbers.front() << std::endl;
-            logger.info() << "Last one" 
-                << numbers.back() << std::endl;
+        void VectorPlayground::access_and_safety(){
+            logger.info() << "[Vector -- ACCESS && SAFETY]\n";
+            std::vector<int> data = {10, 21, 34, 56, 73};
+            
+            logger.debug() 
+                << "Operator [x] fast but dangerous\n" 
+                << "-- no border controll -- out of index is allowed\n" 
+                << "data[0]: " << data[0] << std::endl;
+            logger.debug()
+                << "Method .at(x) safe and throw exception if out of range\n"
+                << "Regular index access: .at(1): " << data.at(1) << "\n";
+            try {
+                logger.debug() << ".at(100)";
+                int value = data.at(100);
+                logger.debug() << "success or exception?";
+            }
+            catch (const std::out_of_range& range_exception){
+                logger.error() 
+                    << "Exception caught cause of: " 
+                    << range_exception.what() << "\n";
+            }
+            
+            logger.debug() 
+                << "Front: " << data.front()  << " | "
+                << "Back: "  << data.back()  << "\n";
         }
-        void VectorExamples::modification() {
-            std::vector<float> holds;
-            /*
-                Dodają oba na koniec vectora
-                >push_back
-                    - dodaje gotowy obiektu kopiuje lub przenosi
-                    - jesli chce go dodać na miejscui to emplace
-                >emplace_back
-                    - tworzy obiekt bezpośrednio w wektorze
-                    - jesli mam obiekt i chce go dodać to push_back
-            */
-            holds.push_back(10.5); 
-            holds.emplace_back(20.15);
-            // wstawianie w dane miejsce
-            int index = 2;
-            holds.insert(holds.begin() + index, 99 );
-            // usuniecie z danego indexu
-            holds.erase(holds.begin() + index );
+
+        /* Oba dodają na koniec vectora
+        >push_back
+            - dodaje gotowy obiektu kopiuje lub przenosi
+            - jesli chce go dodać na miejscui to emplace
+        >emplace_back
+            - tworzy obiekt bezpośrednio w wektorze
+            - jesli mam obiekt i chce go dodać to push_back
+        */
+        void VectorPlayground::modification_and_memory() {
+            logger.info() << "[Vector - Modification && Memory]\n";
+            std::vector<float> numbers;
+             logger.debug()
+                << "Memory reservation primary by: \n" 
+                << "-- method reserve(x)";
+            numbers.reserve(10);
+            numbers.push_back(15.26);    numbers.emplace_back(20.15);
+            numbers.push_back(563.76);   numbers.emplace_back(58.211);
+            log_vector_state("After reserve(10)", numbers);
+
+            logger.debug()
+                << "Put in the middle of (costly)\n"
+                << "-- method insert(nr_place, value)";
+            
+            numbers.insert(numbers.begin() + 2, 995);
+            log_vector_state("After insert", numbers);
+            
+            logger.debug()
+                << "Removal last one\n" << "-- method pop_back()";
+            numbers.pop_back();
+            log_vector_state("After pop", numbers);
+
+            logger.debug()
+                << "Remove given index\n" << "-- method erase()";
+            numbers.erase(numbers.begin() + 2);
+            log_vector_state("After erase", numbers);
+
             // czyszczenie bez zmiany capacity
-            holds.clear();
-            // gdy zna sie przybliżoną wartośc to mamy
-            holds.reserve(100); // docelowe capacity 100
-            holds.resize(5);// ustawia dany rozmiar
-        
-            // zwrócenie danej ilości elementów / ciecie
-            std::vector<int> v = {0,1,2,3,4,5,6,7,8,9,10,11,12};
-            // elementy od 0 do 10 
-            std::vector<int> sub_vector(v.begin(), v.begin() + 11); 
+            logger.debug() << "Clear\n";
+            numbers.clear();
+            log_vector_state("After clear", numbers);
+
+            numbers.resize(5);
+            log_vector_state("Resized", numbers);
+
+            std::vector<int> values = {0,1,2,3,4,5,6,7,8,9,10,11,12};
+            log_vector_state("Main values vector", values);
+            std::vector<int> sub_vector(values.begin(), values.begin() + 11); 
+            log_vector_state("Sub vector", sub_vector);
+            
         }
 
-        void VectorExamples::iteration(){
-            std::vector<double> doubles{12.667, 512.51267, -133.5787};
-            /*
-                size_t - typ liczbowy, rodzaj zmiennej do liczb całkowitych
-                    ale tylko dodatnich
-                Używany do rozmiarów, indeksów, długości, liczby bitów
-                    zamiast unsigned - na różnych systemach różna ilość bitów
-                    to jest tutaj size_t  
-            */
-            // poprzez indeksy
-            for (std::size_t index = 0; index < doubles.size(); ++index) {
-                logger.debug() << "Index: " << index << " element " << doubles[index] << std::endl;
-            }
+        void VectorPlayground::iteration(){
+            logger.info() << "[Vector - ITERATION]\n";
+            std::vector<double> doubles = {12.667, 512.51267, -133.5787};
 
-            // range-for - read only 
+            logger.debug()
+                << "Standard iteration formula: \t"
+                << "for (type index = 0; index < .size(); index++)\n";
+            for (std::size_t index = 0; index < doubles.size(); ++index) {
+                logger.debug()
+                     << "Index: "   << index          << " | "
+                     << "Element: " << doubles[index] << "\n"; 
+            }
+            logger.debug()
+                << "FOR RANGE, Read only loop: \t"
+                << "for (type element: vector)\n";
             for (double dub: doubles) {
-                logger.error() << "Read only numbers: " << dub << std::endl;
+                logger.debug() 
+                    << "Element: " << dub << "\n";
             }
-            // range for - z modyfikacją(poprzez referencje)
+            logger.debug()
+                << "FOR RANGE loop with modification by reference : \t"
+                << "for (type& element: vector)\n";
             for (double& dub: doubles) {
+                logger.debug() 
+                    << "Before: " << dub << " | "; 
                 dub *= 3;
-                logger.warn() << "Changed numbers: " << dub << std::endl;
+                logger.debug() 
+                    << "After: "  << dub << "\n";
             }
-            /*
-                Iterator
-                    coś w rodzaju wskaźnika
-                    pokazuje na który element kontenera akutalnie patrzymy
-                    Możemy zacząć od początku begin | końca end
-                    Przejść dalej po kontenerze (kolejny adres) ++it
-                    Zobaczyć zawartość *it ->it
+            /*  Iterator
+                coś w rodzaju wskaźnika
+                pokazuje na który element kontenera akutalnie patrzymy
+            Możemy zacząć od początku begin | końca end
+                Przejść dalej po kontenerze (kolejny adres) ++it
+                Zobaczyć zawartość *it ->it
             */
+            logger.debug() << "By iterator \n";
             for (auto it = doubles.begin(); it != doubles.end(); it++){
                 logger.info() << "Iter: " << *it << std::endl;
             }
         }
-        void VectorExamples::sort_and_algorithms(){
+        void VectorPlayground::sort_and_algorithms(){
+            logger.info() << "[Vector - soft and algorithms]\n";
             std::vector<unsigned int> positive{5,6,12,73,8};
+            logger.debug() << "Sort ascending - up\n";
             std::sort(
-                positive.begin(), positive.end()
-            ); // rosnąco 
+                positive.begin(),
+                positive.end()
+            );
+ 
+            log_vector_state("After ascending sort", positive);
+            logger.debug() << "Sort descending - down\n";
             std::sort(
                 positive.begin(), positive.end(),
                 std::greater<>()
-            ); // malejąco
-            std::stable_sort(positive.begin(), positive.end()); // stabilne
-            // mapowanie wartości
+            );
+            log_vector_state("After descending sort", positive);
+
+            std::stable_sort(positive.begin(), positive.end());
+            log_vector_state("After stable sort", positive);
+            logger.debug() << "Maping values\n";
             std::transform(
                 positive.begin(), positive.end(), positive.begin(),
                 [](unsigned int x) {
                     return x * 10;
                 }
             );
-            // sumowanie
+            log_vector_state("After value mapping", positive);
             int sum = std::accumulate(positive.begin(), positive.end(), 0);
             // szukanie
             auto it = std::find(positive.begin(), positive.end(), 4);
-            /*
-                Sortowanie obiektów, przez funkcje sprawdzającą
-            */
-            struct Player {
-                std::string name;
-                int score;
-            };
+
+            logger.debug()
+                << "Sorting objects by checking lambda function\n";
+
             std::vector<Player> players = {
                 {"Ala", 10}, {"Ola", 25}, {"Ela", 15}
             };
+            log_vector_state("Players before sorting", players);
             std::sort(players.begin(), players.end(),
                 [](const Player& first, const Player& second){
                     return first.score > second.score;
                 }
             );
-
-
+            log_vector_state("Players after sorting", players);
         }
         // --------------------------------//
         //         MAP EXAMPLES            //
@@ -1869,11 +1924,6 @@ namespace Knowledge {
         void MapExamples::sort_and_algorithms(){}
 
         void show_all_methods() {
-            VectorExamples vec_examples;
-            std::vector<int> numbers = vec_examples.creation_ways();
-            vec_examples.access_to_elements(numbers);
-            vec_examples.iteration();
-            vec_examples.sort_and_algorithms();
             
             MapExamples map_examples;
             std::map<int, int> scores = map_examples.creation_ways();

@@ -39,6 +39,7 @@
 */
 /*--------------Knowledge NAMESPACE---------------------------------*/
 namespace Knowledge {
+
 /*--------------StreamsManagement NAMESPACE---------------------------------*/
     namespace StreamsManagement {
         /* Strumień
@@ -680,6 +681,7 @@ namespace Knowledge {
         };
 
     }
+
 /*----------------Preprocesor NAMESPACE---------------------------*/
     namespace Preprocesor {
         /*  Preproces 
@@ -745,6 +747,7 @@ namespace Knowledge {
             #endif
         #endif
     }
+
 /*----------------ClassKnow NAMESPACE---------------------------*/
     namespace ClassKnow {
         /*  Klasy:
@@ -1206,8 +1209,9 @@ namespace Knowledge {
                 << "Text after: "  << text << "\n";
         }
     }
-/*----------------RegexKnowleadge NAMESPACE---------------------------*/
-    namespace RegexKnowleadge {
+
+/*----------------RegexKnowledge NAMESPACE---------------------------*/
+    namespace RegexKnowledge {
         inline const std::string dots = "\n----------------------------------------------\n";
         class RegexPlayground {
             public:
@@ -1225,38 +1229,76 @@ namespace Knowledge {
 
 /*----------------Collections NAMESPACE---------------------------*/
     namespace Collections {
-        /*  Vector - co to jest itp
-        To dynamiczna tablica, ciągły blok pamieci 
-            zarzadzana automatycznie
-        Działa jak tablica, ale sama powiększa bufor przy dodawaniu
-            Iteratory /pointer / referencje mogą sie uniewaznić
-                przz realokacji
-            - size()     ile elementów jest faktycznie
-            - capacity() ile elementów mieści bufor
-            - szybko wstawaia na koniec
-        */
-        class VectorExamples{
+        class VectorPlayground {
+            /*  Vector - co to jest itp
+            To dynamiczna tablica, ciągły blok pamieci 
+                zarzadzana automatycznie
+            Działa jak tablica, ale sama powiększa bufor przy dodawaniu
+                Iteratory /pointer / referencje mogą sie uniewaznić
+                    przz realokacji
+                - size()     ile elementów jest faktycznie
+                - capacity() ile elementów mieści bufor
+                - szybko wstawaia na koniec
+            size_t - typ liczbowy, rodzaj zmiennej do liczb całkowitych
+                ale tylko dodatnich
+                Używany do rozmiarów, indeksów, długości, liczby bitów
+                    zamiast unsigned - na różnych systemach różna ilość bitów
+                    to jest tutaj size_t  
+            */
+            private:
+                template <typename T_Item>
+                void log_vector_state(
+                    const std::string& label, 
+                    const std::vector<T_Item>& vector
+                ){
+                    std::ostringstream vecInfoStrBuffor;
+                    vecInfoStrBuffor << "[ " << label << " ]\n"
+                        << "Size: "     << vector.size()     << " | "
+                        << "Capacity: " << vector.capacity() << " | "
+                        << "Data: {";
+                    for (const auto& vec_item: vector){
+                        vecInfoStrBuffor << vec_item << " ";
+                    }
+                    vecInfoStrBuffor << "}";
+                    logger.debug() << vecInfoStrBuffor.str() << "\n";
+                }   
+
+                struct Player {
+                    std::string name;
+                    int score;
+                    
+                    friend std::ostream& operator<<(
+                        std::ostream& playerDataBuffor,
+                        const Player& player
+                    ) {
+                        playerDataBuffor
+                            << "{" << player.name << " : " << player.score << "}";
+                        return playerDataBuffor; 
+                    }
+                };
+            
             public:
-                std::vector<int> creation_ways();
-                void access_to_elements(std::vector<int> numbers);
-                void modification();
+                void creation_ways();
+                void access_and_safety();
+                void modification_and_memory();
                 void iteration();
                 void sort_and_algorithms();
         };
-        /*
-            Map - słownik
-                Para klucz i wartość
-                    numer telefonu → imię
-                    nazwa użytkownika → liczba punktów
-                    dzień tygodnia → temperatura
-                Klucze są unikalne i posortowane 
-                    alfabetycznie, liczbowo itp
 
-            różnica miedzy:
-              unordered:  (bashowana)
+        class MapExamples {
+            /*  Map - słownik
+            Para klucz i wartość
+                numer telefonu → imię
+                nazwa użytkownika → liczba punktów
+                dzień tygodnia → temperatura
+            Klucze są unikalne i posortowane 
+                alfabetycznie, liczbowo itp
+    
+            Różnica miedzy:
+                unordered:  (bashowana)
                 - nie sortuje kluczy 
-                - gorsze zużyciepamieci, losowa kolejnosc
-
+                - gorsze zużycie pamieci, losowa kolejnosc
+    
             pair: para klucz wartosc
                 tworzenie:
                     klasyczny konstruktor
@@ -1266,8 +1308,7 @@ namespace Knowledge {
                 c++17
                     rozbijanie pary na zmienne
                 auto[name, score] = para
-        */
-        class MapExamples {
+            */
             public:
                 std::map<int, int> creation_ways();
                 void access_to_elements(std::map<int, int> scores);
@@ -1278,6 +1319,8 @@ namespace Knowledge {
         };
         void show_all_methods();
     }
+
+/*----------------Functions NAMESPACE---------------------------*/
     namespace Functions {
         /*
             Funkcja anonimowa, pisana namiejscu
