@@ -265,7 +265,7 @@ namespace Knowledge {
             typedef unsigned long int UL_int;
             using Ldouble = long double;
             using Callback = void(*)(int);
-            UL_int bts_id = 125612512516324673;
+            UL_int bts_id = 1256125;
             Ldouble meta_numb = 512.512095102518260166;
             Callback cb = [](int x) {
                 logger.debug() << "Callback called with x = " << x << "\n";
@@ -1236,7 +1236,7 @@ namespace Knowledge {
             // formatowanie +20
             #if __has_include(<format>) && __cplusplus >= 202002L
                 #include <format>
-                std::string message = std::format("{} {}", "data", "data")
+                std::string message = std::format("{} {}", "data", "data");
             #endif
         }
 

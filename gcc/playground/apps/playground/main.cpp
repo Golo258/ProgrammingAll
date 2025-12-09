@@ -22,7 +22,6 @@ void KNOWLEAGE_INTRODUCTION() {
     logger.info() << dots << "STANDARD STREAM INTRODUCTION" << std::endl;
     using Standard = Streams::StandardStream;
     Standard std_stream;
-    // std_stream.standard_input(); 
     std_stream.standard_output();
 
     // ------------------------------------------------------
