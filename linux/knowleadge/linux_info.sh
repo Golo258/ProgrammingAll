@@ -608,3 +608,253 @@ sudo nano /etc/apt/sources.list -- repozytoria
     sudo passwd user
 
 
+#--------------------------------------
+Linuxowe sieci notatki:
+#--------------------------------------
+interfacy sieciowe: 
+    enp0s3, eth0, eth3, eth300 
+        to są interfejsy sieciowe w systemie
+        czyli karty sieciowe tylko w linuxie
+
+
+#--------------------------------------
+Nazewnictwo interfaców:
+    Stary system nazw:
+        eth0 - Ethernet karta 0
+        wlan0 - Wifi
+    Nowy system nazw - predicable intercface names:
+        enp0s3
+        enp2s0
+        ens33
+        elp2s0
+            każda część coś innego znaczy
+            e - ethernet
+            n - predicable name
+            p0 - PCI bus 0 
+              
+            s3 - slot 3
+            inaczej 
+#---------------------------
+Co to jest PCI BUS 0:
+    PCI -  peripheral Component Interconnect
+    - z ang - połączenie komponentów peryferyjnych
+    płyta główna ma kilka magistrali - PCI  
+    czyli autostrada (BUS)
+    do każdej autostrady są podłączone urzadzenia
+        karta graficzna
+        sieciowa
+        dźwiekowa
+        konrolery USB itd
+    Autostrada to PCI  Interconnect
+    Każde miejsce gdzie można coś wpiąć to slot
+        „karta sieciowa Ethernet wpięta w slot nr 3 na pierwszym busie PCI”
+    Obrazowo:
+        Płyta główna
+        ────────────
+        BUS 0
+        ├── SLOT 1 ── karta graficzna
+        ├── SLOT 3 ── karta sieciowa (enp0s3)
+        └── SLOT 8 ── karta sieciowa druga (enp0s8)
+
+        BUS 1
+        ├── SLOT 0 ── kontroler USB
+        └── SLOT 2 ── NVMe
+        
+#---------------------------
+Sprawdzanie interfejsów:
+    ip a  - interfacy sieciowe i adresy ip które system posiada
+
+2: enp0s3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP group default qlen 1000
+    link/ether 08:00:27:46:e8:c5 brd ff:ff:ff:ff:ff:ff
+    altname enx08002746e8c5
+    inet 10.55.249.11/16 brd 10.55.255.255 scope global enp0s3
+       valid_lft forever preferred_lft forever
+    inet 192.168.1.12/24 brd 192.168.1.255 scope global dynamic noprefixroute enp0s3   
+       valid_lft 6046sec preferred_lft 5146sec
+    inet6 fe80::f469:5d37:6573:e3e7/64 scope link 
+       valid_lft forever preferred_lft forever
+
+Co to wszystko znaczy:
+    1. enp0s3 - nazwa interfacu
+    2. <BROADCAST,MULTICAST,UP,LOWER_UP>
+        - flagi interfacu - czyli co potrafi i co wspiera
+        - BRODCAST - potrafi wysyłać broadcast, komunikaty do wszystkich w sieci
+        - MULTICAST - wspiera multicast
+        - UP - jest włączony na systemie  | Down wyłączony
+        LOWER_UP - połączenie fizyczne jest ok 
+        - mtu 1500 - maksymalny rozmiar pakietu
+        - qdiscfq_codel - algorytm kolejkowania pakietów
+        - qlen 1000 - długość kolejki pakietów - ile może czekać
+    3 link/ ether - adres MAC karty
+        brd - adres brodcast
+    4. altname - alternatywna nazwa
+    5. inet - adresy IPv4
+        10.55.255.255 -adres ip 
+        /16 - maska
+        brd- brodcast 
+        scope global - jest normalnym adresem do użytku w sieci
+        dynamic - przydzielone przez DHCP
+        valid_lft - adres jest ważny ile czasu
+    6. inet6 - adres IPv6
+
+    INET:
+        to jest adres/y ip który jest przypisany do danego 
+        interfacu sieciowego dla systemu
+            poprzez niego będzie można sie odezwać do akutalnego systemu 
+        /16 - pod sieć w której sie znajduje urzadzenia
+        do wszystkich hostów w danej podsieci mamy dostęp
+
+//--------------------------------
+Jak sie porozumiewają
+    ip r - tablica routingu
+    lista zasad:
+        któredy aktualny sytem wysyła pakiety,
+        w zależnosci od adresu docelowego
+
+    W zależności gdzie kierujemy pakiet to przez tak pójdzie
+
+default via 192.168.0.1 dev enp0s3
+192.168.0.0/24 dev enp0s3 proto kernel scope link src 192.168.0.25
+
+Tłumaczenie:
+    default via 192.168.0.1 dev enp0s3
+        dla wszystkich nieznanych adresów, wysyła ruch przez router/gateway
+        - default - wszystko co nie pasuje do znanych
+        - via .. - przez co ma iść
+        - dev .. - użyj tej karty
+    
+    192.168.0.0/24 dev enp0s3 proto kernel scope link src 192.168.0.25
+        192.168.0.0 - karta sieciowa lokalna
+          - dana podsiec jest osiągalna przez tą karte 
+
+//--------------------------------
+    ip link - pokazuje same intefacy / karty sieciowe
+        - czysta linia sprzętu
+//--------------------------------
+Skąd sie bierze IP- dhcp vs static
+    DHCP - dynamiczne ip
+        router sam automatycznie przydziela adresy ip
+
+    Static - reczne ustawianie IP:
+        używane w labach /serwerach / nietypowych sieciach
+        ustawiasz go sam albo w network/interfaces
+
+
+
+Podsieci i maski? (mega skrót, ale wystarczy)
+    Typowe maski:
+        /24 = 255.255.255.0 → najczęściej w domach
+        sieć: 192.168.0.0 - 192.168.0.255
+
+        /16 = 255.255.0.0 → jak lab uczelniany
+        sieć: 10.55.0.0 - 10.55.255.255
+
+VirtualBox:
+    Tryby kart:
+        Bridge 
+        - VM jest jak normalny komputer w mojej sieci
+        - router daje ip 
+        NAT:
+        - VM wychodz id ointrnetu, ale jest a NAT-em hosta
+        - nie można pingować z sieci
+        Host-Only:
+        - VM widzi tylko hosta, nie ma intenetu
+
+//------------------------
+Ustawianie ip:
+Trwałe - poprzez pliki konfiguracyjne
+    /etc/network/interfaces - już 
+
+    iface enp0s3 inet static
+        address 10.55.249.11/16
+        gateway 10.55.0.1   
+    
+    1. iface .. - dla intefacu x użyj statycznego adresu IPv4
+    2. addres -- ustaw dla danego komputera i karty ten adres ip
+    3  gateway - wyjscie do internetu poza sieć, to wysyłaj tutaj - adres rutera/ brama domyślna
+
+Tymczasowe:
+    tymczasowe ustawianie
+    ip addr add 192.168.1.200/24 dev enp0s3
+            dodaj <ip_addr>/maska device(na tym danym urzadzeniu) karta_sieciowa
+        - opcje 
+            del - usuniecie danego adresu
+    ustawianie jakiś parametrów:
+        mtu - maksymalny rozmiar pakietu chyba
+        ip addr set dev enp0s3 mtu 1400
+                ustaw na danym urzadzeniu - co i ile
+    
+    ip link set dev enp0s3 up
+        -włącz urzadzenie  | down - wyłącz
+    
+    ip addr flush dev enp0s3
+        - reset starych adresów na kartcie
+    
+    # ustawianie routy 
+    ip route add 10.0.1.1/16 via 192.168.1.1 dev ensp03
+            del - usuwanie
+
+    reset interfacu:
+        ifdown enp0s3
+        ifup enp0s3 
+        - czysci stan, ładuje z plików
+        albo    
+            ip link set enp0s3 down lub up
+    
+    sudo dhclient -v enp0s3
+    pobranie ip z dhcp - ręcznie
+        -v verbose - pokazuje 
+        DISCORE - wysyła brodcast
+        OFFER - daje propozycje IP
+        REQUEST - prosi o IP
+        ACK - przyjmuje IP
+
+    ustawiani bramy domyślnej
+        ip route add default via 192.168.2.2 dev enp0s3
+        poza moją sieciową lokalną, wysyłaj pakiety przez router
+
+    ip -brief link
+        krótkie info - tylko nazwy i adresy i stan
+        
+//------------------------
+Diagnostyka sieci
+    ping  ip
+        - działa routing - z ip route - jest widoczny dany host 
+            /albo przez ruter albo lokalnie znany 
+    traceroute ip
+        cała droga pakietu przez co przechodzi
+        - na przykład najpierw przez router potem przez coś innego i tak dalej
+        traceroute 8.8.8.8
+            pierwszy hop → TWÓJ ROUTER (192.168.1.1)
+            drugi → Twój operator
+            kolejne → trasy między operatorami
+            ostatni → Google (8.8.8.8)
+
+ARP: - address resolution protocl
+    służy do:
+        mam ip jakiegoś urzadzenia, ale musze poznać jego adres MAC
+        żeby móc do niego cokolwiek wysłać
+        bo komputery w sieci lokalnej wysyłają pakiety po adresie MAC a nie po IP
+    IP mówi, DO KOGO chcesz wysłać pakiet
+    MAC mówi, JAK DO NIEGO TRafić po kablu / Wi-Fi
+
+Jak PC nie zna MAC:
+    to rozsyła brodcast - po całej lokalnej sieci
+    ARP REQUEST-
+        pyta kto ma dany adres ip, i prosi o adres MAC
+        zapisuje w tablicy ARRP i od tej pory go zna
+    
+    linux: 
+        ip neigh - pokazuje tablice arp
+
+    output:    
+    192.168.1.10 dev enp0s3 lladdr b8:8a:60:9b:05:6e REACHABLE 
+    192.168.1.2 dev enp0s3 lladdr 28:af:42:3e:10:60 STALE
+    192.168.1.1 dev enp0s3 lladdr 78:8c:b5:10:0e:1e STALE
+
+    stany:
+        REACHABLE - mac jest znany, host odpowiada
+        STALE - mac znany, host nie odpowiada
+        incomplete - trwa prób ARP, nie odpowiada
+
+    ip neigh flush all - czyszczenie tablicy 
