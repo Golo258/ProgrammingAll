@@ -815,7 +815,7 @@ Tymczasowe:
 
     ip -brief link
         krótkie info - tylko nazwy i adresy i stan
-        
+
 //------------------------
 Diagnostyka sieci
     ping  ip
@@ -858,3 +858,168 @@ Jak PC nie zna MAC:
         incomplete - trwa prób ARP, nie odpowiada
 
     ip neigh flush all - czyszczenie tablicy 
+
+#-------------------------
+
+192.168.1.12 - server firewal
+192.168.1.13 - attacker - nmap
+192.168.1.10 - host - windows
+
+# Zadanie do zrobienia:
+    Nauka firewalla na najniższym poziomie
+        iptables
+        tablica filtrów
+        łańcuch input / output
+
+Mamy maszyne VM1
+    piszemy skrypt firewalla, który kontroluje
+        ja pakiety są wpuszane i wypuszczane na daną VMkę
+    
+Mamy drugą VM2 + twój host 
+    służa one jako źródło testów
+    symulacja ruchu
+    sposób na pokazanie czy firewall działa
+
+Jak działa przepyw pakietów przez iptables
+    co to jest input / output 
+
+#-----------------------
+iptables - maszyna decyzyjna 
+    - program / narzedzie w userspace, 
+        który konfiguruje netfiltera
+    netfliter - kawałek jądra linuxa, który decyduje co robić z pakietami
+        - silnik firewalla 
+    iptables - zarzadza silnikiem, ustawiamy nim reguły
+
+Trzy pojecia :
+    table - tablica - zestaw reguł do konkretnego celu
+    chain - łanuch - lista reguł wykonywanych w danyym momencie życia pakietu
+    rule - reguła - pojedynczy warunek - akcja 
+
+W linuxie jest kilak tablic:
+    tabela to jest rodzaj operacji np:
+        filter - filtrowanie pakietów, czyli firewall 
+        nat - translacja adresów 
+        mangle - modyfikacja pakietów
+        raw - bardziej zaawansowane do conttrack
+
+Filter:
+    łancuchy: - czyli lista wykonywanych podczas przepływu  pakietu
+    - INPUT - pakiety do tej maszyny 
+        np gdy ktoś łączy sie poprzez SSH do obecnej maszyny
+        INPUT:
+            [reguła 1]
+            [reguła 2]
+            [reguła 3]
+
+    - OUTPUT - pakiety z maszyny
+        ty pingujesz, próbujesz sie dostać do kogoś innego
+    - FORWARD - pakiety, przelatujące przez maszyne
+        obecny linux jest routerem i przekazuje dane dalej
+    
+Jak płynie pakiet przez iptables:
+    Ktoś łączy sie do twojej maszyny
+    Pakiet przechodzi z sieci na karte  
+    Kernel patrzy, pakiet do mnie, kierunek LOCAL_IN
+    pakeit wpada do tablicy filter, łaćuch INPUT
+    w INPUT jest lista reguł, idziemy od góry do dołu
+    pierwsza reguła, do której pakiet pasuje, wykonuje akcje
+    Decydujemy co z nim robimy , action (TARGET):
+        ACCEPT - przepuszczamy dalej
+        DROP - odrzuca po cichu (zero odpowiedz)
+        REJECT - odrzucasz i odsyłą ICPM
+        LOG - loguje, pakiet idzie dalej
+        RETURN - zwraca z łańcucha
+
+    na odwrót 
+    ty wsyłasz 
+    aplikacja generuje pakie
+    kernel patrzy - LOCAL_OUT
+    trafa do filter, łancuch OUTPUT
+    reguły, robimy akcje 
+
+Jak wygląda reguła:
+    jeden warunek + jedna akcja
+    iptables 
+        -t filter # defaultowo --table 
+        -A INPUT \ -- append dodaj na koniec tablicy INPUT
+        -p tcp \ -- --protocol protokół tcp
+        --dport 22 \  -- destination port port docelowy 22 -- ssh
+        -s 192.168.1.10 \ -- source źródłowy ip hosta
+        -j ACCEPT -- // --jump target
+    
+    -A -- append 
+    -C -- check
+    -D -- delete
+    -I -- insert
+    -R -- replace
+    -L -- list 
+    -F -- flush
+    -s --source -- jak nie podane to wtedy wszystko
+    -d --destination - dla każdego adresu docelowego
+        ale to raczej dla OUTPUTU
+
+specjalne pod icmp --icmp-type:
+    echo-request - ping -> zapytanie
+    echo-reply - ping -> odpowidx
+    destination-unreacable
+    time-exceeded
+    redirect
+    itp
+
+
+// ---------------------- poglądowo
+Internet / LAN
+    ↓
+Twoja karta (enp0s3)
+     ↓
+ŁAŃCUCH INPUT
+   ├─ reguła 1: czy to host 192.168.1.10? jeśli tak → ACCEPT → KONIEC
+   ├─ reguła 2: czy protokół tcp i port 22? jeśli tak → DROP → KONIEC
+   └─ nic nie pasuje → domyślna polityka (ACCEPT)
+
+// ---------------------- poglądowo
+komendy fajne
+    iptables -L - sprawdzenie jakie śa reguły 
+            -L INPUT -v (--verbose)
+    
+    iptables -F INPUT
+        --flush - czyści wszystkie reguły z łańcucha
+
+    iptables -P INPUT ACCEPT
+        --policy - ustawia polityke domyślną
+        czyli wszystko jest przepuszczane itd
+
+
+Ip mówi dokąd wysłać pakiet
+PORT mówi do jakiej aplikacji
+| Usługa | Port        | Protokół |
+| ------ | ----------- | -------- |
+| SSH    | 22          | TCP      |
+| HTTP   | 80          | TCP      |
+| HTTPS  | 443         | TCP      |
+| DNS    | 53          | UDP/TCP  |
+| DHCP   | 67/68       | UDP      |
+| ping   | brak portów | ICMP     |
+
+TCP ma handshake, sekwencje, stany połączeń itd.
+ICMP to proste komunikaty.
+ssh używa TCP na porcie 22.
+
+Polityka: --policy
+    każdy łaćńuch ma reguiłe, którą dodajmy
+    oraz polityke domyślną, która mówi
+        co zrobićz pakietem
+        jeśli żadna reguła nie pasuje, nie jest ustawiona
+    
+    czyli jak reguły nie złapiąpakietu
+        to co zrobić z nim decyduje poliyka
+    takie finally 
+   
+    iptables -P INPUT ACCEPT
+        Jeśli pakiet DO CIEBIE nie pasuje
+             do żadnej reguły → WPUSZCZAMY.
+
+        DROP 
+            - nie wpuszczamy, nie ufamy
+            
