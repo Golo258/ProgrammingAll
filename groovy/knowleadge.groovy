@@ -239,3 +239,7 @@ env.getEnvironment().each { k, v ->
     def debug_issue_only(token){
         sh "echo '${token}' | ssh ute@10-7-UTE4G5SK333.p05.ska-lab.nsn-rdnet.net  'cat > /tmp/to PGW-8: [PDN=8;Dir=DL] Destination unreachable for received SGi packet: 1 packets. Print
     }
+
+#------------------------------------
+Metody i operatory groovy:
+    

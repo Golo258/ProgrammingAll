@@ -29,6 +29,12 @@ def LINUX:
             -E ci umożliwa matchowanie
             -o zwraca ci tylko to ci chcesz znaleźć
 
+        grep -oP "RUN = \k[^ ]+"
+            \k - ucina wszystkoo co było przed 
+            Czyli jeśli mamy RUN = BUILD_CUS
+                to zwróci nam tylko BUILD_CUS
+            [^ ]+ - wszystko oprócz spacji
+            
     #sprawdzanie priorytetu procesu:
         ps -o pid,ni,cmd -p <pid>
 
