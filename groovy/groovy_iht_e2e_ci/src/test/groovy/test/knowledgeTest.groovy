@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test
 
 class knowledgeTest extends BasePipelineTest {
 
-
     @BeforeEach
     void setup() {
         super.setUp()

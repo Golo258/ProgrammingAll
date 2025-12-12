@@ -12,30 +12,24 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <groovy.version>4.0.20</groovy.version>
+        <groovy.version>4.0.21</groovy.version>
         <junit.jupiter.version>5.10.2</junit.jupiter.version>
-
-        <jpu.version>1.9</jpu.version>
     </properties>
 
+    <!-- (opcjonalne) Repos: Maven Central i tak jest domyślny
     <repositories>
-        <repository>
-            <id>central</id>
-            <name>Maven Central</name>
-            <url>https://repo1.maven.org/maven2/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-
+      <repository>
+        <id>central</id>
+        <name>Maven Central</name>
+        <url>https://repo1.maven.org/maven2/</url>
+        <releases><enabled>true</enabled></releases>
+        <snapshots><enabled>false</enabled></snapshots>
+      </repository>
     </repositories>
+    -->
 
     <dependencyManagement>
         <dependencies>
-            <!-- Porządkuje wersje JUnit 5 -->
             <dependency>
                 <groupId>org.junit</groupId>
                 <artifactId>junit-bom</artifactId>
@@ -47,21 +41,19 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- ✅ Groovy runtime -->
         <dependency>
             <groupId>org.apache.groovy</groupId>
-            <artifactId>groovy-all</artifactId>
-            <version>4.0.29</version>
-            <type>pom</type>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
         </dependency>
-
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
+            <groupId>org.apache.groovy</groupId>
+            <artifactId>groovy-json</artifactId>
+            <version>${groovy.version}</version>
         </dependency>
 
-
+        <!-- Twoje biblioteki -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
@@ -69,26 +61,41 @@
         </dependency>
 
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.10.0</version>
-            <scope>test</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>2.0.12</version>
         </dependency>
 
         <dependency>
+            <groupId>com.hierynomus</groupId>
+            <artifactId>sshj</artifactId>
+            <version>0.38.0</version>
+        </dependency>
+
+        <!-- ✅ JUnit 5 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-params</artifactId>
-            <version>5.10.0</version>
             <scope>test</scope>
         </dependency>
 
+        <!-- ✅ Jenkins Pipeline Unit -->
         <dependency>
             <groupId>com.lesfurets</groupId>
             <artifactId>jenkins-pipeline-unit</artifactId>
             <version>1.1</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
 
     <build>
@@ -97,14 +104,11 @@
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
                 <version>3.0.2</version>
-
                 <executions>
                     <execution>
                         <goals>
                             <goal>addSources</goal>
-                            <goal>addTestSources</goal>
                             <goal>compile</goal>
-                            <goal>compileTests</goal>
                         </goals>
                     </execution>
                 </executions>
@@ -113,20 +117,31 @@
                 </configuration>
             </plugin>
 
+            <!-- ✅ Surefire (JUnit 5) -->
+            <!--            <plugin>-->
+            <!--                <groupId>org.apache.maven.plugins</groupId>-->
+            <!--                <artifactId>maven-surefire-plugin</artifactId>-->
+            <!--                <version>3.2.5</version>-->
+            <!--                <configuration>-->
+            <!--                    <useModulePath>false</useModulePath>-->
+            <!--                    <includes>-->
+            <!--                        <include>**/*Test.groovy</include>-->
+            <!--                        <include>**/*Tests.groovy</include>-->
+            <!--                        <include>**/*Test.java</include>-->
+            <!--                    </includes>-->
+            <!--                </configuration>-->
+            <!--            </plugin>-->
+
+            <!-- (opcjonalnie) Uruchamianie Main przez mvn exec:java
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.2.5</version>
-                <configuration>
-                    <useModulePath>false</useModulePath>
-                    <includes>
-                        <include>**/*Test.groovy</include>
-                        <include>**/*Tests.groovy</include>
-                        <include>**/*Test.java</include>
-                    </includes>
-                </configuration>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>exec-maven-plugin</artifactId>
+              <version>3.3.0</version>
+              <configuration>
+                <mainClass>com.nokia.scripts.Main</mainClass>
+              </configuration>
             </plugin>
+            -->
         </plugins>
     </build>
-
-
 </project>
