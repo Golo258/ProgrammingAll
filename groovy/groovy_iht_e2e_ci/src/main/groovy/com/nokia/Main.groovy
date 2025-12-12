@@ -9,10 +9,10 @@ class Main {
     static void main(String[] args) {
         log.setLevel("SUCCESS")
         Knowledge knowledge_playground = new Knowledge();
-        knowledge_playground.show_collections();
+//        knowledge_playground.show_collections();
         ArtifactTools artifactTools = new ArtifactTools()
         artifactTools.debugExecuteCusUtil()
-        artifactTools.connectToRemoteHostAndRunCommand();
-        artifactTools.connectToNodeAndStayOnSession()
+//        artifactTools.connectToRemoteHostAndRunCommand();
+//        artifactTools.connectToNodeAndStayOnSession()
     }
 }

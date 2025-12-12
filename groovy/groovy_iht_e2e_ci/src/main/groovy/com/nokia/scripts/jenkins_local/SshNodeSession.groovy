@@ -1,5 +1,6 @@
 package com.nokia.scripts.jenkins_local
 
+
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.connection.channel.direct.Session
 import net.schmizz.sshj.sftp.SFTPClient
@@ -8,21 +9,21 @@ import net.schmizz.sshj.transport.verification.PromiscuousVerifier
 import java.util.concurrent.atomic.AtomicBoolean
 
 class SshNodeSession implements AutoCloseable {
-    private final String host;
-    private final int port;
-    private final String user;
-    private final String password;
-    private final String privateKeyPath;
-    private final int connectTimeoutMs;
+    private final String host
+    private final int port
+    private final String user
+    private final String password
+    private final String privateKeyPath
+    private final int connectTimeoutMs
     private final int sessionTimeoutMs
 
-
-    private SSHClient ssh;
+    private SSHClient ssh
     private final AtomicBoolean open = new AtomicBoolean(false)
 
+    // Uporządkowałem argumenty (host, port)
     SshNodeSession(
-        int port, String host,
-        String privateKeyPath, String password, String user,
+        String host, int port, String user,
+        String password = null, String privateKeyPath = null,
         int sessionTimeoutMs = 15000, int connectTimeoutMs = 600000
     ) {
         this.host = host
@@ -35,13 +36,13 @@ class SshNodeSession implements AutoCloseable {
     }
 
     synchronized void open() {
-        if (open.get()) {
-            return
-        }
+        if (open.get()) return
+
         ssh = new SSHClient()
         ssh.addHostKeyVerifier(new PromiscuousVerifier())
         ssh.connect(host, port)
         ssh.getConnection().setTimeoutMs(sessionTimeoutMs)
+
         if (privateKeyPath) {
             ssh.authPublickey(user, privateKeyPath)
         } else if (password) {
@@ -49,10 +50,10 @@ class SshNodeSession implements AutoCloseable {
         } else {
             ssh.authPublickey(user)
         }
-        ssh.getTransport().setHeartbeatInterval(30) // sec
+
+        ssh.getTransport().setHeartbeatInterval(30)
         open.set(true)
     }
-
 
     synchronized ShResult exec(String command, boolean allocatePty = false) {
         ensureOpen()
@@ -62,10 +63,14 @@ class SshNodeSession implements AutoCloseable {
                 session.allocateDefaultPTY()
             }
             Session.Command cmd = session.exec(command)
+
+            // Czytanie strumieni
             String stdout = cmd.inputStream.getText("UTF-8")
             String stderr = cmd.errorStream.getText("UTF-8")
+
             cmd.join()
             int code = cmd.exitStatus ?: 0
+
             return new ShResult(code, stdout, stderr)
         } finally {
             session.close()
@@ -77,35 +82,26 @@ class SshNodeSession implements AutoCloseable {
         SFTPClient sftp = ssh.newSFTPClient()
         try {
             sftp.put(localPath, remotePath)
-        }
-        finally {
+        } finally {
             sftp.close()
         }
     }
 
     private void ensureOpen() {
-        if (!open.get()) {
-            open()
-        }
+        if (!open.get()) open()
     }
 
     @Override
     synchronized void close() {
-        if (!open.get()) {
-            return
-        }
+        if (!open.get()) return
         try {
             ssh.disconnect()
-        }
-        catch (ignored) {
+        } catch (ignored) {
         }
         try {
             ssh.close()
-        }
-        catch (ignored) {
+        } catch (ignored) {
         }
         open.set(false)
     }
-
-
 }

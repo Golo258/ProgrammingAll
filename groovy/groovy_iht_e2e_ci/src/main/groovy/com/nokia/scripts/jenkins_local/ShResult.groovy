@@ -14,4 +14,7 @@ class ShResult {
     boolean isSuccess() {
         exitCode == 0;
     }
+
+    @Override
+    String toString() { "exit=${exitCode}\nSTDOUT:\n${stdout}\nSTDERR:\n${stderr}" }
 }

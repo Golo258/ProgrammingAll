@@ -10,6 +10,36 @@ class ArtifactTools {
 
     ArtifactTools() {}
 
+    void debugExecuteCusUtil() {
+        def manager = new NodeSessionManager()
+        def shell = manager.getShell("linux-vm") {
+            new PersistentShellSession(
+                "10-7-T05SK095.p05.ska-lab.nsn-rdnet.net",
+                22,
+                "ute",
+                "ute",
+                null
+            )
+        }
+        def cusUtilResultOutput = shell.run(
+            "/opt/cus/bin/cus-util.py ver"
+        )
+        def outputTrimed = cusUtilResultOutput.stdout.trim()
+        log.debug("Cus util result version: ${outputTrimed}")
+
+        def collectedBuildVersions = outputTrimed
+            .readLines()
+            .findAll { cusBuildOnCtrl ->
+                log.debug("Checking cus-util output line ${cusBuildOnCtrl}")
+                if (cusBuildOnCtrl ==~ /CUS[\._]?\d+\.\d+(\.REL|\.DEV)?\.\d+\.\d+(\.DEV)?|CUS\.\d+\.\d+(\.\d+)?(\.DEV)?/) {
+                    log.debug("${cusBuildOnCtrl} is valida cus build")
+                    return true
+                }
+            }
+        log.debug("Collected bbuilds: ${collectedBuildVersions}")
+
+    }
+
     void connectToRemoteHostAndRunCommand() {
         def executor = NodeRegistry.forNode("linux-vm")
         ShResult result = executor.run("hostname")
@@ -44,10 +74,6 @@ class ArtifactTools {
         }
     }
 
-    void debugExecuteCusUtil() {
-
-        String cusUtilResult = ""
-    }
 
     static Map getjsonApiHeaders(Map headers, String WFT_TOKEN) {
         return [

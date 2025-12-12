@@ -1,5 +1,6 @@
 package com.nokia.scripts
 
+import com.nokia.scripts.jenkins_local.ShResult
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.connection.channel.direct.Session
 import net.schmizz.sshj.transport.verification.PromiscuousVerifier
@@ -22,7 +23,7 @@ class PersistentShellSession implements AutoCloseable {
     private InputStream stderr
     private boolean open = false
 
-    private String MARK = "___END__MARK___" + UUID.randomUUID().toString()
+    private final String MARK = "___END__MARK___" + UUID.randomUUID().toString()
 
     long defaultTimeoutMs = 30000L
 
@@ -48,17 +49,22 @@ class PersistentShellSession implements AutoCloseable {
         session = ssh.startSession()
         session.allocateDefaultPTY()
         shell = session.startShell()
+
         stdin = shell.getOutputStream()
         stdout = shell.getInputStream()
         stderr = shell.getErrorStream()
-        open = true
 
+        Thread.sleep(500)
         drain()
 
         sendInit([
+            'stty -echo',
+            'unset PROMPT_COMMAND',
+            'PS1=',
             'set -o pipefail',
             'export LC_ALL=C'
         ])
+        open = true
     }
 
     private void sendInit(List<String> lines) {
@@ -66,17 +72,14 @@ class PersistentShellSession implements AutoCloseable {
             stdin.write((l + "\n").getBytes(StandardCharsets.UTF_8))
         }
         stdin.flush()
+        Thread.sleep(200)
         drain()
     }
 
     private void drain() {
         byte[] buf = new byte[4096]
-        while (stdout.available() > 0) {
-            stdout.read(buf)
-        }
-        while (stderr.available() > 0) {
-            stderr.read(buf)
-        }
+        while (stdout.available() > 0) stdout.read(buf)
+        while (stderr.available() > 0) stderr.read(buf)
     }
 
     private void ensureOpen() {
@@ -85,14 +88,15 @@ class PersistentShellSession implements AutoCloseable {
 
     synchronized ShResult run(String cmd, long timeoutMs = defaultTimeoutMs, boolean collectErr = false) {
         ensureOpen()
-        String payload = cmd + '\n' + 'rc=$?; printf "%s:%d\n" "' + MARK + '" "$rc"' + '\n'
+
+        String payload = "${cmd}; rc=\$?; printf '%s:%d\\n' '${MARK}' \"\$rc\"\n"
 
         stdin.write(payload.getBytes(StandardCharsets.UTF_8))
         stdin.flush()
 
         long deadline = System.currentTimeMillis() + timeoutMs
-        StringBuilder out = new StringBuilder()
-        StringBuilder err = new StringBuilder()
+        StringBuilder outBuilder = new StringBuilder()
+        StringBuilder errBuilder = new StringBuilder()
         byte[] buf = new byte[4096]
 
         Integer exitCode = null
@@ -100,49 +104,43 @@ class PersistentShellSession implements AutoCloseable {
         while (System.currentTimeMillis() < deadline) {
             while (stdout.available() > 0) {
                 int n = stdout.read(buf)
-                if (n <= 0) break
-                out.append(new String(buf, 0, n, StandardCharsets.UTF_8))
+                if (n > 0) outBuilder.append(new String(buf, 0, n, StandardCharsets.UTF_8))
             }
-            // stderr (opcjonalnie)
             if (collectErr) {
                 while (stderr.available() > 0) {
                     int n = stderr.read(buf)
-                    if (n <= 0) break
-                    err.append(new String(buf, 0, n, StandardCharsets.UTF_8))
+                    if (n > 0) errBuilder.append(new String(buf, 0, n, StandardCharsets.UTF_8))
                 }
             }
 
-            int idx = out.indexOf(MARK + ":")
+            String currentOutput = outBuilder.toString()
+            int idx = currentOutput.indexOf(MARK + ":")
+
             if (idx >= 0) {
-                int eol = out.indexOf("\n", idx)
-                String tail = (eol >= 0 ? out.substring(idx, eol) : out.substring(idx))
-                def m = (tail =~ /\d+/)  // znajdź sekwencję cyfr
-                if (m.find()) {
-                    exitCode = Integer.parseInt(m.group())
-                } else {
-                    exitCode = 255
-                }
+                int start = idx + (MARK + ":").length()
+                int eol = currentOutput.indexOf("\n", start)
 
-                if (eol >= 0) {
-                    out.delete(idx, eol + 1)
-                } else {
-                    out.delete(idx, out.length())
-                }
+                String codeStr = (eol >= 0 ? currentOutput.substring(start, eol) : currentOutput.substring(start)).trim()
+                def m = (codeStr =~ /^(\d+)/)
+                exitCode = m.find() ? m.group(1).toInteger() : -1
 
-                String cleanOut = out.toString().replace("\r\n", "\n").trim()
-                String cleanErr = err.toString().replace("\r\n", "\n").trim()
+                outBuilder.delete(idx, eol >= 0 ? eol + 1 : outBuilder.length())
+
+                String cleanOut = outBuilder.toString().replace("\r\n", "\n").trim()
+                String cleanErr = errBuilder.toString().replace("\r\n", "\n").trim()
 
                 return new ShResult(exitCode, cleanOut, cleanErr)
             }
 
-            Thread.sleep(20)
+            Thread.sleep(50) // Krótka pauza, żeby nie zarżnąć CPU pętlą while
         }
 
-        throw new RuntimeException("Timeout (${timeoutMs} ms) waiting for command result and marker '${MARK}'")
+        throw new RuntimeException("Timeout (${timeoutMs} ms) waiting for command result on ${host}")
     }
 
     @Override
     synchronized void close() {
+        if (!open) return
         try {
             stdin?.close()
         } catch (ignored) {
@@ -164,22 +162,5 @@ class PersistentShellSession implements AutoCloseable {
         } catch (ignored) {
         }
         open = false
-    }
-
-    static class ShResult {
-        final int exitCode
-        final String stdout
-        final String stderr
-
-        ShResult(int exitCode, String stdout, String stderr) {
-            this.exitCode = exitCode
-            this.stdout = stdout
-            this.stderr = stderr
-        }
-
-        boolean isSuccess() { exitCode == 0 }
-
-        @Override
-        String toString() { "exit=${exitCode}\nSTDOUT:\n${stdout}\nSTDERR:\n${stderr}" }
     }
 }
