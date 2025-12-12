@@ -13,5 +13,6 @@ class Main {
         ArtifactTools artifactTools = new ArtifactTools()
         artifactTools.debugExecuteCusUtil()
         artifactTools.connectToRemoteHostAndRunCommand();
+        artifactTools.connectToNodeAndStayOnSession()
     }
 }

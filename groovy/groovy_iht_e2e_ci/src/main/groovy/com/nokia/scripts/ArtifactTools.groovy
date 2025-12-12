@@ -2,6 +2,7 @@ package com.nokia.scripts
 
 import com.nokia.scripts.Log as log
 import com.nokia.scripts.jenkins_local.NodeRegistry
+import com.nokia.scripts.jenkins_local.NodeSessionManager
 import com.nokia.scripts.jenkins_local.ShResult
 import groovy.json.JsonOutput
 
@@ -13,13 +14,38 @@ class ArtifactTools {
         def executor = NodeRegistry.forNode("linux-vm")
         ShResult result = executor.run("hostname")
         log.debug(
-            "Exit code ${result.exitCode}" +
-                "Stdout ${result.stdout}" +
-                "Stderr ${result.stderr}"
+            "Exit code: ${result.exitCode}\n" +
+                "Stdout: ${result.stdout}\n" +
+                "Stderr: ${result.stderr}\n"
         )
     }
 
+    void connectToNodeAndStayOnSession() {
+        def manager = new NodeSessionManager()
+        try {
+            def shell = manager.getShell("linux-vm") {
+                new PersistentShellSession(
+                    "10-7-T05SK095.p05.ska-lab.nsn-rdnet.net",
+                    22,
+                    "ute",
+                    "ute",
+                    null
+                )
+            }
+            def pwdResult = shell.run("pwd")
+            def echoResult = shell.run("echo 'siemano'")
+            def lsResult = shell.run("ls -la")
+            log.debug("Result pwd: ${pwdResult.stdout}")
+            log.debug("Result echo: ${echoResult.stdout}")
+            log.debug("Result ls: ${lsResult.stdout}")
+        }
+        finally {
+            manager.close()
+        }
+    }
+
     void debugExecuteCusUtil() {
+
         String cusUtilResult = ""
     }
 
