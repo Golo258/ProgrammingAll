@@ -1,9 +1,21 @@
+def call() {
+    // 1. Zwykły log
+    echo "Uruchamiam przykładowy skrypt..."
 
-def call(Map args = [:]) {
-    echo "myStep: start, args=${args}"
-    if (args.fail) {
-        error "Requested failure"
+    // 2. Krok withEnv (na którym wcześniej był błąd)
+    // Przyjmuje listę zmiennych i blok kodu (closure)
+    withEnv(["PYTHONPATH=/home/ute/.pyenvs/"]) {
+
+        echo "Jestem wewnatrz srodowiska"
+
+        // 3. Wywołanie shella (które sprawdzamy w teście)
+        sh('git status')
+
+        // Przykładowy etap
+        stage('build') {
+            sh(script: 'mvn clean install', returnStdout: true)
+        }
     }
-    def output = sh(script: "echo hello", returnStdout: true).trim()
-    echo "myStep: output=${output}"
-    return output
+
+    echo "Koniec skryptu."
+}
