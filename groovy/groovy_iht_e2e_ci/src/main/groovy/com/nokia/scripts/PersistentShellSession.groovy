@@ -62,7 +62,8 @@ class PersistentShellSession implements AutoCloseable {
             'unset PROMPT_COMMAND',
             'PS1=',
             'set -o pipefail',
-            'export LC_ALL=C'
+            'export LC_ALL=C',
+            'export TERM=dumb'
         ])
         open = true
     }

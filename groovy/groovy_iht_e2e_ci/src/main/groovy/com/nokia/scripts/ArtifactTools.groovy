@@ -8,13 +8,17 @@ import groovy.json.JsonOutput
 
 class ArtifactTools {
 
-    ArtifactTools() {}
+    private final String hostname;
 
-    void debugExecuteCusUtil() {
+    ArtifactTools(String hostname) {
+        this.hostname = hostname
+    }
+
+    List<String> receiveInstalledBuildsOnCtrl() {
         def manager = new NodeSessionManager()
         def shell = manager.getShell("linux-vm") {
             new PersistentShellSession(
-                "10-7-T05SK095.p05.ska-lab.nsn-rdnet.net",
+                hostname,
                 22,
                 "ute",
                 "ute",
@@ -22,22 +26,23 @@ class ArtifactTools {
             )
         }
         def cusUtilResultOutput = shell.run(
-            '/opt/cus/bin/cus-util.py ver | grep -oP \"RUN = \\K[^ ]+\"'
+            '/opt/cus/bin/util.py ver | grep -oP \"RUN = \\K[^ ]+\"'
         )
-        def outputTrimed = cusUtilResultOutput.stdout.trim()
-        log.debug("Cus util result version: ${outputTrimed}")
-
-        def collectedBuildVersions = outputTrimed
+        def collectedBuildVersions = cusUtilResultOutput
+            .stdout
+            .trim()
             .readLines()
-            .findAll { cusBuildOnCtrl ->
-                log.debug("Checking cus-util output line ${cusBuildOnCtrl}")
-                if (cusBuildOnCtrl ==~ /CUS[\._]?\d+\.\d+(\.REL|\.DEV)?\.\d+\.\d+(\.DEV)?|CUS\.\d+\.\d+(\.\d+)?(\.DEV)?/) {
-                    log.debug("${cusBuildOnCtrl} is valida cus build")
+            .findAll { build ->
+                if (build ==~ /dziki_regex/) {
+                    log.debug("${build} is valid build")
                     return true
                 }
             }
+        if (collectedBuildVersions.size() < 0) {
+            throw new IllegalArgumentException("CUS version on CTRLs and requested does not match.")
+        }
         log.debug("Collected bbuilds: ${collectedBuildVersions}")
-
+        return collectedBuildVersions
     }
 
     void connectToRemoteHostAndRunCommand() {
@@ -55,7 +60,7 @@ class ArtifactTools {
         try {
             def shell = manager.getShell("linux-vm") {
                 new PersistentShellSession(
-                    "10-7-T05SK095.p05.ska-lab.nsn-rdnet.net",
+                    hostname,
                     22,
                     "ute",
                     "ute",

@@ -117,6 +117,47 @@ class Knowledge {
             Integer saveValue = numbers.getAt(2)
             // bezpieczne dołożenie
             numbers.putAt(5, 10); // reszte wypełni nullami
+
+            //1. Iteracja z indexem
+            numbers.eachWithIndex { int entry, int index ->
+                log.info("Index: ${index} | Entry: ${entry}")
+            }
+            // 2. Agregacja (reduce / fold)
+            def sum = numbers.inject(0) { acc, val ->
+                log.debug("Accumulator: ${acc}, Value: ${val}")
+                return acc + val
+            }
+            // 3. Sprawdzanie logiczne
+            // any - czy chociaż jeden spełnia warunek
+            boolean isAnyOver3 = numbers.any { it > 30 }
+            // every - czy wszystkie elementy spełniają warunek
+            boolean allPositives = numbers.every { it > 0 }
+
+            // 4. Grupowanie danych - zwraca Mape
+            // mapa której klcuzem jest wynik closure a wartością lista elementów
+            def groupedByOddEven = numbers.groupBy {
+                it % 2 == 0 ? "Parzyste" : "Nieparzyste "
+            }
+            // Wynik: [Nieparzyste:[5, 33], Parzyste:[12, 18, 40]]
+
+            // 5. Operacje strukturalne
+            // flatten - spłaszcza zagnieżdżone listy do jednego poziomu
+
+            // collate - dzieli listę na mniejsze podlisty (chunki)
+            def chunks = numbers.collate(2)
+            // Wynik: [[5, 12], [18, 33], [40]]
+
+            // sort() - UWAGA: domyślnie mutuje listę!
+            // Użyj sort(false), aby zwrócić nową posortowaną listę bez zmiany oryginału.
+            def sortedDesc = numbers.sort(false) { a, b -> b <=> a }
+
+            // --- 7. Inne przydatne skróty ---
+            def countOver10 = numbers.count { it > 10 } // zlicza pasujące
+            String joined = numbers.join(" | ") // łączy elementy w Stringa
+
+            // take / drop - bezpieczniejsze niż subList (nie rzucają błędów przy indeksach)
+            def firstTwo = numbers.take(2)
+            def withoutFirstTwo = numbers.drop(2)
         }
     }
 

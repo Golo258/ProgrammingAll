@@ -14,9 +14,9 @@ class LocalShExecutor implements ShExecutor {
             .redirectErrorStream(false)
             .start()
         String stdout = process.inputStream.getText("UTF-8")
-        String stdoerr = process.errorStream.getText("UTF-8")
+        String stderr = process.errorStream.getText("UTF-8")
         int code = process.waitFor()
-        return new ShResult(code, stdout, stdoerr)
+        return new ShResult(code, stdout, stderr)
     }
 }
 
