@@ -22,7 +22,7 @@ class ArtifactTools {
             )
         }
         def cusUtilResultOutput = shell.run(
-            "/opt/cus/bin/cus-util.py ver"
+            '/opt/cus/bin/cus-util.py ver | grep -oP \"RUN = \\K[^ ]+\"'
         )
         def outputTrimed = cusUtilResultOutput.stdout.trim()
         log.debug("Cus util result version: ${outputTrimed}")
