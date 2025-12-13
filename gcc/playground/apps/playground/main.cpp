@@ -245,3 +245,7 @@ int main() {
 // Patterns
 /*----------------AliasesAndTypes::Enums NAMESPACE---------------------------*/
 /*----------AliasesAndTypes::CastingPlayground class methods------------*/
+
+
+#pragma region COLLECTIONS_PLAYGROUND_CLASS
+        #pragma region LAMBDA_PLAGROUND_CLASS
