@@ -1244,6 +1244,13 @@ namespace Knowledge {
                 Używany do rozmiarów, indeksów, długości, liczby bitów
                     zamiast unsigned - na różnych systemach różna ilość bitów
                     to jest tutaj size_t  
+            Metody dodawania obe dodają na koniec vectora
+            ->push_back
+                - dodaje gotowy obiektu kopiuje lub przenosi
+                - jesli chce go dodać na miejscui to emplace
+            - >emplace_back
+                - tworzy obiekt bezpośrednio w wektorze
+                - jesli mam obiekt i chce go dodać to push_back
             */
             private:
                 template <typename T_Item>
@@ -1285,7 +1292,7 @@ namespace Knowledge {
                 void sort_and_algorithms();
         };
 
-        class MapExamples {
+        class MapPlayground {
             /*  Map - słownik
             Para klucz i wartość
                 numer telefonu → imię
@@ -1293,7 +1300,7 @@ namespace Knowledge {
                 dzień tygodnia → temperatura
             Klucze są unikalne i posortowane 
                 alfabetycznie, liczbowo itp
-    
+            
             Różnica miedzy:
                 unordered:  (bashowana)
                 - nie sortuje kluczy 
@@ -1309,15 +1316,33 @@ namespace Knowledge {
                     rozbijanie pary na zmienne
                 auto[name, score] = para
             */
+            private:
+            template<typename T_Key, typename T_Value>
+            void log_map_state(const std::string& label, const std::map<T_Key, T_Value>& map){
+                std::ostringstream mapInfoStateBuffor;
+                mapInfoStateBuffor << "[" << label << "]\n"
+                    << "Size: " << map.size() << "\n"
+                    << "Data: {";
+                if (map.empty()){
+                    mapInfoStateBuffor << "EMPTY";
+                } 
+                else{
+                    for (const auto& [key, value]: map){
+                        mapInfoStateBuffor << "[" << key << " : " << value << "]";
+                    }
+                }
+                mapInfoStateBuffor << "}";
+                logger.debug()<< mapInfoStateBuffor.str() << "\n";
+            }
+
             public:
-                std::map<int, int> creation_ways();
-                void access_to_elements(std::map<int, int> scores);
-                void modification();
-                void iteration(std::map<int, int> scores);
-                void sort_and_algorithms();
-                void pair_know();
+                void creation();
+                void access_and_safety();
+                void modification_and_merging();
+                void iteration();
+                void custom_sorting_behavior();
+                void pair_usage_scenarios();
         };
-        void show_all_methods();
     }
 
 /*----------------Functions NAMESPACE---------------------------*/

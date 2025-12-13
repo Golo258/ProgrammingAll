@@ -1686,14 +1686,6 @@ namespace Knowledge {
                 << "Back: "  << data.back()  << "\n";
         }
 
-        /* Oba dodają na koniec vectora
-        >push_back
-            - dodaje gotowy obiektu kopiuje lub przenosi
-            - jesli chce go dodać na miejscui to emplace
-        >emplace_back
-            - tworzy obiekt bezpośrednio w wektorze
-            - jesli mam obiekt i chce go dodać to push_back
-        */
         void VectorPlayground::modification_and_memory() {
             logger.info() << "[Vector - Modification && Memory]\n";
             std::vector<float> numbers;
@@ -1778,6 +1770,7 @@ namespace Knowledge {
                 logger.info() << "Iter: " << *it << std::endl;
             }
         }
+        
         void VectorPlayground::sort_and_algorithms(){
             logger.info() << "[Vector - soft and algorithms]\n";
             std::vector<unsigned int> positive{5,6,12,73,8};
@@ -1823,115 +1816,223 @@ namespace Knowledge {
             );
             log_vector_state("Players after sorting", players);
         }
-        // --------------------------------//
-        //         MAP EXAMPLES            //
-        // --------------------------------//
 
-        std::map<int, int> MapExamples::creation_ways(){
-            std::map<int, int> empty_scores; // pusta mapa
-            std::map<int, int> filled_scores = {
-                {1, 15},
-                {2, 56},
-                {3, 79},
-                {4, 37}
-            }; // gotowe dane
-            // kopia
-            std::map<int, int> copy = filled_scores;
-            // przeniesienie (oddanie bez kopiowania)
-            std::map<int, int> moved = std::move(empty_scores);
-            logger.debug() << "Copy size: " << copy.size() << std::endl;
-            
-            // dodawanie nowych elementów
-            filled_scores[12] = 51;
-            // check if key exists
-            bool is_key_in = filled_scores.contains(1);
-            int element = filled_scores[1];
-            int element_save = filled_scores.at(2);
-            auto searching = filled_scores.find(1);
-            if (searching != filled_scores.end()){
-                int element = searching->second;
-            }
-            return copy;
-        }
+/*----------Collections::MapPlayground class methods------------*/
+        void MapPlayground::creation(){
+            logger.info() << "[MAP - CREATION WAYS]\n";
 
-        void MapExamples::pair_know(){
-            std::pair<std::string, int> single_score = {"Bob", 561};
-            logger.debug() << single_score.first << std::endl;
-            logger.debug() << single_score.second << std::endl;
-            
-            // po inicjalizacji moge 
-            std::pair<int, int> result_numbers;
-            result_numbers.first = 12;
-            result_numbers.second = 51; 
-            //albo
-            result_numbers = std::make_pair(12, 51);
-            // jak chcemy zwrócić pustą pare to 
-            // return {};
-        }
+            std::map<int, std::string> empty_map;
+            log_map_state(
+                "EMPTY MAP",
+                empty_map
+            );
 
-        void MapExamples::access_to_elements(std::map<int, int> scores){
-            scores[0] = 12; // utworzy jak nie ma
-            scores[1] = 51; // nadpisze 
-
-            logger.info() << "By operator []:" 
-                << scores[1] << std::endl;
-            logger.info() << "With checking index:" 
-                << scores.at(0) << std::endl; // sprawdza czy jest zakres inaczej out_of_range
-        }
-
-        void MapExamples::modification(){
-            std::map<int, int> scores;
-            // dodanie nowego
-            scores[1] = 12;  // jeśli nie ma, doda
-            scores[5] = 20;  // jeśli jest, nadpisze
-            // alternatywy
-            scores.insert({52, 51});          // wstaw (nie nadpisze)
-            scores.emplace(6, 65);            // tworzy bezpośrednio w mapie
-            scores.insert_or_assign(67, 100); // C17 -doda lub nadpisze
-            scores.try_emplace(2, 200);       // doda tylko jeśli nie istnieje
-            /*
-            map.find()
-                -szuka elementu o danym kluczu i zwraca iterator
-                jeśli znalazł -> iterator do elementu
-                jesli nie - to scores.end()
-            */
-            if (scores.find(1) != scores.end()){
-                logger.debug() << "1 not exists\n";
-            }
-            // 20 contains
-            // if (scores.contains(1)){
-                // logger.debug() << "1 exists\n";
-            // }
-            // usuwanie
-            scores.erase(1);
-            // łączenie dwóch map
-            std::map<int, int> results = {
-                {51, 25},
-                {66, 2}
+            std::map<int, std::string> filled_by_initalized_list = {
+                {1, "south"},
+                {4, "north"},
+                {2, "west" },
+                {3, "east" }
             };
-            scores.merge(results);
-        }
-        void MapExamples::iteration(std::map<int, int> scores){
-            for (auto &pair : scores) {
-                logger.debug() << pair.first << " => " << pair.second << std::endl;
-            }
 
-            // (C++17)
-            for (auto &[name, score] : scores) {
-                logger.debug() << name << " ma wynik " << score << std::endl;
-            }
-        }
-        void MapExamples::sort_and_algorithms(){}
+            log_map_state(
+                "FILLED BY INITALIZED LIST",
+                filled_by_initalized_list
+            );
 
-        void show_all_methods() {
+            std::map<int, std::string> map_copy = filled_by_initalized_list;
+            log_map_state("MAP COPY", map_copy);
             
-            MapExamples map_examples;
-            std::map<int, int> scores = map_examples.creation_ways();
-            map_examples.access_to_elements(scores);
-            map_examples.modification();
-            map_examples.iteration(scores);
-            // map_examples.sort_and_algorithms();
+            std::map<int, std::string> moved = std::move(filled_by_initalized_list);
+            log_map_state("MOVED WITHOUT COPY", moved);
+
+            std::vector<std::pair<int, std::string>> vector_pairs = {
+                {0, "some"},
+                {100, "other"}
+            };
+            std::map<int, std::string> from_iterator(
+                vector_pairs.begin(),
+                vector_pairs.end()
+            );
+            log_map_state("From iterator range", from_iterator);
         }
+
+     
+
+        void MapPlayground::access_and_safety(){
+            logger.info() << "[MAP - ACCESS AND SAFETY]\n";
+
+            std::map<std::string, int> scores = {
+                {"Alice", 100},
+                {"Tom", 50}
+            };
+            log_map_state("Initial scores", scores);
+            logger.debug()
+                << "Check by [key] if not set it will create with 0: "
+                << scores["Mariusz"] << "\n";
+            
+            log_map_state("After [key] check", scores);
+            try{
+                logger.debug() << "Safe access by .at(key) \n";
+                int personScore = scores.at("David");
+                logger.debug() 
+                    << "Person score: (not gonna happen)" 
+                    << personScore << "\n";
+            }
+            catch(const std::out_of_range& exception){
+                logger.error() 
+                    << "Exception caught: " 
+                    << exception.what() << " (Key not found)\n";
+            }
+            
+            logger.debug() << "Check if key exists: \n";
+            if (scores.contains("Alice")) logger.info() << "Found\n";
+            else logger.error() << "Not found\n";
+            
+            logger.debug()
+                << ".find() searches for element with key, "
+                << "if found - returns iterator to element"
+                << "if not - return map.end()\n";
+
+            auto it = scores.find("Alice");
+            if (it != scores.end()){
+                logger.debug()
+                    << "Found Alice with value: "
+                    << it->second << "\n";
+            }
+            
+        }
+
+        void MapPlayground::modification_and_merging(){
+            logger.info() << "[MAP- MODIFICATION AND MERGIN]\n";
+            std::map<int, int> dict;
+
+            logger.debug()
+                << ".insert(), returns pare {iterator, bool success}\n"
+                << "Not overwriting if key exists\n";
+            dict.insert({1, 12});
+            auto [iterator, success] = dict.insert({1, 51});
+            log_map_state("Map after inserting", dict);
+        
+            logger.debug()
+                << ".insert_or_assaign()\n"
+                << "Inserting or overwiting key value \n";
+
+            dict.insert_or_assign(2, 41);
+            dict.insert_or_assign(2, 61);
+            log_map_state("After insert_or_asign()", dict);
+            
+            logger.debug() << ".emplace() creates in place\n";
+            dict.emplace(6, 65);
+            log_map_state("After emplace()", dict);
+
+            logger.debug() << ".try_emplace() creates if not exists\n";
+            dict.try_emplace(2, 200);
+            log_map_state("After try_emplace()", dict);
+
+            logger.debug() << ".merge() nodes from one to another map\n";
+            std::map<int, int> other_dict = {
+                {7, 63},
+                {8, 1}
+            };
+            dict.merge(other_dict);
+            log_map_state("After merge()", dict);
+
+            logger.debug() << ".erase(): Removing key from map\n";
+            dict.erase(1);
+            log_map_state("After erase()", dict);
+
+        }
+
+        void MapPlayground::iteration(){
+            logger.info() << "[MAP ITERATION]\n";
+            std::map<int, int> squares = {
+                {1, 1}, {2, 4}, {3, 9}
+            };
+            logger.debug() << "Iteration by [key, value]: \n"; 
+            for (const auto& [number, sq]: squares){
+                logger.debug()
+                    << "Number: " << number << "^2 = " << sq << "\n";
+            }
+            logger.debug() << "Classical it.first it.second iteration\n";
+            for (auto &pair : squares) {
+                logger.debug() 
+                    << "Pair: " << pair.first << " => " << pair.second << "\n";
+            }
+        }
+        
+        void MapPlayground::custom_sorting_behavior(){
+            logger.info() << "[MAP - CUSTOM SORTING]\n";
+            logger.debug()
+                << "Mapy sortują się same. Ale co jeśli chcemy odwrotnie (malejąco)?\n"
+                << "Trzeci parametr szablonu to komparator.\n";
+            
+            std::map<int, std::string, std::greater<int>> descending_map = {
+                {1, "First"}, {3, "Third"}, {2, "Second"}
+            };
+            std::ostringstream oss;
+            oss << "Descending Map: { "; 
+            for(const auto& [key, value] : descending_map) 
+                oss << key << " ";
+            oss << "}";
+            logger.debug() << oss.str() << "\n";
+        }
+
+        void MapPlayground::pair_usage_scenarios(){
+            logger.info() << "[ PAIR usage scenario]\n";
+
+            logger.debug() << "pair creation\n";
+            std::pair<int, std::string> classic_way = {10, "classic way"};
+            auto self_detected = std::make_pair(20, "detected pair by make_pair");
+            std::pair modern_way(
+                30, "modern way CTAD, class template argument decution"
+            );
+            logger.debug()
+                << "Createdd pairs: "
+                << "{" << classic_way.first << "}\n"            
+                << "{" << self_detected.first << "}\n"            
+                << "{" << modern_way.first << "}\n";   
+            
+            logger.debug() << "Acces by structered binding\n";
+            auto [id, name] = classic_way;
+            logger.debug() 
+                << "Unpacked pair: ID=" << id  << ", "
+                << "Name=" << name << "\n";
+
+            std::pair<int, int> p_small = {1, 999};
+            std::pair<int, int> p_big   = {2, 0};
+            logger.debug() << "Comparing pairs attributes\n";
+            bool is_smaller = p_small < p_big;
+            logger.debug() 
+                << "{1, 999} < {2, 0} is: " << std::boolalpha << is_smaller << "\n";
+
+            classic_way.first = 99;
+            logger.debug() << "Modification in loose pair key" << classic_way.first << "\n";
+
+            logger.debug() << "Simulation of map pair:\n";
+            std::pair<const int, std::string> map_node = {1, "MapData"};
+            // map_node.first = 2; // compilation error
+            map_node.second = "NewData";
+
+            logger.debug() << "Pairs Vector \n";
+            std::vector<std::pair<std::string, int>> ranking = {
+                {"Burek", 10}, {"Azor", 50}, {"Reksio", 30}
+            };
+            
+            // Sortowanie po wyniku (second)
+            std::sort(ranking.begin(), ranking.end(), 
+                [](const auto& a, const auto& b){
+                    return a.second > b.second; // Malejąco po punktach
+                }
+            );
+            std::ostringstream oss;
+            oss << "Vector of pairs sorted by value: ";
+            for(const auto& [dog, score] : ranking) {
+                oss << dog << "(" << score << ") ";
+            }
+            logger.debug() << oss.str() << "\n";
+
+        }
+
     }
     namespace Functions {
         void LambdaFunction::syntax(){

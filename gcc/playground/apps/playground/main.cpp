@@ -162,11 +162,23 @@ void KNOWLEAGE_INTRODUCTION() {
     // ------------------------------------------------------    
     logger.info() << dots << "COLLECTIONS INTRODUCTION" << std::endl;
     Knowledge::Collections::VectorPlayground vector_playground;
+    // ------------------------------------------------------    
+    logger.info() << dots << "VECTOR INTRODUCTION" << std::endl;
     vector_playground.creation_ways();
     vector_playground.access_and_safety();
     vector_playground.modification_and_memory();
     vector_playground.iteration();
     vector_playground.sort_and_algorithms();
+    
+    // ------------------------------------------------------    
+    logger.info() << dots << "MAP INTRODUCTION" << std::endl;
+    Knowledge::Collections::MapPlayground map_playground;
+    map_playground.creation();
+    map_playground.access_and_safety();
+    map_playground.modification_and_merging();
+    map_playground.iteration();
+    map_playground.custom_sorting_behavior();
+    map_playground.pair_usage_scenarios();
 }
 
 void parser_task(){
