@@ -412,7 +412,7 @@ namespace Knowledge {
                     Person(int age) : _age(age) {}
                     ~Person() { logger.debug() << "End of story\n"; }
                     void introduce(){
-                        logger.debug() << "age: " << _age << std::endl;
+                        logger.debug() << "age: " << _age <<ENDL;
                     }
                 };
 
@@ -1218,8 +1218,8 @@ namespace Knowledge {
 
                         void send(const std::string& msg) const override {
                             logger.debug() 
-                                << "[EMAIL] To: " << _email << std::endl 
-                                << "Content: "    << msg << std::endl; 
+                                << "[EMAIL] To: " << _email << ENDL 
+                                << "Content: "    << msg << ENDL; 
                         } 
                 };
 
