@@ -23,6 +23,7 @@
 #include <filesystem> // zarządzanie plikami
 #include <memory> // smart pointers
 #include <optional>
+#include <cmath> // pow
 
 // ------------------------
 /*
@@ -39,7 +40,7 @@
 */
 /*--------------Knowledge NAMESPACE---------------------------------*/
 namespace Knowledge {
-
+    constexpr char ENDL = '\n';
 /*--------------StreamsManagement NAMESPACE---------------------------------*/
     namespace StreamsManagement {
         /* Strumień
@@ -1347,31 +1348,55 @@ namespace Knowledge {
 
 /*----------------Functions NAMESPACE---------------------------*/
     namespace Functions {
-        /*
-            Funkcja anonimowa, pisana namiejscu
-                bez potrzeby nazywania i defniowania
-            
-            Zamiast
-                bool compare(const Player& a, const Player& b) {
-                    return a.score > b.score;
-                }
-            mamy
-                [](const Player& a, const Player& b) {
-                    return a.score > b.score;
-                })
+        class LambdaPlayground {
+            /*  Funkcja anonimowa, pisana namiejscu
+                    bez potrzeby nazywania i defniowania
+        Zamiast
+            bool compare(const Player& a, const Player& b) {
+                return a.score > b.score;
+            }
+        mamy
+            [](const Player& a, const Player& b) {
+                return a.score > b.score;
+            })
+        Składania:
+        1. [parametry_zewnetrzne] 
+            co  funkcja ma widzieć (czyli capture list)
+                [=] -- łapanie wszystkie przez kopie wartości
+                [&] -- łapanie przez referencje
+                [x, &y] - przez wartość, przez referencje
+        2. (argumenty_lambdy) 
+            - argumenty jak w normalnej funkcji
+        3. -> typ - opcjonalny typ zwracany
+        4. {} kod który wykona lambda
+            --- całość
+        5. [parametry_zewętrzny](argumenty_lambdy) -> zwracany_typ {
+            ciało funkcji
+        }
+        ------------------------------
+        std::function to "pudełko" na cokolwiek co da się wywołać 
+            (lambda, funkcja, funktor). Ma narzut wydajnościowy, ale pozwala
+            przekazywać funkcje jako parametry.
+        syntax:
+            std::function<typ_zwrotny(parametry...)> {}
+        
         */
-        class LambdaFunction {
             public:
-                void syntax();
-                // callback function
-                void repeat(int amount, const std::function<void(int)>& fun);
-                void show_function_examples();
+                void syntax_and_basics();
+                void capture_mechanisms();
+                void std_function_wrapper();
+                void modern_lambdas();
+                void run_times(
+                    size_t iter_amount,
+                    const std::function<void(int)>& action
+                );
             };
 
-        class UsefulFunction{
+        class UtilityPlayground{
             public:
-                void checking_int();
+                void char_operations();
+                void numeric_operations();
         };
-        void show_all_functions();
+
     }
 }

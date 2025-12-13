@@ -179,6 +179,20 @@ void KNOWLEAGE_INTRODUCTION() {
     map_playground.iteration();
     map_playground.custom_sorting_behavior();
     map_playground.pair_usage_scenarios();
+
+    // ------------------------------------------------------    
+    logger.info() << dots << "LAMBDA FUNCTION INTRODUCTION" << std::endl;
+    Knowledge::Functions::LambdaPlayground lambda_playground;
+    lambda_playground.syntax_and_basics();
+    lambda_playground.capture_mechanisms();
+    lambda_playground.std_function_wrapper();
+    lambda_playground.modern_lambdas();
+    
+    // ------------------------------------------------------    
+    logger.info() << dots << "UTILIY FUNCS INTRODUCTION" << std::endl;
+    Knowledge::Functions::UtilityPlayground utiliy_playground;
+    utiliy_playground.char_operations();
+    utiliy_playground.numeric_operations();
 }
 
 void parser_task(){
