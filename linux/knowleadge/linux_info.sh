@@ -800,6 +800,8 @@ Tymczasowe:
     ip route add 10.0.1.1/16 via 192.168.1.1 dev ensp03
             del - usuwanie
 
+    ip -4 a - wypisuje tylko adresy ipv4
+
     reset interfacu:
         ifdown enp0s3
         ifup enp0s3 
@@ -899,10 +901,10 @@ iptables - maszyna decyzyjna
 
 Trzy pojecia :
     table - tablica - zestaw reguł do konkretnego celu
-    chain - łanuch - lista reguł wykonywanych w danyym momencie życia pakietu
+    chain - łanuch - lista reguł wykonywanych w danym momencie życia pakietu
     rule - reguła - pojedynczy warunek - akcja 
 
-W linuxie jest kilak tablic:
+W linuxie jest kilka tablic:
     tabela to jest rodzaj operacji np:
         filter - filtrowanie pakietów, czyli firewall 
         nat - translacja adresów 
@@ -910,7 +912,7 @@ W linuxie jest kilak tablic:
         raw - bardziej zaawansowane do conttrack
 
 Filter:
-    łancuchy: - czyli lista wykonywanych podczas przepływu  pakietu
+    łancuchy: - czyli lista wykonywanych reguł podczas przepływu pakietu
     - INPUT - pakiety do tej maszyny 
         np gdy ktoś łączy sie poprzez SSH do obecnej maszyny
         INPUT:
@@ -965,14 +967,21 @@ Jak wygląda reguła:
     -d --destination - dla każdego adresu docelowego
         ale to raczej dla OUTPUTU
 
-specjalne pod icmp --icmp-type:
-    echo-request - ping -> zapytanie
-    echo-reply - ping -> odpowidx
-    destination-unreacable
-    time-exceeded
-    redirect
-    itp
+Jak dopasować przychodzący pakiet ICMP:
+czyli „jaki ICMP do mnie przyszedł”
+    icmp-type:
+        echo-request - ping przychodzący -> zapytanie
+        echo-reply - ping -> odpowidx
+        destination-unreacable
+        time-exceeded
+        redirect
+        itp
 
+Jak określić jakim komunikatem odrzucamy dane pakiet icmp:
+    --reject-with 
+        icmp-net-unreachable
+        icmp-host-unreachable
+        icmp-port-unreachable
 
 // ---------------------- poglądowo
 Internet / LAN
@@ -988,7 +997,9 @@ Twoja karta (enp0s3)
 komendy fajne
     iptables -L - sprawdzenie jakie śa reguły 
             -L INPUT -v (--verbose)
-    
+
+    iptables -L -n -v - wszystko ładnie
+
     iptables -F INPUT
         --flush - czyści wszystkie reguły z łańcucha
 
@@ -1013,12 +1024,11 @@ ICMP to proste komunikaty.
 ssh używa TCP na porcie 22.
 
 Polityka: --policy
-    każdy łaćńuch ma reguiłe, którą dodajmy
-    oraz polityke domyślną, która mówi
-        co zrobićz pakietem
-        jeśli żadna reguła nie pasuje, nie jest ustawiona
+    każdy łaćńuch ma regułe, którą dodajemy
+    oraz polityke domyślną, która mówi co zrobić z pakietem
+    jeśli żadna reguła nie pasuje/ nie jest ustawiona
     
-    czyli jak reguły nie złapiąpakietu
+    czyli jak reguły nie złapią pakietu
         to co zrobić z nim decyduje poliyka
     takie finally 
    
@@ -1028,4 +1038,14 @@ Polityka: --policy
 
         DROP 
             - nie wpuszczamy, nie ufamy
-            
+
+ICMP:  
+    Ping to dwa różne pakiety ICMP:
+1. echo-request
+    → „hej, żyjesz?”
+
+2. echo-reply
+    → „tak, żyję”
+Ping zawsze jest parą:
+    request w jedną stronę
+    reply w drugą
