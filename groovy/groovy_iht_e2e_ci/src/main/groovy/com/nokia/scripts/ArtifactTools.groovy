@@ -26,19 +26,17 @@ class ArtifactTools {
             )
         }
         def cusUtilResultOutput = shell.run(
-            '/opt/cus/bin/util.py ver | grep -oP \"RUN = \\K[^ ]+\"'
+            '/opt/cus/bin/cus-util.py ver | grep -oP \"RUN = \\K[^ ]+\"'
         )
+//        def cusUtilResultOutput = "SOME_OTHER\nfampsofmapsfom"
         def collectedBuildVersions = cusUtilResultOutput
-            .stdout
             .trim()
             .readLines()
-            .findAll { build ->
-                if (build ==~ /dziki_regex/) {
-                    log.debug("${build} is valid build")
-                    return true
-                }
+            .findAll { cusBuildOnCtrl ->
+                log.debug("CTRL Build Check: ${cusBuildOnCtrl}")
+                return cusBuildOnCtrl ==~ /SOMETHING)?/
             }
-        if (collectedBuildVersions.size() < 0) {
+        if (!collectedBuildVersions || cusUtilResultOutput.readLines().size() != collectedBuildVersions.size()) {
             throw new IllegalArgumentException("CUS version on CTRLs and requested does not match.")
         }
         log.debug("Collected bbuilds: ${collectedBuildVersions}")

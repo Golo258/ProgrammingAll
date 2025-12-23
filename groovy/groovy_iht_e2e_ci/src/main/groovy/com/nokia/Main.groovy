@@ -20,17 +20,22 @@ class Main {
     }
 
     static void debugCusUpdate() {
-        String hostname = "192.168.1.13"
+        String hostname = "10.84.158.242"
         ArtifactTools artifactTools = new ArtifactTools(hostname)
         List<String> ctrlBuilds = artifactTools.receiveInstalledBuildsOnCtrl()
         String targetBuild = "CUS.251126.04"
         ctrlBuilds.any { it.contains(targetBuild) }
     }
 
+    static void debugRequiredEnvParameters() {
+
+    }
+
     static void main(String[] args) {
         log.setLevel("SUCCESS")
 //        show_base();
         debugCusUpdate()
+        debugRequiredEnvParameters();
 
 
     }
