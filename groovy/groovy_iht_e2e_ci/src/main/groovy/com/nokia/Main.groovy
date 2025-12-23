@@ -6,17 +6,32 @@ import com.nokia.scripts.Log as log
 
 class Main {
 
-    static void show_base() {
-        Knowledge knowledge_playground = new Knowledge();
-        knowledge_playground.show_collections();
+    static Knowledge base = new Knowledge()
+    // collections
+    static Knowledge.CollectionsPlayground collections = new Knowledge.CollectionsPlayground(this.base)
+    static Knowledge.CollectionsPlayground.ListPlayground listPlayground = new Knowledge.CollectionsPlayground.ListPlayground(this.collections)
+    static Knowledge.CollectionsPlayground.MapPlayground mapPlayground = new Knowledge.CollectionsPlayground.MapPlayground(this.collections)
 
-        Knowledge.RegexMatching regexMatching = new Knowledge.RegexMatching(knowledge_playground)
-        regexMatching.qualificators()
-        regexMatching.anchors()
-        regexMatching.sign_classes()
-        regexMatching.greedy_lazy()
-        regexMatching.flags()
-        regexMatching.matching()
+    static void present_collections() {
+        this.listPlayground.creation();
+        this.listPlayground.operations();
+        this.listPlayground.accessAndSlices();
+        this.listPlayground.iterationAndTransformation();
+    }
+
+    //    string operations
+    static Knowledge.RegexMatching regexMatching = new Knowledge.RegexMatching(this.base)
+    static Knowledge.JsonPlayground jsonPlayground = new Knowledge.JsonPlayground(this.base)
+
+
+    static void show_base() {
+        this.base.show_collections()
+        this.regexMatching.qualificators()
+        this.regexMatching.anchors()
+        this.regexMatching.sign_classes()
+        this.regexMatching.greedy_lazy()
+        this.regexMatching.flags()
+        this.regexMatching.matching()
     }
 
     static void debugCusUpdate() {
@@ -28,15 +43,36 @@ class Main {
     }
 
     static void debugRequiredEnvParameters() {
+        def env = [
+            "TESTLINE"       : null,
+            "TEST_SUITE_FILE": "fas",
+            "CUS_BUILD_NAME" : "CUS123",
+            "ESIM_BUILD_NAME": "ESIM123"
+        ]
+        List<String> requiredEnvParams = ["TESTLINE", "TEST_SUITE_FILE", "CUS_BUILD_NAME", "ESIM_BUILD_NAME"]
+        log.debug(env["CUS_BUILD_NAME"])
+        log.debug(env.CUS_BUILD_NAME)
+        def missingParams = env.findAll { key, value ->
+            return (key in requiredEnvParams) && !value
+        }
+        if (!missingParams.isEmpty()) {
+            log.debug("Missing ${missingParams.keySet()} parameters")
+        } else {
+            log.success("there is no missing properties")
+        }
+        def missingAny = env.any { key, value ->
+            (key in requiredEnvParams) && !value
+        }
+        log.debug("any missing: ${missingAny}")
 
     }
 
     static void main(String[] args) {
         log.setLevel("SUCCESS")
 //        show_base();
-        debugCusUpdate()
-        debugRequiredEnvParameters();
-
+//        debugCusUpdate()
+//        debugRequiredEnvParameters();
+        jsonPlayground.from_string_to_json()
 
     }
 }

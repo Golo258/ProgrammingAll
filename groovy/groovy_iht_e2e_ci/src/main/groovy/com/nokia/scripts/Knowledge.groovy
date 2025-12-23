@@ -1,6 +1,7 @@
 package com.nokia.scripts
 
 import com.nokia.scripts.Log as log
+import groovy.json.JsonSlurperClassic
 
 import java.util.regex.Matcher
 
@@ -34,141 +35,192 @@ import java.util.regex.Matcher
  */
 
 class Knowledge {
-    class Collections_Playground {
+    class CollectionsPlayground {
 
-        Collections_Playground() {};
         /* List management */
 
-        void listsCreations() {
-            def automaticInit = [1, 2, 3, 4]
-            List<Integer> ints = [51, 56, 25, 67];// typowanie generyczne
-            List mixed = [1, "more", 25.67]; // mieszanie typów
-            List empty = [];
-            // Jawne wybieranie typu listy
-            List<Integer> arrayNumbers = new ArrayList<Integer>(
-                [1, 12, 516, 733]
-            )
-            List<String> linkedStrings = new LinkedList<String>(
-                ["One", "some", "other"]
-            )
-            // definiowanie z zakresu
-            def rangeList = (1..12).toList()
-            def explusiveList = (1..<4).toList()
-            def charsRangeList = ('a'..'e').toList();
-            // konwersje
-            def fromListToSet = [1, 2, 2, 51, 1, 6] as Set
-            def fromSetToList = fromListToSet as List
-            // z javy
-            def javaList = Arrays.asList(1, 2, 51);// stałej długości
-            def java9List = List.of(1, 2, 3); //niemutowalna
-            log.debug(javaList)
-        }
+        class ListPlayground {
 
-        void listsOperations() {
-            log.info("Adding new items to list")
-            def baseList = [1, 2];
-            baseList << 3 // na koniec
-            baseList.add(51);
-            baseList += [22, 68]; // konkatenaacja Listy
-            log.info("Removing items from list")
-            baseList.remove(5); // po indexie
-            baseList.remove((Integer) 2) // pierwsze wystapienie liczby 2
-            baseList -= [51, 3]; // wystapienia liczb
-        }
+            List<Integer> baseList = new ArrayList<>(1, 2)
 
-        void listsAccess() {
-            log.info("Acess to list items")
-            def base = [10, 20, 30, 40, 50]
-            Integer byIndex = base[2];
-            Integer lastOne = base[-1];
-            List rangeNumbers = base[1..3];
-            List choseIndexes = base[1, 5];
-            List subList = base.subList(2, 5)
-        }
-
-        void listsIteration_Transformation() {
-            def numbers = [5, 6, 71];
-            numbers.each { //iteracja
-                log.info("Numb: ${numbers}")
-            }
-            /*  jesli nie zwrócisz to zostanie bez zmian wartość
-                 zawsze zwróci liste tej samej długości co wykonuje .collect
-                tworzy nowa liste
-             */
-            def mappingNumbers = numbers.collect { numb ->
-                log.debug("Numb value before: ${numb}")
-                if (numb % 2 == 0) {
-                    return numb * 2
+            void log_list_state(String label, Iterable collection) {
+                log.info("-----------------------------------")
+                log.info("SECTION: ${label} ")
+                log.info("-----------------------------------")
+                if (!collection) {
+                    log.error("Provided collection is empty")
                 } else {
-                    return numb * 3
-                };
+                    collection.withIndex(item, index ->
+                        log.info("[${index}]=${item}")
+                    )
+                }
+                log.info("========================================\n")
             }
-            log.debug("Mapped numbers: ${mappingNumbers}")
-            //filtrowanie - lambda oczekuje true / false
-            def filterReturnFirstOne = numbers.find { numb ->
-                log.debug("Filtering ${numb}")
-                return numb % 2 == 0
+
+            void log_operation_state(String label, result = null) {
+                log.info("-----------------------------------")
+                log.info("SECTION: ${label} ")
+                log.info("-----------------------------------")
+                if (result) {
+                    log.info("Operation result: ${result}")
+                }
+                log.info("========================================\n")
             }
-            // wszystkie pasujące elementy (lista, może być pusta).
-            def allEvens = numbers.findAll { it % 2 == 0 }
-            // unique - przechodz iprzez liste i usuwa duplikaty
-            def onlyUnique = numbers.unique()
-            // bezpieczne wydobycie .getAt
-            Integer saveValue = numbers.getAt(2)
-            // bezpieczne dołożenie
-            numbers.putAt(5, 10); // reszte wypełni nullami
 
-            //1. Iteracja z indexem
-            numbers.eachWithIndex { int entry, int index ->
-                log.info("Index: ${index} | Entry: ${entry}")
+            void creation() {
+                List empty = [];
+                def automaticInit = [1, 2, 3, 4]
+                log_list_state("Dynamic typing", automaticInit)
+
+                List<Integer> genericTypesInitList = [51, 56, 25, 67]
+                log_list_state("Generic List Typing <>", genericTypesInitList)
+
+                List mixedTypes = [1, "more", 25.67]
+                log_list_state("List with mixed types", mixedTypes)
+
+                List<Integer> arrayNumbers = new ArrayList<Integer>([1, 12, 516, 733])
+                log_list_state("With explicit list type", arrayNumbers)
+
+                List<String> linkedStrings = new LinkedList<String>(["One", "some", "other"])
+                log_list_state("Linked elements", linkedStrings)
+
+                List<Integer> rangeList = (1..12).toList()
+                log_list_state("Range list (begin..end).toList()", rangeList)
+
+                def explusiveList = (1..<4).toList()
+                log_list_state("Range with exclusion (begin..<end)", explusiveList)
+
+                List<Character> charsRangeList = ('a'..'e').toList();
+                log_list_state("Chars range (begin..<end)", charsRangeList)
+
+                def fromListToSet = [1, 2, 2, 51, 1, 6] as Set
+                def fromSetToList = fromListToSet as List
+                log_list_state("Conversion use as Type", fromSetToList)
+
+                def javaList = Arrays.asList(1, 2, 51);
+                log_list_state("With const length asList", javaList)
+
+                def java9List = List.of(1, 2, 3);
+                log_list_state("unmutable list", java9List)
             }
-            // 2. Agregacja (reduce / fold)
-            def sum = numbers.inject(0) { acc, val ->
-                log.debug("Accumulator: ${acc}, Value: ${val}")
-                return acc + val
+
+            void operations() {
+                log.info("Adding new items to list")
+                this.baseList << 3 // na koniec
+                this.baseList.add(51);
+                this.baseList += [22, 68]; // konkatenaacja Listy
+                log.info("Removing items from list")
+                this.baseList.remove(5); // po indexie
+                this.baseList.remove((Integer) 2) // pierwsze wystapienie liczby 2
+                this.baseList -= [51, 3]; // wystapienia liczb
             }
-            // 3. Sprawdzanie logiczne
-            // any - czy chociaż jeden spełnia warunek
-            boolean isAnyOver3 = numbers.any { it > 30 }
-            // every - czy wszystkie elementy spełniają warunek
-            boolean allPositives = numbers.every { it > 0 }
 
-            // 4. Grupowanie danych - zwraca Mape
-            // mapa której klcuzem jest wynik closure a wartością lista elementów
-            def groupedByOddEven = numbers.groupBy {
-                it % 2 == 0 ? "Parzyste" : "Nieparzyste "
+            void accessAndSlices() {
+                log.info("Acess to list items")
+                Integer byIndex = this.baseList[2];
+                Integer lastOne = this.baseList[-1];
+                List rangeNumbers = this.baseList[1..3];
+                List choseIndexes = this.baseList[1, 5];
+                List subList = this.baseList.subList(2, 5)
             }
-            // Wynik: [Nieparzyste:[5, 33], Parzyste:[12, 18, 40]]
 
-            // 5. Operacje strukturalne
-            // flatten - spłaszcza zagnieżdżone listy do jednego poziomu
+            void iterationAndTransformation() {
+                this.baseList.each { //iteracja
+                    log.info("Numb: ${this.baseList}")
+                }
+                /*  jesli nie zwrócisz to zostanie bez zmian wartość
+                     zawsze zwróci liste tej samej długości co wykonuje .collect
+                    tworzy nowa liste
+                 */
+                def mappingNumbers = this.baseList.collect { numb ->
+                    log.debug("Numb value before: ${numb}")
+                    if (numb % 2 == 0) {
+                        return numb * 2
+                    } else {
+                        return numb * 3
+                    };
+                }
+                log.debug("Mapped numbers: ${mappingNumbers}")
+                def filterReturnFirstOne = this.baseList.find { numb ->
+                    log.debug("Filtering ${numb}")
+                    return numb % 2 == 0
+                }
+                log_operation_state("Filter element -> expects true / false", filterReturnFirstOne)
 
-            // collate - dzieli listę na mniejsze podlisty (chunki)
-            def chunks = numbers.collate(2)
-            // Wynik: [[5, 12], [18, 33], [40]]
+                def allEvens = this.baseList.findAll { it % 2 == 0 }
+                log_list_state("Find all matching condition", allEvens)
 
-            // sort() - UWAGA: domyślnie mutuje listę!
-            // Użyj sort(false), aby zwrócić nową posortowaną listę bez zmiany oryginału.
-            def sortedDesc = numbers.sort(false) { a, b -> b <=> a }
+                def onlyUnique = this.baseList.unique()
+                log_list_state("Find unique numbers / remove duplicated", onlyUnique)
 
-            // --- 7. Inne przydatne skróty ---
-            def countOver10 = numbers.count { it > 10 } // zlicza pasujące
-            String joined = numbers.join(" | ") // łączy elementy w Stringa
+                Integer saveValue = this.baseList.getAt(2)
+                log_operation_state("Save retrieval .getAt", saveValue)
 
-            // take / drop - bezpieczniejsze niż subList (nie rzucają błędów przy indeksach)
-            def firstTwo = numbers.take(2)
-            def withoutFirstTwo = numbers.drop(2)
+                // this.baseList.putAt(5, 10); // reszte wypełni nullami
+                log_operation_state("Save addition, excess will be filled with nulls", this.baseList)
+
+                this.baseList.eachWithIndex { Integer entry, Integer index ->
+                    if (entry) {
+                        log.info("Index: ${index} | Entry: ${entry}")
+                    }
+                }
+                log_operation_state("iteration with index",)
+
+                def sum = this.baseList.inject(0) { acc, val ->
+                    log.debug("Accumulator: ${acc}, Value: ${val}")
+                    return acc + val
+                }
+                log_operation_state("Agregation reduce/fold", sum)
+                // 3. Sprawdzanie logiczne
+                boolean isAnyOver3 = this.baseList.any { it > 30 }
+                log_operation_state("Logical any - one has to meet condition", isAnyOver3)
+
+                boolean allPositives = this.baseList.every { it > 0 }
+                log_operation_state("Logical every - all have to meet condition", allPositives)
+
+                /* 4. Grupowanie danych - zwraca Mape
+                    mapa której klcuzem jest wynik closure a wartością lista elementów
+                 */
+                def groupedByOddEven = this.baseList
+                    .groupBy {
+                        it % 2 == 0 ? "Even" : "Odd "
+                    }
+                log_operation_state("Grouping data", groupedByOddEven)
+                // Result: [Odd:[5, 33], even:[12, 18, 40]]
+
+                /* 5. Operacje strukturalne
+                    flatten - spłaszcza zagnieżdżone listy do jednego poziomu
+                    collate - dzieli listę na mniejsze podlisty (chunki)
+                 */
+                def chunks = this.baseList.collate(2)
+                // Wynik: [[5, 12], [18, 33], [40]]
+                log_list_state("Chunks- structual operations", chunks)
+
+                /*
+                    sort() - by default it mutate list
+                    use sort(false), to return sorted without original
+                 */
+                def sortedDesc = this.baseList.sort(false) { a, b -> b <=> a }
+                log_list_state("Sorted descending", sortedDesc)
+
+                // --- Other useful ---
+                def countOver10 = this.baseList.count { it > 10 }
+                log_operation_state("Count numbers by condition", countOver10)
+
+                String joined = this.baseList.join(" | ")
+                log_operation_state("Join to string", joined)
+
+                def firstTwo = this.baseList.take(2)
+                log_list_state("take() list slices", firstTwo)
+
+                def withoutFirstTwo = this.baseList.drop(2)
+                log_list_state("drop() list slices without specific", withoutFirstTwo)
+            }
         }
-    }
 
-    void show_collections() {
-        Collections_Playground collections = new Collections_Playground();
-        /* List management */
-        log.info("List management Playground")
-        collections.listsCreations();
-        collections.listsOperations();
-        collections.listsAccess();
-        collections.listsIteration_Transformation();
+        class MapPlayground {
+
+        }
     }
 
     void stringAndTextOperation() {
@@ -217,28 +269,46 @@ class Knowledge {
 */
     }
 
+    class JsonPlayground {
+        void from_string_to_json() {
+            String data = """
+            {
+                "meta": [
+                    "cusVerificationAttributes.json",
+                    "mailNotification.html",
+                    "mailNotification.css"
+                ],
+                "bash": [
+                    "combo_update.sh"
+                ]
+            }"""
+            Map classic = new JsonSlurperClassic().parseText(data)
+//            for ()
+        }
+    }
+
     void workingWithJson() {
-/*
-    # czytanie i używanie jsona w groovim
-    def tokens = readJSON file: TOKENS_FILE
-    echo "GitLab token: ${tokens.gitlab}"
-    echo "Jira token: ${tokens['jira']}"
-    Opis:
-        readJSON w Jenkinsie parsuje JSON z pliku do struktury Groovy (Map / List).
-        Możesz się odwoływać przez tokens.key albo tokens['key']
-        import groovy.json.JsonOutput
-        import groovy.json.JsonSlurperClassic
+        /*
+            # czytanie i używanie jsona w groovim
+            def tokens = readJSON file: TOKENS_FILE
+            echo "GitLab token: ${tokens.gitlab}"
+            echo "Jira token: ${tokens['jira']}"
+            Opis:
+                readJSON w Jenkinsie parsuje JSON z pliku do struktury Groovy (Map / List).
+                Możesz się odwoływać przez tokens.key albo tokens['key']
+                import groovy.json.JsonOutput
+                import groovy.json.JsonSlurperClassic
 
-        def data = [foo: 1, bar: [x: 2, y: 3]]
-        def jsonString = JsonOutput.toJson(data)
-        def pretty = JsonOutput.prettyPrint(jsonString)
-        def parsed = new JsonSlurper().parseText(jsonString
-        Opis:
-            JsonSlurper().parseText() → zamienia JSON string na Mapę/Listę.
-            JsonSlurperClassic.toJson() → obiekt → JSON string.
-            prettyPrint() → formatuje JSON czytelnie.
+                def data = [foo: 1, bar: [x: 2, y: 3]]
+                def jsonString = JsonOutput.toJson(data)
+                def pretty = JsonOutput.prettyPrint(jsonString)
+                def parsed = new JsonSlurper().parseText(jsonString
+                Opis:
+                    JsonSlurper().parseText() → zamienia JSON string na Mapę/Listę.
+                    JsonSlurperClassic.toJson() → obiekt → JSON string.
+                    prettyPrint() → formatuje JSON czytelnie.
+        */
 
-*/
     }
 
     void collections() {
@@ -379,6 +449,7 @@ class Knowledge {
                .*? -> Lazy (Leniwy):
                     Zjada jak najmniej, zatrzymuje się przy PIERWSZYM pasującym.
             */
+            def jenkinsLog = "pmfaosmfpaomfspoamfspom"
             def greedyMatcher = (jenkinsLog =~ /\[(.*)\]/)
             def lazyMatcher = (jenkinsLog =~ /\[(.*?)\]/)
             if (greedyMatcher.find() && lazyMatcher.find()) {
