@@ -96,10 +96,6 @@ export TERM=xterm-256color
 PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 alias cdlogs='cd /home/cus/logs/; cd $(ls -td -- */ | head -n 1); cd $(ls -td -- */ | head -n 1);'
 alias res_vnc="xrandr --newmode '1904x990_60.00'  155.75  1904 2016 2216 2528  990 993 1003 1027 -hsync +vsync; xrandr --addmode Virtual-1 '1904x990_60.00'; xrandr --output Virtual-1 --mode '1904x990_60.00';"
-alias rtt='/home/ute/test_repository/resources/DevKr/run_test_and_backup_results.sh'
-alias tt='telnet 0 20000'
-alias enb_check='/home/ute/test_repository/resources/DevKr/enb_check_build.sh'
-alias epcsim_start='/home/ute/test_repository/resources/DevKr/epcsim_start.sh'
 # --------------------------------------
 
 # --------------------------------------
@@ -110,27 +106,15 @@ alias gitsetup='
   git config --global credential.helper store
 '
 # --------------------------------------
-alias clone_gears='git clone https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git'
-alias clone_cicus='git clone https://wrgitlab.ext.net.nokia.com/tsex/cicus.git'
-alias clone_iht='git clone "https://ggolonka@gerrit.ext.net.nokia.com/gerrit/a/MN/LTE/IHT/iht-e2e-ci" && (cd "iht-e2e-ci" && gitdir=$(git rev-parse --git-dir); curl -o ${gitdir}/hooks/commit-msg https://gerrit.ext.net.nokia.com/gerrit/static/commit-msg ; chmod +x ${gitdir}/hooks/commit-msg)'
 alias vmip="ip -4 addr show eth0"
-alias linkSuites='ln -s /home/ute/MN/UTE/robotlte/testsuite/IHT/suites/ /home/ute/RobotSuites'
 alias reload='source ~/.bashrc'
 alias editrc='vim ~/.bashrc && reload'
 
 # --------------------------------------
-alias uex_cmd="UEX_CONFIG_PATH=/opt/cus/etc/uex/uex.exs iex -S mix" 
-alias run_uex="UEX_CONFIG_PATH=/opt/cus/etc/uex/uex.exs mix run -e 'UEx.CT.run_test(suite: $1, group: $2)'"
-alias go_scripts="cd /home/ute/MN/UTE/krakow.iht/cus/testsuite/SCRIPTS"
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
-export PATH=${PATH}:/home/ute/MN/UTE/robotlte/resources/DevKr
 
-# -----------------PROXY SETUP---------------------
-export https_proxy='http://proxy-lab.krk-lab.nsn-rdnet.net:8080'
-export http_proxy='http://proxy-lab.krk-lab.nsn-rdnet.net:8080'
-# --------------------------------------
 
 # --------------------------------------
 function vscode_setup() {
@@ -177,25 +161,7 @@ function set_prios(){
 }
 
 # --------------------------------------
-function ping_ctrl(){
-  ctrl_nr=$1
-  if [[ "$arg" =~ ^ctrl-([0-9]+)$ ]]; then
-    num="${BASH_REMATCH[1]}"
-  else
-    echo "Wrong given argument. Using default ctrl-1"
-    num=1
-  fi
-  ip="192.168.200.$num"
-  echo "Ping ctrl$num. Stop by CTRL+C"
-  ping "$ip"
-}
 
-# --------------------------------------
-function ping_enb(){
-  ping "192.168.255.129"
-}
-
-# --------------------------------------
 function update_rc() {
     vim ~/.bashrc && reload && echo "Bashrc changed successfully. Nice !!."
 }
@@ -203,86 +169,5 @@ function update_rc() {
 # --------------------------------------
 function show_rc(){
   cat ~/.bashrc 
-}
-
-# --------------------------------------
-function go() {
-  HOME_PATH="/home/ute"
-  UTE_PATH="/home/ute/MN/UTE"
-    case "$1" in
-        robot) path="$UTE_PATH/robotlte" ;;
-        gears) path="$UTE_PATH/gears/gears.krakow.iht" ;;
-        cicus) path="$HOME_PATH/cicus" ;;
-        gerrit) path="$HOME_PATH/iht-e2e-ci" ;;
-        *)
-            echo "USE: go_repo [nazwa_repo]"
-            echo "Available: robot, gears, cicus, gerrit"
-            return 1
-            ;;
-    esac
-    cd "$path" || return
-    echo ">> PWD now: $path"
-    ls -la
-}
-
-# --------------------------------------
-# PING CTRL AND WAIT UNTIL ITS AVAILABLE
-# THEN CHECK WHETHER CUSMMESSAGES.LOG IS AVAIALABLE 
-# --------------------------------------
-function ctrl_messages() {
-  HOST="192.168.200.1"
-  LOG_FILE="/tmp/CusMessages.log"
-  PASS="oZPS0POrRieRtu"
-  USER="toor4nsn"
-  echo "Wait for $HOST to respond..."
-
-  until ping -c1 -W1 "$HOST" &>/dev/null; do
-    sleep 2
-  done 
-
-  echo "Host is eachable. Connectying via SSH"
-  sshpass -p "$PASS"  ssh -o StrictHostKeyChecking=no  "$USER@$HOST" <<EOF
-    if [ -f "$LOG_FILE" ]; then
-        echo "File $LOG_FILE exists. Tailing..."
-        tail -f "$LOG_FILE"
-    else
-        echo "File $LOG_FILE does not exist yet."
-    fi
-EOF
-}
-
-# --------------------------------------
-function get_testline_pdu() {
-  GITLAB_TOKEN="ZeXZpQiQmNE9M4x3wZ_6"
-  USER="ggolonka"
-  TARGET_REPO_PATH="/home/ute/MN/UTE/krakow.iht"
-  POSSIBLE_SECOND_REPO_PATH="/home/ute/MN/UTE/gears/krakow.iht"
-  repo_path=""
-  if [ -d "$TARGET_REPO_PATH" ]; then
-    repo_path=$TARGET_REPO_PATH
-  elif [ -d "$POSSIBLE_SECOND_REPO_PATH" ]; then
-    repo_path=$POSSIBLE_SECOND_REPO_PATH
-  else
-    repo_path="$TARGET_REPO_PATH"
-    echo "Repo not found in paths. Let's clone it"
-    git clone https://${USER}:${GITLAB_TOKEN}@wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git   $TARGET_REPO_PATH
-  fi
-  echo "Repo path: ${repo_path}"
-
-  echo "Settuping python environment"
-  export PYENV_ROOT="$HOME/.pyenv"
-  export PATH="$PYENV_ROOT/bin:$PATH"
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-  pyenv activate test_repo
-  echo "Running script"
-  local pdu_ip_addr=$(python "${repo_path}/cus/testsuite/SCRIPTS/config/get_tl_config_param.py" "_pdu1" "addr")
-  google-chrome --new-tab "https://$pdu_ip_addr" &
-}
-
-# --------------------------------------
-function run_sxap_config(){
-   GEARS_DIR=/home/ute/MN/UTE/krakow.iht/cus/testsuite
-   bash $GEARS_DIR/SCRIPTS/uex/configure_sxap.sh ENBs=10.0.1.2,10.0.1.22 MMEs=10.0.1.1
 }
 # --------------------------------------

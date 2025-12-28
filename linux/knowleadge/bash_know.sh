@@ -1,8 +1,7 @@
 
 
 # debug skryptów, dajemy do #!bin/bash -xv
-#!!!!!!!!! od pjotrusia protip !!!!!!!!!
- !/bin/bash -xv
+!/bin/bash -xv
 
 BASH syntax:
     # switch case:   
@@ -77,27 +76,6 @@ done
 [[ -n $zmienna ]] -- niepusta
 [[ -z $zmienna ]] -- pusta
 
-  declare -A cus_patterns=(
-        ['^CUS_2\.0\.REL\.([0-9]{6}\.[0-9]{2})$']="CUS_2.0|cus_2.0.REL.{date}_amd64.deb"
-        ['^CUS_2\.0\.DEV\.([0-9]{6}\.[0-9]{2})$']="CUS_2.0|cus_2.0.DEV.{date}_amd64.deb"
-        ['^CUS\.([0-9]{6}\.[0-9]{2})$']="CUS_TRUNK|cus_{date}_amd64.deb"
-        ['^CUS\.([0-9]{6}\.[0-9]{2})\.DEV$']="CUS_TRUNK|cus_{date}.dev_amd64.deb"
-    )
-declare -A REPOSITORIES=(
-    ['CUS_TRUNK']="\
-        link1 \
-        link1 \
-        link1 \
-    ",
-    ['CUS_2.0']="\
-        link1 \
-        link1 \
-    ",
-    ['Esim']="link1"
-)
-iteracja wydobywanie
-CUS_PATTERNS[@] -- wartosci
-!CUS_PATTERNS[@] -- klucze 
 ${!REPOSITORIES[@]}
 ${!REPOSITORIES[CUS_TRUNK]}
 
@@ -159,15 +137,5 @@ sed -i 's|/sciezka1|sciezka2|g' /sciezk3
 operator:
     =~ - sprawdzanie wyrażenia regularnego
 
-
-
-"CUS_2.0|cus_2.0.REL.{date}_amd64.deb"
-    substring removal:
-    skłądnia:
-        $var%%  -- usuwa dopasowanie wzorca od końca (sufix)
-        $var##  -- usuwa dopasowanie wzorca od poczatku (prefix)
-    cus_version="${matched%%|*}"
-    package_template="${matched##*|}"
-    
 
 

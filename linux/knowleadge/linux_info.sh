@@ -133,7 +133,7 @@ def LINUX:
                 link/ether 52:54:0a:b8:5e:10 brd ff:ff:ff:ff:ff:ff
                 altname enp0s3
                 altname ens3
-                inet 10.84.159.4/23 brd 10.84.159.255 scope global dynamic eth0 # to ten chuj
+                inet 10.84.159.4/23 brd 10.84.159.255 scope global dynamic eth0  # corrent one 
                 valid_lft 36634sec preferred_lft 36634sec
                 inet6 fe80::5054:aff:feb8:5e10/64 scope link 
                 valid_lft forever preferred_lft forever
@@ -141,21 +141,21 @@ def LINUX:
 
 
     # linki 
-        ln -s /home/gg/testy Tests # symboliczny -- taki skrót do ścieżki
+        ln -s /home/gg/testy Tests       # symboliczny -- taki skrót do ścieżki
         ln /home/gg/testy.txt testy.txt  # twardy - tworzy identyczny plik jako kopie -- delete casade
 
         ln -sfn /home/gg/nowy_katalog Tests -- nadpisanie linku syembolicznego
 
-    # miejsce na dysku - czyszczenie TL 
+    # miejsce na dysku - czyszczenie VM
         df -h -- miejsce na zamontowanych dyskach 
 
         du -sh /katalog - dla danego katalogu
         du -ah /ścieżka | sort -rh | head -n 10  # top 10 najwiekszych katalogółw
 
-        # czyszczenie systemowe
-            sudo apt clean # paczki z /var/cache/apt/archives
-            sudo apt autoremove # zbedne dependencies
-            sudo journalctl --vacuum-size=100M  # logi systemowe
+    # czyszczenie systemowe
+        sudo apt clean # paczki z /var/cache/apt/archives
+        sudo apt autoremove # zbedne dependencies
+        sudo journalctl --vacuum-size=100M  # logi systemowe
 
 
         du -h --max-depth=1 /home/ute | sort -hr
@@ -167,9 +167,7 @@ def LINUX:
                 -h human 
                 -r odwraca kolejnośc - od najwiekszych do najmniejszych
 
-    # vs code 
-    ## instalacja vs coda :
-    # ustaw wcześniej proxy do https / http
+    # vs code:  instalacja vs coda :
         wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
         sudo install -o root -g root -m 644 packages.microsoft.gpg /usr/share/keyrings/
         rm packages.microsoft.gpg
@@ -177,32 +175,30 @@ def LINUX:
         sudo apt update
         sudo apt install code
 
-        # ustawienia debugera
-        CTRL + SHIFT + P --> Preferences: Open Keyboard Shortcuts (JSON)
-            // Place your key bindings in this file to override the defaults
-                [
-                {
-                    "key": "f5",
-                    "command": "workbench.action.debug.continue"
-                },
-                {
-                    "key": "f10",
-                    "command": "workbench.action.debug.stepOver"
-                },
-                {
-                    "key": "f11",
-                    "command": "workbench.action.debug.stepInto"
-                },
-                {
-                    "key": "shift+f11",
-                    "command": "workbench.action.debug.stepOut"
-                },
-                {
-                    "key": "f4",
-                    "command": "workbench.action.debug.start"
-                }
-                ]
-
+    # ustawienia debugera
+    CTRL + SHIFT + P --> Preferences: Open Keyboard Shortcuts (JSON)
+        [
+            {
+                "key": "f5",
+                "command": "workbench.action.debug.continue"
+            },
+            {
+                "key": "f10",
+                "command": "workbench.action.debug.stepOver"
+            },
+            {
+                "key": "f11",
+                "command": "workbench.action.debug.stepInto"
+            },
+            {
+                "key": "shift+f11",
+                "command": "workbench.action.debug.stepOut"
+            },
+            {
+                "key": "f4",
+                "command": "workbench.action.debug.start"
+            }
+        ]
 
     ## dodawanie wtyczek
         code --install-extension nazwa_pliku.vsix # ex robotframework-lsp.vsix
@@ -222,9 +218,6 @@ def LINUX:
         echo $VAR - zobaczysz zmienną 
         printenv PATH -- pokazuje zmienne środowiskowe
         
-    # alias - skrót do długich komend lub sewencji komend
-        alias ll="ls -la "
-
     # sprawdzanie adres ip po eth
 
     ip -4 addr show ethx
@@ -234,7 +227,7 @@ def LINUX:
     # herbata - standardowe wyjscie (stdout ) i do pliczku
     komenda | tee pliczek 
 
-    # dodawnaie użytkownikó group + root
+    # dodanie userów i atrybutów group + root
         sudo adduser ute
         sudo usermod -aG sudo ute
     
@@ -247,7 +240,6 @@ def LINUX:
     awk '{ sum += $2 } END { print sum }' dane.txt
         # Jak chcesz przetwarzać dane rekord bo jest ich dużo to dajesz
         awk 'NR==2 { print $2 }'
-
         # -F field seperator- czyli co bedzie oddzielało wyrazy albo wyraz
         np ipczki: 10.0.1.1
             awk -F. '{ print $4 }' podzieli nam wyraz wzgledem kropki i da 4 oktet 
@@ -260,23 +252,9 @@ def LINUX:
     # dodanie rzeczy do patha
         export PATH="/opt/cus/lib/erlang/bin:$PATH"
 
-    # sciezki fajne
-        uex: pliki .ez
-        cd /opt/cus/lib/uex/
-
     # grepowanie z regexem
         ls | grep -E '^s'
     
-    # sciezki do pythonowego repo: test_repo
-        /home/ute/.pyenv/versions/test_repo/lib/python3.9/site-packages/
-        np: ta_uexgate
-        
-    # 
-        pierwsze generujemy seedy 
-            generateSeeds
-    	
-        potem generateJobs
-
     #  sedowanie -0 zamienianie
         cat $ZMIenna | sed 's/cos_zamieniamy/na_co/g'
             g - global - że sie zmieni
@@ -301,13 +279,8 @@ def LINUX:
     # fajnie komendy sieciowe
         ip link  -- wszystkie interfacy sieciowe
         ss -tulpn -- zamiast netstat
-
         nmap - network mapper - skanowanie sieci / otwarte porty / usługi
 
-    # rota 
-        \\eseefsn50.emea.nsn-net.net\rotta4internal\LTE_2\pgolonka
-        file://eseefsn50.emea.nsn-net.net/rotta4internal/LTE_2/pgolonka/
- 
     # usuwanie interaceów
         ip link del ethx -- usuwa dany interface
     # usuwanie adresów
@@ -332,17 +305,17 @@ def LINUX:
             poetry new my_project
                 cd my_project            
 
-            dodawanie zależności
-                poetry add paramiko scp
+        dodawanie zależności
+            poetry add paramiko scp
             
-            uruchamianie środowiska 
-                poetry shell
+        uruchamianie środowiska 
+            poetry shell
             
-            instalacja na innym systemie
-                poetry install
+        instalacja na innym systemie
+            poetry install
 
-            poetry env info --path -- gdzie jest zapisane środowisko
-                -- sciezka do interpretera
+        poetry env info --path -- gdzie jest zapisane środowisko
+            -- sciezka do interpretera
 
     # kolejka, ubijanie sprawdzanie 
         atq - 
@@ -378,35 +351,10 @@ def LINUX:
         du -sh archiwum.tar.gz - rozmiar arcghiwum
         
             
-    #-------------------------------------------------
-    # python - virutalenv
-        znajduje sie w 
-        /home/ute/.pyenv/versions/
-            tutaj masz wszystkie wersje 
-        jak sie zjebie test_repo to kopiujesz sobie pliczki do
-            /home/ute/.pyenv/versions/python_version/envs/test_repo
-            i robisz linka symbolicznego 
-                ln -s  /home/ute/.pyenv/versions/python_version/envs/test_repo /home/ute/.pyenv/versions/test_repo
-
-        inaczej łatwiej tworzenie test_repo:
-            patrzysz
-                pyenv versions
-                    bierzesz tą która chcesxz
-                    
-                    pyenv virtualenv 3.9.14 test_repo
-                    i ci to tworzy
-                        ~/.pyenv/versions/3.9.14/envs/test_repo/
-                        ~/.pyenv/versions/test_repo → ~/.pyenv/versions/3.9.14/envs/test_repo
-
     # montowanie - mount
         podpinanie systemu plików(jakiegoś zasobu)
             do konkretnego katalogu w drzewie plików
         W linuxie: wszystko jest widoczne w jednym drzewie kataogów /
-
-            montowanie logstora:
-                sudo mount -t cifs -o user=ute,pass='Y9-Qb35v$suQ',uid=1000,gid=1000 //p05-nas.p05.ska-lab.nsn-rdnet.net/logstore /mnt
-                potem masz w /mnt/CUS1/ i se mozesz manewrować
-                
 
     # vs code dodawanie kolejnego hosta 
         w ~/.ssh/config dodajesz 

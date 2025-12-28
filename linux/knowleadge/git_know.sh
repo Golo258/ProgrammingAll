@@ -168,33 +168,12 @@ def GIT:
     # stashowanei tylko rzeczy na zielono w stagingu 
         git stash push --keep-index
 
-    # gearsy dodanie
-    git remote add gitlab https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git
-
-    # testowanie gearsów na branch jenkins
-    git clone https://gerrit.ext.net.nokia.com/gerrit/MN/UTE/gears/gears.krakow.iht
-    cd /home/ute/MN/UTE/gears/gears.krakow.iht
-    git remote add gitlab https://wrgitlab.ext.net.nokia.com/RAN/gears/krakow.iht.git
-    git pull gitlab main
-    cd /home/ute/MN/UTE/gears/gears.krakow.iht
-    git fetch --all
-    git checkout ggolonka/listener_dependency_update"
 
     Ustawianie ignorowania danych plików bez dodania ich do gitignora
         git update-index --assume-unchanged .vscode/
             przy tym musi być śledzony
 
         echo ".vscode/" >> .git/info/exclude -- to jest lepsze 
-"
-
-    gears env create
-    eval $(gears env activate) 
-    gears env update 
-    #linkowanie 
-    cd  ~/MN/UTE/gears/gears.krakow.iht/.gears_cache/virtualenvs/cus-py3.10/lib/python3.10/site-packages/taf/ul
-    rm -rf cus_monitoring
-    ln -sfn /home/ute/MN/UTE/taf.ul.cus_monitoring/taf/ul/cus_monitoring cus_monitoring
-
 
     # sprawdzenie akutalnej kofiguracji .gitconifg
     git config --list --show-origin
@@ -303,7 +282,7 @@ def GIT:
     17: Zamiana daty
     GIT_COMMITTER_DATE="2025-10-19T16:20:00 +0200" \
     git commit --amend --no-edit --date="2025-10-19T16:20:00 +0200"
-":
+
 #-----------------------
 
 Problem z credentialami:
@@ -364,3 +343,5 @@ then
     export GIT_AUTHOR_EMAIL="$CORRECT_EMAIL"
 fi
 ' --tag-name-filter cat -- --branches --tags
+
+#-----------------------
