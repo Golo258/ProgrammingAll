@@ -10,7 +10,7 @@ class KnowleadgeIntroduction{
     const char ENDL = '\n';
 
     public:
-        void show_stream_management(){
+        void show_stream_management() {
             namespace Streams = Knowledge::StreamsManagement;
             // ------------------------------------------------------
             logger.info() << dots 
@@ -36,7 +36,7 @@ class KnowleadgeIntroduction{
             fsystem_management.get_file_from_resources();
         };
     
-        void show_aliases_and_types(){
+        void show_aliases_and_types() {
             logger.info() << dots 
                 << "ALIASES AND TYPES INTRODUCTION" << std::endl;
             namespace aliases = Knowledge::AliasesAndTypes;
@@ -88,7 +88,7 @@ class KnowleadgeIntroduction{
             template_playground.template_as_vector_type();
         }
 
-        void show_compile_time(){
+        void show_compile_time() {
             namespace compile_time = Knowledge::CompileTime;
             logger.info() << dots 
                 << "COMPILE TIME INTRODUCTION" << std::endl;
@@ -132,7 +132,7 @@ class KnowleadgeIntroduction{
             class_know::Polymorphism::show_polymorphism();
         }
 
-        void show_exceptions_knowledge(){
+        void show_exceptions_knowledge() {
             logger.info() << dots 
                 << "EXCEPTIONS INTRODUCTION" << std::endl;
             Knowledge::ExceptionsKnow::ExceptionPlayground exception_playground;
@@ -140,7 +140,7 @@ class KnowleadgeIntroduction{
             exception_playground.custom_throw();
             exception_playground.custom_with_specific_message();
         }
-        void show_string_knowledge(){
+        void show_string_knowledge() {
             logger.info() << dots 
                 << "STRINGS INTRODUCTION" << std::endl;
             std::string text = " some funny \t tricky text";
@@ -162,7 +162,7 @@ class KnowleadgeIntroduction{
             regex_playground.replace_match();
         }
 
-        void show_collections_knowledge(){
+        void show_collections_knowledge() {
             logger.info() << dots 
                 << "COLLECTIONS INTRODUCTION" << std::endl;
             Knowledge::Collections::VectorPlayground vector_playground;
@@ -186,7 +186,7 @@ class KnowleadgeIntroduction{
             map_playground.pair_usage_scenarios();
         }
 
-        void show_functions_knowledge(){
+        void show_functions_knowledge() {
             logger.info() << dots 
                 << "LAMBDA FUNCTION INTRODUCTION" << std::endl;
             Knowledge::Functions::LambdaPlayground lambda_playground;

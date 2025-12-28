@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <numeric>  // accumulate 
 #include <cctype>   // to lower | upper
-#include <utils/variables.hpp>
+#include <utils/include/variables.hpp>
 #include <variant>  // union variant
 #include <regex>
 #include <exception> // exception
@@ -24,20 +24,7 @@
 #include <memory> // smart pointers
 #include <optional>
 #include <cmath> // pow
-
-// ------------------------
-/*
-    TODO co do przerobienia:
-        - json, parsowanie, tworzenie, tak samo yaml i inne typy 
-        - może modyfikacja loggera żeby zapisywał do pliku i żeby terminal nie spamił
-        - includowanie zewnętrznych bibliotek, ale to pewnie przy jsonie
-        - przeciążanie operatorów, mniej wiecej jak to działa
-        - wątki i programowanie wielowątkowe 
-        - tworzenie baz danych
-            łączenie sie, tworzenie query, itp
-        - tworzenie requestów do api, i parsowanie tego
-            - tworzenie własnego API, ale to nie wiem czy nie lepiej w pythonie
-*/
+#include <functional> // std::function
 
 /*--------------Knowledge NAMESPACE---------------------------------*/
 #pragma region KNOWLEDGE
@@ -251,7 +238,7 @@ namespace Knowledge {
         */
 
         // ----------BASIC ALIASES------------ 
-        inline void basic_aliases_definition(){
+        inline void basic_aliases_definition() {
             typedef unsigned int Uint32;
             using ULL = unsigned long long;
             using Callback = void(*)(int);// zamiast  void f(int)
@@ -268,15 +255,15 @@ namespace Knowledge {
         using UserIdAlias = int; 
         struct UserId {
             int value;
-            explicit UserId(int value) : value(value){}
+            explicit UserId(int value) : value(value) {}
         };
 
-        inline void namespace_aliases_definition(){
+        inline void namespace_aliases_definition() {
             namespace KMD = Knowledge::StreamsManagement;
             using StreamReader = Knowledge::StreamsManagement::StandardStream;
         }
 
-        inline void multiple_types_aliases_definition(){
+        inline void multiple_types_aliases_definition() {
             union PossibleTypes {
                 int i;
                 double d;
@@ -370,7 +357,7 @@ namespace Knowledge {
                         virtual ~Base() = default;
                     };
                     struct Derived : Base {
-                        inline void say(){
+                        inline void say() {
                             logger.debug() << "Something\n";
                         }
                     };
@@ -411,7 +398,7 @@ namespace Knowledge {
                     int _age;
                     Person(int age) : _age(age) {}
                     ~Person() { logger.debug() << "End of story\n"; }
-                    void introduce(){
+                    void introduce() {
                         logger.debug() << "age: " << _age <<ENDL;
                     }
                 };
@@ -561,15 +548,15 @@ namespace Knowledge {
                 inline double add_double(double a, double b) {return a + b; }
                 
                 template<typename Type> // Piszemy jedną wersje
-                Type generic_add(Type a, Type b){ return a + b; }
+                Type generic_add(Type a, Type b) { return a + b; }
 
                 template<typename Type>
-                Type max_of(const Type& prev, const Type& next){
+                Type max_of(const Type& prev, const Type& next) {
                     return (prev > next) ? prev : next;
                 }
                 
                 template<typename Type_a, typename Type_b>
-                auto add_different(Type_a first, Type_b second){
+                auto add_different(Type_a first, Type_b second) {
                     return first + second;
                 }
 
@@ -578,9 +565,9 @@ namespace Knowledge {
                     private: 
                         TData _value;
                     public:
-                        GenericBox(TData value) : _value(value){}
+                        GenericBox(TData value) : _value(value) {}
                         TData get() const { return _value; }
-                        void set(TData new_value){ _value = new_value; }
+                        void set(TData new_value) { _value = new_value; }
                 };
 
                 template <typename TKey, typename TValue>
@@ -603,8 +590,8 @@ namespace Knowledge {
                         
                     public:
                         GenericItemsContainer() { containers_amount++; } 
-                        ~GenericItemsContainer(){ containers_amount--; }
-                        GenericItemsContainer(size_t size){
+                        ~GenericItemsContainer() { containers_amount--; }
+                        GenericItemsContainer(size_t size) {
                             _items.reserve(size);
                             containers_amount++;
                         }
@@ -619,14 +606,14 @@ namespace Knowledge {
                             containers_amount++;
                         }
 
-                        void add(const TItem& item){ _items.emplace_back(item); }
+                        void add(const TItem& item) { _items.emplace_back(item); }
                         void print_all_items() const {
-                            for (const TItem& item: _items){
+                            for (const TItem& item: _items) {
                                 logger.debug() 
                                     << "Item [" << item << "]\n"; 
                             }
                         }
-                        static int get_active_containers(){ return containers_amount; }
+                        static int get_active_containers() { return containers_amount; }
                 };
 
                 class TemplatePlayground {
@@ -765,20 +752,22 @@ namespace Knowledge {
 
         #pragma region COMPILE_TIME_PLAYGROUND
             
-            constexpr int factorial(int numb){
+            constexpr int factorial(int numb) {
                 return (numb <= 1) ? 1 : numb * factorial(numb - 1);
             }
+            
+            #if __cplusplus >= 202002L
+                consteval int make_id(int x) {
+                    return x * 10;
+                }
+                inline constinit int GLOBAL_COUNTER = 0; 
+            #endif 
 
-            consteval int make_id(int x){
-                return x * 10;
-            }
-
-            inline constinit int global_counter = 0; 
             struct Point {
                 int x;
                 int y;
                 constexpr Point(int a, int b)
-                    : x(a), y(b){}
+                    : x(a), y(b) {}
                 
                 constexpr int length_squared() const {
                     return (x * x) + (y * y); 
@@ -846,7 +835,7 @@ namespace Knowledge {
             #define SQUARE(x) ( (x) * (x))
             // w nowoczesnym pisze sie 
             template <typename MathType>
-            constexpr MathType square(MathType var){
+            constexpr MathType square(MathType var) {
                 return var * var;
             }
 
@@ -1227,7 +1216,7 @@ namespace Knowledge {
                     std::string _phone_number;
                     public:
                         SmsNotification(std::string phone_number) 
-                            : _phone_number(phone_number){}
+                            : _phone_number(phone_number) {}
 
                         void send(const std::string& msg) const override {
                             logger.debug() 
@@ -1391,7 +1380,7 @@ namespace Knowledge {
                 const std::string& operation_name,
                 std::string& text,
                 StrFunc action
-            ){
+            ) {
                 std::string dots = "\n----------------------------------------------\n";
                 logger.debug() << dots
                     << operation_name << '\n' 
@@ -1461,13 +1450,13 @@ namespace Knowledge {
                     void log_vector_state(
                         const std::string& label, 
                         const std::vector<T_Item>& vector
-                    ){
+                    ) {
                         std::ostringstream vecInfoStrBuffor;
                         vecInfoStrBuffor << "[ " << label << " ]\n"
                             << "Size: "     << vector.size()     << " | "
                             << "Capacity: " << vector.capacity() << " | "
                             << "Data: {";
-                        for (const auto& vec_item: vector){
+                        for (const auto& vec_item: vector) {
                             vecInfoStrBuffor << vec_item << " ";
                         }
                         vecInfoStrBuffor << "}";
@@ -1526,16 +1515,16 @@ namespace Knowledge {
                 */
                 private:
                 template<typename T_Key, typename T_Value>
-                void log_map_state(const std::string& label, const std::map<T_Key, T_Value>& map){
+                void log_map_state(const std::string& label, const std::map<T_Key, T_Value>& map) {
                     std::ostringstream mapInfoStateBuffor;
                     mapInfoStateBuffor << "[" << label << "]\n"
                         << "Size: " << map.size() << "\n"
                         << "Data: {";
-                    if (map.empty()){
+                    if (map.empty()) {
                         mapInfoStateBuffor << "EMPTY";
                     } 
                     else{
-                        for (const auto& [key, value]: map){
+                        for (const auto& [key, value]: map) {
                             mapInfoStateBuffor << "[" << key << " : " << value << "]";
                         }
                     }

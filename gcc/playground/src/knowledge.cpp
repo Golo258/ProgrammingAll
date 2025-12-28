@@ -1,8 +1,5 @@
 // ------------------------
-#include <include/docs/>
-/*
-    Creating Exceptions
-*/
+#include <include/knowledge.hpp>
 
 #pragma region KNOWLEDGE
 namespace Knowledge{
@@ -12,24 +9,24 @@ namespace Knowledge{
 
         #pragma region STANDARD_STREAM_CLASS
         
-            void StandardStream::print_list(std::ostream& os, const std::vector<int>& items){
+            void StandardStream::print_list(std::ostream& os, const std::vector<int>& items) {
                 int index = 1;
-                for (const auto& item: items){
+                for (const auto& item: items) {
                     os << index++ << ") value: " 
                     << item << ENDL;
                 }
             }
 
-            std::vector<std::string> StandardStream::read_lines(std::istream& is){
+            std::vector<std::string> StandardStream::read_lines(std::istream& is) {
                 std::vector<std::string> lines;
                 std::string line;
-                while(std::getline(is, line)){
+                while(std::getline(is, line)) {
                     lines.push_back(line);
                 }
                 return lines;
             }
 
-            void StandardStream::standard_output(){
+            void StandardStream::standard_output() {
                 /* output - czyli dane wychodzą gdzieś
                     - funkcja nie zna celu wyjśca wtedy mamy ostream jako parametr
                 */
@@ -46,7 +43,7 @@ namespace Knowledge{
                 std::filesystem::remove("numbers_list.txt");
             }
 
-            void StandardStream::standard_input(){
+            void StandardStream::standard_input() {
                 logger.debug() << "Enter some number" << ENDL; //  pisanie do stdout - terminala 
                 int number;
                 /*  czyta z stdin - z klawiatury
@@ -73,11 +70,11 @@ namespace Knowledge{
         /*---------------------------------------------------------------------------------------*/
         #pragma region FILE_STREAM_CLASS
             
-            void FileStream::write_data_out(){
+            void FileStream::write_data_out() {
                 /* tworzy nowy plik albo czyści , domyślne tryby
                     std::ios::out | std::ios::trunc */
                 std::ofstream out("notes.txt");
-                if(!out){
+                if(!out) {
                     logger.debug() << "Cannot open for override";
                     return;
                 }
@@ -85,18 +82,18 @@ namespace Knowledge{
                 std::filesystem::remove("notes.txt");
             }  // out.close(); // after went out of func
             
-            void FileStream::write_data_out_by_append(){
+            void FileStream::write_data_out_by_append() {
                 std::ofstream append_out("notes.txt", std::ios::app); // dopisuje std::ios::app - append
-                if(!append_out){
+                if(!append_out) {
                     logger.debug() << "Cannot open to append";
                     return;
                 }
                 append_out << "\n[NEW] one and last";
             }
             
-            void FileStream::read_from_in(){
+            void FileStream::read_from_in() {
                 std::ifstream in("notes.txt");
-                if (!in){
+                if (!in) {
                     std::cerr << "Cannot open notes.txt" << ENDL;
                     return;
                 }
@@ -107,7 +104,7 @@ namespace Knowledge{
                     std::getline(in, first_line);
                     bierze z buffora pierwszą linie i wstawia w zmienną 
                 */
-                while (std::getline(in, line)){
+                while (std::getline(in, line)) {
                     logger.debug() << "Line " << index++ << " content: " << line << ENDL; 
                 }
                 std::filesystem::remove("notes.txt");
@@ -117,7 +114,7 @@ namespace Knowledge{
         /*---------------------------------------------------------------------------------------*/
         #pragma region MEMORY_STREAM_CLASS
         
-            void MemoryStream::load_string_into_buffor(){
+            void MemoryStream::load_string_into_buffor() {
                 std::string text = "12 34 5 61\n";
                 /* Tekst trafia do buffora
                     bo chcesz na nim potem robić jakieś rzeczy
@@ -132,14 +129,14 @@ namespace Knowledge{
                         << ", d=" << d << ENDL;
             }
 
-            void MemoryStream::load_data_into_buffor(){
+            void MemoryStream::load_data_into_buffor() {
                 std::ostringstream out;
                 out << "Result: " << 27 << ENDL;
                 std::string text = out.str(); // pobiera z buffora
                 logger.debug() << "Content after loading from buffor " << text << ENDL;
             } 
 
-            void MemoryStream::read_and_write_data_to_buffor(){
+            void MemoryStream::read_and_write_data_to_buffor() {
                 std::stringstream sstream;
                 sstream << "123 451";
                 int first, second;
@@ -151,7 +148,7 @@ namespace Knowledge{
         /*---------------------------------------------------------------------------------------*/
         #pragma region FILE_SYSTEM_MANAGEMENT_CLASS
         
-            fs::path FileSystemManagment::create_paths(){
+            fs::path FileSystemManagment::create_paths() {
                 /*  tworzenie ścieżek
                     operator / - składa ścieżki */
                 fs::path user_path = "/home/user";
@@ -159,7 +156,7 @@ namespace Knowledge{
                 return scores_path;
             }
 
-            void FileSystemManagment::paths_management(fs::path path){
+            void FileSystemManagment::paths_management(fs::path path) {
                 logger.info() << "Getting basic elements of paths: (slices)" << ENDL;
                 logger.debug() << "[PATHS PARTS]" << ENDL
                     << "Filename: "   << path.filename()    << ENDL
@@ -183,7 +180,7 @@ namespace Knowledge{
                     << "  Temp dir      : " << fs::temp_directory_path() << ENDL;
             }
 
-            void FileSystemManagment::file_states(fs::path path){
+            void FileSystemManagment::file_states(fs::path path) {
                 logger.info() << "[FILE STATES]" << ENDL;
                 /*Czy istnieje i jakim jest plikiem*/
                 bool exists   = fs::exists(path);
@@ -205,7 +202,7 @@ namespace Knowledge{
                 }
             }
 
-            void FileSystemManagment::modification(fs::path file_path){
+            void FileSystemManagment::modification(fs::path file_path) {
                 logger.info() << "[FILE SYSTEM MANAGEMENT MODIFCATION]" << ENDL;
                 bool already_exists = fs::create_directory(file_path);
                 bool dirs_exists    = fs::create_directories(file_path);
@@ -220,11 +217,11 @@ namespace Knowledge{
                     file_path, fs::path("other/files"),
                     fs::copy_options::overwrite_existing 
                 );
-                for (const auto& file: fs::directory_iterator(file_path)){
+                for (const auto& file: fs::directory_iterator(file_path)) {
                     const fs::path& path = file.path();
                 }
 
-                for(const auto& file_rec: fs::recursive_directory_iterator(file_path)){\
+                for(const auto& file_rec: fs::recursive_directory_iterator(file_path)) {\
                     const fs::path& path = file_rec.path();
                 }
 
@@ -237,14 +234,14 @@ namespace Knowledge{
                 );
             }
 
-            void FileSystemManagment::get_file_from_resources(){
+            void FileSystemManagment::get_file_from_resources() {
                 try {
                     auto path = resource_path("scores.txt");
                     logger.info() << "Config path: " << path << ENDL; 
                     std::string loaded_text = load_text("scores.txt");
                     logger.info() << "Config path text: " << loaded_text<< ENDL; 
                 }
-                catch (const std::exception& ex){
+                catch (const std::exception& ex) {
                     logger.error() << "Error while reading resources: " << ex.what() << ENDL; 
                 }
             }
@@ -258,7 +255,7 @@ namespace Knowledge{
 
         #pragma region ALIASES_PLAYGROUND_CLASS
         
-            void AliasesPlayground::basic_aliases(){
+            void AliasesPlayground::basic_aliases() {
                 logger.info() << "BASIC ALIASES" << ENDL;
                 typedef unsigned long int UL_int;
                 using Ldouble = long double;
@@ -276,7 +273,7 @@ namespace Knowledge{
                 cb(12);
             }
             
-            void AliasesPlayground::template_aliases(){
+            void AliasesPlayground::template_aliases() {
                 logger.info() << "TEMPLATE ALIASES" << ENDL;
                 TypeVec<int> numbers{1,5,612,26};
                 StringMap<double> factors{
@@ -289,12 +286,12 @@ namespace Knowledge{
                 }
 
                 logger.debug() << "StringMap<double> factors:" << ENDL;
-                for (const auto& [key, value]: factors){
+                for (const auto& [key, value]: factors) {
                     logger.debug() << " " << key << "-" << value << ENDL;
                 }
             }
             
-            void AliasesPlayground::strong_types(){
+            void AliasesPlayground::strong_types() {
                 logger.info() << "STRONG TYPES" << ENDL;
                 UserIdAlias id1 = 10;
                 UserIdAlias id2 = 20;
@@ -309,7 +306,7 @@ namespace Knowledge{
                     << "UserId strong2.value = " << strong2.value << ENDL;
             }
         
-            void AliasesPlayground::play_with_variant_save_union(){
+            void AliasesPlayground::play_with_variant_save_union() {
                 logger.info() << "VARIANT PLAYGROUND" << ENDL; 
                 std::variant<std::string, int, double> values;
                 bool holds_integer = std::holds_alternative<int>(values);
@@ -317,7 +314,7 @@ namespace Knowledge{
                 values = 1;
                 logger.debug() << 
                     "Does hold it integer " << std::boolalpha << holds_integer << ENDL;
-                if (holds_integer){
+                if (holds_integer) {
                     logger.debug() 
                         << "Variant holds int type, which is index nr" << variant_index << ENDL
                         << "Value of integer is" <<  std::get<int>(values) << ENDL;
@@ -326,18 +323,18 @@ namespace Knowledge{
                     }
                 }
                 std::visit(
-                    [](auto&& value){
+                    [](auto&& value) {
                         logger.info() << "Received from variant: " << value << ENDL; 
                     },
                     values
                 );
             }
 
-            void AliasesPlayground::play_with_optional(){
+            void AliasesPlayground::play_with_optional() {
                 std::optional<int> numb = 42;
                 std::optional<int> other = std::nullopt;
                 bool has_numb_value = numb.has_value();
-                if (has_numb_value){
+                if (has_numb_value) {
                     logger.info()
                         << "Value via .value(): " << numb.value() << ENDL
                         << "Value via *numb   : " << *numb << ENDL;
@@ -352,35 +349,35 @@ namespace Knowledge{
         /*---------------------------------------------------------------------------------------*/
         #pragma region CASTING_PLAYGROUND_CLASS
         
-            void CastingPlayground::implicit_conversion(){
+            void CastingPlayground::implicit_conversion() {
                 double pi_double = 3.14562;
                 int converted_pi = pi_double;
                 logger.debug()
                     << "Implicit convert: "<<  converted_pi << ENDL;
             }
 
-            void CastingPlayground::convert_static_cast(){
+            void CastingPlayground::convert_static_cast() {
                 double var = 3.1561261;
                 int static_var = static_cast<int>(var); 
                 logger.debug()
                     << "Static convert: "<<  static_var << ENDL;
             }
 
-            void CastingPlayground::convert_const_cast(const int* value){
+            void CastingPlayground::convert_const_cast(const int* value) {
                 int* pointer = const_cast<int*>(value);
                 *pointer = 99; // nie polecane, ale możliwe
                 logger.debug()
                     << *pointer << ENDL;
             }
 
-            void CastingPlayground::convert_reinterpret_cast(){
+            void CastingPlayground::convert_reinterpret_cast() {
                 int value = 65;
                 char* ptr = reinterpret_cast<char*>(&value);
                 logger.debug()
                     << *ptr << ENDL;
             }
 
-            void CastingPlayground::convert_dynamic_cast(){
+            void CastingPlayground::convert_dynamic_cast() {
                 Base* base = new Derived;
                 Derived* derived = dynamic_cast<Derived*>(base);
                 if (derived) {
@@ -392,7 +389,7 @@ namespace Knowledge{
         /*---------------------------------------------------------------------------------------*/
         #pragma region POINTERS_PLAYGROUND_CLASS
         
-            void PointersPlayground::basic_pointer(){
+            void PointersPlayground::basic_pointer() {
                 /*  numb = wartosc 
                     ptr - adres pamieci
                     *ptr - dereferencja - idz pod adres i wex wartosc
@@ -406,19 +403,19 @@ namespace Knowledge{
                 logger.debug() << "Dereference after chage: " << *numb_ptr << ENDL;
             }
 
-            void PointersPlayground::pointer_to_structure(){
+            void PointersPlayground::pointer_to_structure() {
                 Person woman(21);
                 Person* struct_ptr = &woman;
                 struct_ptr->introduce();
             }
 
-            void PointersPlayground::allocate_memory_dynamic(){
+            void PointersPlayground::allocate_memory_dynamic() {
                 int* ptr = new int(10); // tworzy int w pamieci
                 logger.debug() << *ptr << ENDL;
                 delete ptr;
             }
 
-            void PointersPlayground::unique_pointer(){
+            void PointersPlayground::unique_pointer() {
                 std::unique_ptr<Person> marek = 
                     std::make_unique<Person>(51);
                 logger.debug()
@@ -427,7 +424,7 @@ namespace Knowledge{
                 auto f2 = std::move(marek);
             }
     
-            void PointersPlayground::shared_pointer(){
+            void PointersPlayground::shared_pointer() {
                 std::shared_ptr<Connection> sql_db, mongo_db;
                 sql_db = std::make_shared<Connection>();
                 sql_db->name = "SQL db";
@@ -495,14 +492,14 @@ namespace Knowledge{
                         << ENDL;
                 }
 
-                void EnumPlayground::enum_as_vector_type_iteration(){
+                void EnumPlayground::enum_as_vector_type_iteration() {
                     logger.info() << "[Vector<Enum type> iteration]" << ENDL;
                     constexpr std::array<RequestMethod, 3> all_requests = {
                         RequestMethod::GET,
                         RequestMethod::DELETE,
                         RequestMethod::POST
                     };
-                    for (auto request: all_requests){
+                    for (auto request: all_requests) {
                         logger.debug() 
                             << "Request: (int) " << static_cast<int>(request)
                             << ", As (string) " << request_method_to_string(request)
@@ -510,7 +507,7 @@ namespace Knowledge{
                     }
                 }
 
-                void EnumPlayground::mapping_enum_to_string(){
+                void EnumPlayground::mapping_enum_to_string() {
                     logger.info() << "[Mapping enum]" << ENDL;
                     RequestMethod method = RequestMethod::GET;
                     std::string method_str = request_method_to_string(method);
@@ -519,7 +516,7 @@ namespace Knowledge{
                         << ENDL;
                     RequestMethod get_method = RequestMethod::GET;
                     auto mapped_from_string = string_to_request_method(method_str);
-                    if (mapped_from_string != std::nullopt){
+                    if (mapped_from_string != std::nullopt) {
                         RequestMethod mapped_value = mapped_from_string.value();
                         logger.debug() << "Method: " << static_cast<int>(mapped_value) << ENDL;
                     }
@@ -587,7 +584,7 @@ namespace Knowledge{
                         << "Value: " << player_score.get_value() << ENDL;
                 }
 
-                void TemplatePlayground::template_as_vector_type(){
+                void TemplatePlayground::template_as_vector_type() {
                     logger.debug() << "[Templates] template_as_vector_type " << ENDL;
                     GenericItemsContainer<int> numbers(5);
                     numbers.add(10);
@@ -618,22 +615,22 @@ namespace Knowledge{
         #pragma region NAMESPACES_OBJECTS
             
             namespace Begin{
-                void print(){
+                void print() {
                     logger.debug() << "Namespace Begin " << ENDL;
                 }
             }
             
             namespace End{
-                void print(){
+                void print() {
                     logger.debug() << "Namespace End " << ENDL;
                 }
             }
 
-            void Out::Inner::read(){ 
+            void Out::Inner::read() { 
                 logger.debug() << "Reading in Inner" << ENDL;
             }
 
-            void Out::Inner::write(){
+            void Out::Inner::write() {
                 logger.debug() << "Writing in Inner" << ENDL;
             }
 
@@ -642,7 +639,7 @@ namespace Knowledge{
                 float y;
             };
 
-            void API::append_list(Vector_v1 vector){
+            void API::append_list(Vector_v1 vector) {
                 logger.debug() << "Appending to list from inline" << ENDL;
             }
 
@@ -650,10 +647,10 @@ namespace Knowledge{
                 float x;
                 float y;
                 public:
-                    float get_x(){
+                    float get_x() {
                         return x;
                     }
-                    float get_y(){
+                    float get_y() {
                         return y;
                     }
             };
@@ -671,7 +668,7 @@ namespace Knowledge{
 
         #pragma region COMPILE_TIME_PLAYGROUND
         
-            void CompilePlayground::compile_time_basic_definition(){
+            void CompilePlayground::compile_time_basic_definition() {
                 logger.info() << "[COMPILE BASICS]" << ENDL;
                 //  constexpr vs c const 
                 const int const_value = 512;
@@ -686,7 +683,7 @@ namespace Knowledge{
                 logger.debug() 
                     << "constexpr int board_number" << board_number ; 
 
-                for (auto& numb: numbers){
+                for (auto& numb: numbers) {
                     logger.debug()
                         << "Value from compile numbers: " << numb << ENDL;
                 }
@@ -712,24 +709,28 @@ namespace Knowledge{
             
             void CompilePlayground::only_compile_time_functions() {
                 logger.info() << "[CONSTEVAL FUNCTIONS]" << ENDL;
-                constexpr int id = make_id(51);
-                int x = 5;
-                // int id_rt = make_id(x); // nie, bo wymaga ct value 
-                logger.debug()
-                    << "constexpr make_id(7): "
-                    << id << ENDL;
+                #if __cplusplus >= 202002L // C++ 20
+                    constexpr int id = make_id(51);
+                    int x = 5;
+                    // int id_rt = make_id(x); // nie, bo wymaga ct value 
+                    logger.debug()
+                        << "constexpr make_id(7): "
+                        << id << ENDL;
+                #endif
             }
             
             void CompilePlayground::only_compile_time_inicialization() {
                 logger.info() << "[CONSTINIT EXPLANATION]" << ENDL;
-                logger.debug() <<
-                    "Var counter already inicialized in ct: "
-                    << global_counter << ENDL;
-                // moze byc zmienialna
-                global_counter++;
-                logger.debug()
-                    << "Po zmianie: "
-                    << global_counter << ENDL;
+                #if __cplusplus >= 202002L
+                    logger.debug() <<
+                        "Var counter already inicialized in ct: "
+                        << GLOBAL_COUNTER << ENDL;
+                    // moze byc zmienialna
+                    GLOBAL_COUNTER++;
+                    logger.debug()
+                        << "Po zmianie: "
+                        << global_counter << ENDL;
+                #endif
             }
             
             void CompilePlayground::compile_time_in_classes() {
@@ -759,11 +760,11 @@ namespace Knowledge{
 
         #pragma region PREPROCESSOR_METHODS
         
-            double circle_area(double radius){
+            double circle_area(double radius) {
                 return PI * radius * radius; 
             }
 
-            void all(){
+            void all() {
                 double area = circle_area(5);
                 logger.debug() << "Area: " << area << ENDL;
                 // usage of SQUARE macro
@@ -783,18 +784,18 @@ namespace Knowledge{
 
             #pragma region PRIVATE_SPECIFICATOR_CLASS
             
-                void PrivateSpecificator::start(){
+                void PrivateSpecificator::start() {
                     velocity = 50; // this.velocity
                 }
 
-                void PrivateSpecificator::compare(const PrivateSpecificator& diff){
+                void PrivateSpecificator::compare(const PrivateSpecificator& diff) {
                     logger.debug() 
                         << "Comparing: [" << velocity - diff.velocity 
                         << "]" << ENDL;  
                     velocity = diff.velocity;
                 }
                 
-                void SpecificatorPlayground::private_spec_introduce(){
+                void SpecificatorPlayground::private_spec_introduce() {
                     logger.info() << "[PRIVATE SPECIFICATOR]" << ENDL;
                     PrivateSpecificator priv_spec_a, priv_spec_b;
                     priv_spec_a.start();
@@ -812,12 +813,12 @@ namespace Knowledge{
             /*---------------------------------------------------------------------------------------*/
             #pragma region PUBLIC_SPECIFICATOR_CLASS
             
-                void PublicSpecificator::set_and_show(){
+                void PublicSpecificator::set_and_show() {
                     scores = 51.2;
                     logger.info() << "Scores: " << scores << ENDL;
                 }
             
-                void SpecificatorPlayground::public_spec_introduce(){
+                void SpecificatorPlayground::public_spec_introduce() {
                     logger.info() << "[PUBLIC SPECIFICATOR]" << ENDL;
                     PublicSpecificator allowed;
                     allowed.set_and_show();
@@ -839,7 +840,7 @@ namespace Knowledge{
                     show_shield(); // has access
                 }
                 
-                void SpecificatorPlayground::protected_spec_introduce(){
+                void SpecificatorPlayground::protected_spec_introduce() {
                     logger.info() << "[PROTECTED SPECIFICATOR]" << ENDL;
                     ProtectedSpecificator family;
                     family.show_shield();
@@ -859,26 +860,26 @@ namespace Knowledge{
 
             #pragma region CONSTRUCTOR_CLASS
                 
-                Constructor::Constructor(){
+                Constructor::Constructor() {
                     _name = "none";
                     logger.info() << "Default object created" << ENDL;
                 }
 
-                Constructor::Constructor(std::string name){
+                Constructor::Constructor(std::string name) {
                     _name = name;
                     logger.info() 
                         << "Object with " << name << " name created" << ENDL;
                 }
 
                 Constructor::Constructor(std::string name, int threshold)
-                    : _name(name), _threshold(threshold){
+                    : _name(name), _threshold(threshold) {
                     logger.info() 
                         << "Object inicialized with list (" 
                         << name << ", " 
                         << threshold <<  " params created" << ENDL;
                 }
 
-                void Constructor::introduce(){
+                void Constructor::introduce() {
                     logger.debug()
                         << "Constructor attributes: ["
                         << _name << ", "
@@ -889,9 +890,9 @@ namespace Knowledge{
             /*---------------------------------------------------------------------------------------*/
             #pragma region DESTRUCTOR_CLASS
                 
-                Destructor::Destructor(){
+                Destructor::Destructor() {
                     _notes_file_hook.open("notes.txt");
-                    if (!_notes_file_hook){
+                    if (!_notes_file_hook) {
                         std::cerr << "Cannot open notes.txt file" << ENDL;
                         return;
                     }
@@ -900,9 +901,9 @@ namespace Knowledge{
                     }
                 }
 
-                Destructor::Destructor(std::string path){
+                Destructor::Destructor(std::string path) {
                     _notes_file_hook.open(path);
-                    if (!_notes_file_hook){
+                    if (!_notes_file_hook) {
                         std::cerr << "Cannot open " << path << "path" << ENDL;
                         return;
                     }
@@ -911,8 +912,8 @@ namespace Knowledge{
                     }
                 }
 
-                Destructor::~Destructor(){
-                    if(_notes_file_hook.is_open()){
+                Destructor::~Destructor() {
+                    if(_notes_file_hook.is_open()) {
                         _notes_file_hook.close();
                         logger.info() << "Hook closed properly" << ENDL;
                     }
@@ -923,7 +924,7 @@ namespace Knowledge{
             /*---------------------------------------------------------------------------------------*/
             #pragma region LIFE_CYCLE_PLAYGROUND_CLASS
                 
-                void LifeCyclePlayground::basic_constructor(){
+                void LifeCyclePlayground::basic_constructor() {
                     logger.info() << "[CONSTRUCTOR INTRODUCTION]" << ENDL;
                     Constructor default_one;
                     Constructor with_parameter("Pretty");
@@ -933,7 +934,7 @@ namespace Knowledge{
                     inicialized_list.introduce();
                 }
 
-                void LifeCyclePlayground::basic_destructor(){
+                void LifeCyclePlayground::basic_destructor() {
                     logger.info() << "[DESTRUCTOR INTRODUCTION]" << ENDL;
                     Destructor destructor;
                     Destructor destructor_with_param("other.json");
@@ -950,8 +951,8 @@ namespace Knowledge{
 
             #pragma region ACCESS_GATES_CLASS
                 
-                AccessGates::AccessGates(int amount, int item){
-                    if (amount < 0){
+                AccessGates::AccessGates(int amount, int item) {
+                    if (amount < 0) {
                         throw std::invalid_argument(
                             "Amount of vector elements cannot be negative"
                         );
@@ -969,8 +970,8 @@ namespace Knowledge{
                     return _gates;
                 }
 
-                void AccessGates::set_amount(int new_amount){
-                    if (new_amount < 0){
+                void AccessGates::set_amount(int new_amount) {
+                    if (new_amount < 0) {
                         std::cerr << "Vector cannot have negative amount of elements" << ENDL;
                         return;
                     }
@@ -985,14 +986,14 @@ namespace Knowledge{
                             // raise Exception if not have index
                             _gates.at(id) = new_gates.at(id); 
                         }
-                        catch(const std::out_of_range& range_exception){
+                        catch(const std::out_of_range& range_exception) {
                             std::cerr << "Element " << new_gates.at(id) << " has index out of range" << ENDL;
                             logger.error() << "Exception " << range_exception.what() << ENDL;
                         }
                     }
                 }
 
-                void demonstrate_gates(){
+                void demonstrate_gates() {
                     logger.debug() << "[Getters & Setters INTRODUCTION]" << ENDL;
                     AccessGates gates(5, 12);
                     logger.debug() 
@@ -1021,7 +1022,7 @@ namespace Knowledge{
                 }
 
                 Employee::Employee(std::string name, int age, double salary)
-                  : name(std::move(name)), age(age), salary(salary){
+                  : name(std::move(name)), age(age), salary(salary) {
                     logger.debug() 
                         << "Employee ["   << name   << ", " << age    << ", " 
                         << salary << ", " << "] - created successfully" << ENDL;
@@ -1041,7 +1042,7 @@ namespace Knowledge{
                     stats.show_stats();
                 }
 
-                void StructuresPlayground::creation_ways(){
+                void StructuresPlayground::creation_ways() {
                     logger.info() << "[Structure creation]" << ENDL;
                     Employee default_one;
                     // mamy dostep wiec możemy ustawiać wartości
@@ -1062,7 +1063,7 @@ namespace Knowledge{
                     with_constructor.print();
                 }
             
-                void StructuresPlayground::nested_structs(){
+                void StructuresPlayground::nested_structs() {
                     logger.info() << "[NEsted Structures]" << ENDL;
                     // zagnieżdżone struktury
                     Stats base_stats{100, 25, 10};
@@ -1085,7 +1086,7 @@ namespace Knowledge{
             #pragma region INHERITANCE_CLASSES
 
                 Animal::Animal(int legs)
-                    : _legs(legs){
+                    : _legs(legs) {
                     logger.debug() << "Animal created" << ENDL;
                 }
 
@@ -1103,18 +1104,18 @@ namespace Knowledge{
                 }
 
                 Dog::Dog(int legs, std::string name)
-                    : Animal(legs), _name(std::move(name)){
+                    : Animal(legs), _name(std::move(name)) {
                     logger.debug() 
                         << "Dog with amount of legs" << ENDL;
                 }
 
-                void Dog::introduce(){
+                void Dog::introduce() {
                     logger.debug() 
                         << "Dog " << _name 
                         << ", legs: " << count_legs() << ENDL; 
                 }
             
-                void inheritance_introduction(){
+                void inheritance_introduction() {
                     logger.info() << "[INHERITANCE INTRODUCTION]" << ENDL;
                     Inheritance::Dog burek;
                     burek.introduce();    
@@ -1133,8 +1134,8 @@ namespace Knowledge{
             
             #pragma region POLIMORPHIS_CLASSES_AND_INTERFACES
 
-                void broadcast(const Notifications& notifications, const std::string& message){
-                    for (const auto& notify: notifications){
+                void broadcast(const Notifications& notifications, const std::string& message) {
+                    for (const auto& notify: notifications) {
                         notify->send(message);
                     }
                 }
@@ -1143,12 +1144,12 @@ namespace Knowledge{
                     const std::vector<std::unique_ptr<IProcessor>>& steps,
                     const std::string& input_text)
                 {
-                    for (const auto& step: steps){
+                    for (const auto& step: steps) {
                         step->process(input_text);
                     }
                 }
 
-                void show_polymorphism(){
+                void show_polymorphism() {
                     logger.debug() << "[Polymorhpysm INTROCUTION]" << ENDL;
                     Notifications notifications;
                     notifications.push_back(
@@ -1181,7 +1182,7 @@ namespace Knowledge{
     namespace ExceptionsKnow {
         #pragma region EXCEPTIONS_PLAYGROUND_CLASS
 
-            ExceptionHandling::ExceptionHandling(int arg) : _arg(arg){
+            ExceptionHandling::ExceptionHandling(int arg) : _arg(arg) {
                 throwing_one();
             }
 
@@ -1204,11 +1205,11 @@ namespace Knowledge{
                 _what = exception_message.str();
             }
 
-            void ExceptionHandling::throwing_one(){
+            void ExceptionHandling::throwing_one() {
                 if (_arg < 0) {
                     throw std::invalid_argument("Arg must be >= 0");
                 }
-                else if (_arg == 5){
+                else if (_arg == 5) {
                     throw CustomException("Should not be 5");
                 }
                 else {
@@ -1222,17 +1223,17 @@ namespace Knowledge{
                 try {
                     ExceptionHandling handling(-2);
                 }
-                catch(const std::invalid_argument& arg_err){
+                catch(const std::invalid_argument& arg_err) {
                     logger.error() 
                         << "Argument error: " 
                             << arg_err.what() << ENDL;
                 }
-                catch(const std::exception& reg_err){
+                catch(const std::exception& reg_err) {
                     logger.error() 
                         << "Other error: " 
                             << reg_err.what() << ENDL;
                 }
-                catch(...){
+                catch(...) {
                     logger.error() << "Unknown error" << ENDL;
                 }
             }
@@ -1243,7 +1244,7 @@ namespace Knowledge{
                 try {
                     ExceptionHandling handling_custom(5);
                 }
-                catch(const CustomException::exception& custom_err){
+                catch(const CustomException::exception& custom_err) {
                     logger.error() << "Custom error: " << custom_err.what() << ENDL;
                 }
             }
@@ -1252,7 +1253,7 @@ namespace Knowledge{
                 try {
                     ExceptionHandling handling_custom(12);
                 }
-                catch(const CustomWithFields& custom_adv_err){
+                catch(const CustomWithFields& custom_adv_err) {
                     logger.error() << "Custom error: " << custom_adv_err.what() << ENDL;
                 }
         }
@@ -1269,7 +1270,7 @@ namespace Knowledge{
             StringOperation::StringOperation(std::string base)
                 : base_text(base) {}
         
-            void StringOperation::access_string_attributes(){
+            void StringOperation::access_string_attributes() {
                 logger.info() << "[Access to strings]" << ENDL;
                 int word_buffor_size = base_text.size();
                 int word_length = base_text.length();
@@ -1294,42 +1295,42 @@ namespace Knowledge{
                 #endif
             }
 
-            void StringOperation::modification_without_return(){
+            void StringOperation::modification_without_return() {
                 logger.info() << "[String modification without return]" << ENDL;
                 std::string backup = base_text;
                 log_modification(
                     "push_back() dopisanie znaku na koncu",
                     backup,
-                    [](std::string& str){ str.push_back('!'); }
+                    [](std::string& str) { str.push_back('!'); }
                 );
                 log_modification(
                     "+= dodawanie słów do siebie",
                     backup,
-                    [](std::string& str){ str += "and more | "; }
+                    [](std::string& str) { str += "and more | "; }
                 );
                 log_modification(
                     "append(str, 10) dodawanie ze sprecyzowaniem długości dodawanej",
                     backup,
-                    [](std::string& str){ str.append("add at | the end", 10); }
+                    [](std::string& str) { str.append("add at | the end", 10); }
                 );
                 log_modification(
                     "insert(str, 10), wrzucenie w dane miejsce",
                     backup,
-                    [](std::string& str){ str.insert(5, "in the middle | "); }
+                    [](std::string& str) { str.insert(5, "in the middle | "); }
                 );
                 log_modification(
                     "erase(0, 4), czyszczenie <od, do>",
                     backup,
-                    [](std::string& str){ str.erase(0, 4); }
+                    [](std::string& str) { str.erase(0, 4); }
                 );
                 log_modification(
                     "replace(1, 5, str), podmiana fragmentu na innych",
                     backup,
-                    [](std::string& str){ str.replace(1, 5, "some"); }
+                    [](std::string& str) { str.replace(1, 5, "some"); }
                 );
             }
 
-            void StringOperation::modification_with_return(){
+            void StringOperation::modification_with_return() {
                 logger.info() << "[String modification with return]" << ENDL; 
                 // base_text.clear();
                 std::string str_fragment = base_text.substr(0, 5); 
@@ -1350,12 +1351,12 @@ namespace Knowledge{
                 char upper_case = std::toupper(lower_case);
             }
 
-            void StringOperation::searching(){
+            void StringOperation::searching() {
                 logger.info() << "[Searching inside string]" << ENDL;
                 logger.debug()
                     << "find(char) zwraca pozycje wystapienia znaku" << ENDL;
                 auto sign_position = base_text.find('=');
-                if (sign_position != std::string::npos){
+                if (sign_position != std::string::npos) {
                     std::string before_eq = base_text.substr(0, sign_position);            // [0, pos)
                     std::string after_eq  = base_text.substr(sign_position + 1);
                     logger.debug() 
@@ -1393,15 +1394,17 @@ namespace Knowledge{
                 // find_last_of | .find_last_not_of  tak samo tylko ostatni
                 
                 // boolean - true jesli zaczyna sie
-                bool starts_conf = base_text.starts_with("conf");
-                bool ends_yaml   = base_text.ends_with(".yaml");
-                logger.debug()
-                    << "starts_with(conf): " << std::boolalpha << starts_conf << ENDL
-                    << "ends_with(.yaml): "  << std::boolalpha << ends_yaml   << ENDL;
+                #if __cplusplus >= 202002L
+                    bool starts_conf = base_text.starts_with("conf");
+                    bool ends_yaml   = base_text.ends_with(".yaml");
+                    logger.debug()
+                        << "starts_with(conf): " << std::boolalpha << starts_conf << ENDL
+                        << "ends_with(.yaml): "  << std::boolalpha << ends_yaml   << ENDL;
+                #endif
                 // base_text.contains("fig") 
             }
 
-            void StringOperation::triming_white_spaces(){
+            void StringOperation::triming_white_spaces() {
                 const std::string_view white_spaces_group = " \t\r\n";
                 size_t left_position = base_text.find_first_not_of(white_spaces_group);
                 size_t right_position = base_text.find_last_not_of(white_spaces_group);
@@ -1440,7 +1443,7 @@ namespace Knowledge{
                 regex_replace - zamienia dopasowane fragment na innych text
         */
 
-            void RegexPlayground::sign_classes(){
+            void RegexPlayground::sign_classes() {
                 /*
                 | Wzorzec | Znaczenie                        | Przykład dopasowania |
                 | ------- | -------------------------------- | -------------------- |
@@ -1454,21 +1457,21 @@ namespace Knowledge{
                 logger.info() << dots << "[Regex sign classes]" << ENDL;
                 std::string text = "User42 id=77";
                 std::regex digits(R"(\d+)");
-                if (std::regex_search(text, digits)){
+                if (std::regex_search(text, digits)) {
                     logger.debug() << "Found digits" << ENDL;
                 }
                 std::regex word_or_char(R"(\W+)");
-                if (std::regex_search(text, word_or_char)){
+                if (std::regex_search(text, word_or_char)) {
                     logger.debug() << "Found word characters" << ENDL;
                 }
                 std::regex white_spaces(R"(\s+)");
-                if (std::regex_search(text, white_spaces)){
+                if (std::regex_search(text, white_spaces)) {
                     logger.debug() << "Found whitespace" << ENDL;
                 }
                 
             }
         
-            void RegexPlayground::anchors(){
+            void RegexPlayground::anchors() {
                 /*
                 | Wzorzec | Znaczenie        |
                 | ------- | ---------------- |
@@ -1492,7 +1495,7 @@ namespace Knowledge{
                     logger.debug() << "'good' ends with World" << ENDL;
             }
 
-            void RegexPlayground::qualifiers(){
+            void RegexPlayground::qualifiers() {
                 /*
                 | Wzorzec | Znaczenie             |
                 | ------- | --------------------- |
@@ -1527,7 +1530,7 @@ namespace Knowledge{
                     logger.debug() << "Found exactly 'aaa'" << ENDL;
             } 
 
-            void RegexPlayground::groups_alternatives(){
+            void RegexPlayground::groups_alternatives() {
                 /*
                 | Wzorzec     | Znaczenie                                   |                   |
                 | ----------- | ------------------------------------------- | ----------------- |
@@ -1554,7 +1557,7 @@ namespace Knowledge{
                     logger.debug() << "Found using non-capturing group" << ENDL;
             }
             
-            void RegexPlayground::signs_sets(){
+            void RegexPlayground::signs_sets() {
                 /*
                 | Wzorzec  | Znaczenie               |
                 | -------- | ----------------------- |
@@ -1583,7 +1586,7 @@ namespace Knowledge{
                     logger.debug() << "Found digits in string" << ENDL;
             }
             
-            void RegexPlayground::signs_escape(){
+            void RegexPlayground::signs_escape() {
                 /*
                     | Znak     | Musisz pisać |
                     | -------- | ------------ |
@@ -1615,7 +1618,7 @@ namespace Knowledge{
                     logger.debug() << "Found literal question mark" << ENDL;
             }
 
-            void RegexPlayground::match(){
+            void RegexPlayground::match() {
                 logger.info() << dots << "[Regex FULL match]" << ENDL;
                 // 1. Email – cały string musi pasować
                 std::string email = "admin@example.com";
@@ -1664,7 +1667,7 @@ namespace Knowledge{
                         scores.begin(),
                         scores.end(),
                         pair
-                    ), end; it != end; ++it){
+                    ), end; it != end; ++it) {
                     logger.debug()
                         << "Name: " << (*it)[1]
                         << ", Score: " << (*it)[2] << ENDL;
@@ -1704,7 +1707,7 @@ namespace Knowledge{
 
         #pragma region VECTOR_PLAYGROUND_CLASS
 
-            void VectorPlayground::creation_ways(){
+            void VectorPlayground::creation_ways() {
                 logger.info() << "[Vector - CREATION WAYS]" << ENDL;
                 std::vector<int> empty_vector; 
                 log_vector_state("Empty vector", empty_vector);
@@ -1723,7 +1726,7 @@ namespace Knowledge{
                 
             }
             
-            void VectorPlayground::access_and_safety(){
+            void VectorPlayground::access_and_safety() {
                 logger.info() << "[Vector -- ACCESS && SAFETY]" << ENDL;
                 std::vector<int> data = {10, 21, 34, 56, 73};
                 
@@ -1739,7 +1742,7 @@ namespace Knowledge{
                     int value = data.at(100);
                     logger.debug() << "success or exception?";
                 }
-                catch (const std::out_of_range& range_exception){
+                catch (const std::out_of_range& range_exception) {
                     logger.error() 
                         << "Exception caught cause of: " 
                         << range_exception.what() << ENDL;
@@ -1793,7 +1796,7 @@ namespace Knowledge{
                 
             }
 
-            void VectorPlayground::iteration(){
+            void VectorPlayground::iteration() {
                 logger.info() << "[Vector - ITERATION]" << ENDL;
                 std::vector<double> doubles = {12.667, 512.51267, -133.5787};
 
@@ -1830,12 +1833,12 @@ namespace Knowledge{
                     Zobaczyć zawartość *it ->it
                 */
                 logger.debug() << "By iterator " << ENDL;
-                for (auto it = doubles.begin(); it != doubles.end(); it++){
+                for (auto it = doubles.begin(); it != doubles.end(); it++) {
                     logger.info() << "Iter: " << *it << ENDL;
                 }
             }
             
-            void VectorPlayground::sort_and_algorithms(){
+            void VectorPlayground::sort_and_algorithms() {
                 logger.info() << "[Vector - soft and algorithms]" << ENDL;
                 std::vector<unsigned int> positive{5,6,12,73,8};
                 logger.debug() << "Sort ascending - up" << ENDL;
@@ -1874,7 +1877,7 @@ namespace Knowledge{
                 };
                 log_vector_state("Players before sorting", players);
                 std::sort(players.begin(), players.end(),
-                    [](const Player& first, const Player& second){
+                    [](const Player& first, const Player& second) {
                         return first.score > second.score;
                     }
                 );
@@ -1885,7 +1888,7 @@ namespace Knowledge{
         /*---------------------------------------------------------------------------------------*/
         #pragma region MAP_PLAYGROUND_CLASS
         
-            void MapPlayground::creation(){
+            void MapPlayground::creation() {
                 logger.info() << "[MAP - CREATION WAYS]" << ENDL;
 
                 std::map<int, std::string> empty_map;
@@ -1923,7 +1926,7 @@ namespace Knowledge{
                 log_map_state("From iterator range", from_iterator);
             }
 
-            void MapPlayground::access_and_safety(){
+            void MapPlayground::access_and_safety() {
                 logger.info() << "[MAP - ACCESS AND SAFETY]" << ENDL;
 
                 std::map<std::string, int> scores = {
@@ -1943,23 +1946,25 @@ namespace Knowledge{
                         << "Person score: (not gonna happen)" 
                         << personScore << ENDL;
                 }
-                catch(const std::out_of_range& exception){
+                catch(const std::out_of_range& exception) {
                     logger.error() 
                         << "Exception caught: " 
                         << exception.what() << " (Key not found)" << ENDL;
                 }
                 
                 logger.debug() << "Check if key exists: " << ENDL;
-                if (scores.contains("Alice")) logger.info() << "Found" << ENDL;
-                else logger.error() << "Not found" << ENDL;
-                
+                #if __cplusplus >= 202002L
+                    if (scores.contains("Alice")) logger.info() << "Found" << ENDL;
+                    else logger.error() << "Not found" << ENDL;
+                #endif
+
                 logger.debug()
                     << ".find() searches for element with key, "
                     << "if found - returns iterator to element"
                     << "if not - return map.end()" << ENDL;
 
                 auto it = scores.find("Alice");
-                if (it != scores.end()){
+                if (it != scores.end()) {
                     logger.debug()
                         << "Found Alice with value: "
                         << it->second << ENDL;
@@ -1967,7 +1972,7 @@ namespace Knowledge{
                 
             }
 
-            void MapPlayground::modification_and_merging(){
+            void MapPlayground::modification_and_merging() {
                 logger.info() << "[MAP- MODIFICATION AND MERGIN]" << ENDL;
                 std::map<int, int> dict;
 
@@ -2008,13 +2013,13 @@ namespace Knowledge{
 
             }
 
-            void MapPlayground::iteration(){
+            void MapPlayground::iteration() {
                 logger.info() << "[MAP ITERATION]" << ENDL;
                 std::map<int, int> squares = {
                     {1, 1}, {2, 4}, {3, 9}
                 };
                 logger.debug() << "Iteration by [key, value]: " << ENDL; 
-                for (const auto& [number, sq]: squares){
+                for (const auto& [number, sq]: squares) {
                     logger.debug()
                         << "Number: " << number << "^2 = " << sq << ENDL;
                 }
@@ -2025,7 +2030,7 @@ namespace Knowledge{
                 }
             }
             
-            void MapPlayground::custom_sorting_behavior(){
+            void MapPlayground::custom_sorting_behavior() {
                 logger.info() << "[MAP - CUSTOM SORTING]" << ENDL;
                 logger.debug()
                     << "Mapy sortują się same. Ale co jeśli chcemy odwrotnie (malejąco)?" << ENDL
@@ -2042,7 +2047,7 @@ namespace Knowledge{
                 logger.debug() << oss.str() << ENDL;
             }
 
-            void MapPlayground::pair_usage_scenarios(){
+            void MapPlayground::pair_usage_scenarios() {
                 logger.info() << "[ PAIR usage scenario]" << ENDL;
 
                 logger.debug() << "pair creation" << ENDL;
@@ -2085,7 +2090,7 @@ namespace Knowledge{
                 
                 // Sortowanie po wyniku (second)
                 std::sort(ranking.begin(), ranking.end(), 
-                    [](const auto& a, const auto& b){
+                    [](const auto& a, const auto& b) {
                         return a.second > b.second; // Malejąco po punktach
                     }
                 );
@@ -2106,7 +2111,7 @@ namespace Knowledge{
 
         #pragma region LAMBDA_PLAGROUND_CLASS
 
-            void LambdaPlayground::syntax_and_basics(){
+            void LambdaPlayground::syntax_and_basics() {
                 logger.info() << "[LABMDA - syntax & basics]" << ENDL;
                 logger.debug()
                     << "IIFGE - immediately invoked function expression" << ENDL
@@ -2182,15 +2187,15 @@ namespace Knowledge{
             void LambdaPlayground::run_times(
                 size_t iter_amount,
                 const std::function<void(int)>& action
-            ){
-                for (int index = 0; index < iter_amount; index++){
+            ) {
+                for (int index = 0; index < iter_amount; index++) {
                     logger.debug() 
                         << "Runnig action " << index << " time." << ENDL;
                     action(index);
                 }
             }
 
-            void LambdaPlayground::std_function_wrapper(){
+            void LambdaPlayground::std_function_wrapper() {
                 logger.info() << "[LAMBDA STD::FUNCTION]" << ENDL;
                 logger.debug()
                     << "std::function to 'pudełko' na cokolwiek co da się wywołać " << ENDL
@@ -2205,12 +2210,12 @@ namespace Knowledge{
                 run_times(3, printer);
             }
 
-            void LambdaPlayground::modern_lambdas(){
+            void LambdaPlayground::modern_lambdas() {
                 logger.info() << "[LAMBDA] MODERN C++14/20" << ENDL;
                 /* 1. Generic Lambda (C++14) - parametr auto
                 Działa jak szablon. Jedna lambda obsłuży int, string, double.
                 */
-                auto print_anything = [](const auto& value){
+                auto print_anything = [](const auto& value) {
                     logger.debug()
                         << "Generic print: " << value << ENDL;
                 };
@@ -2220,7 +2225,7 @@ namespace Knowledge{
                 /* 2. Capture Initialization (C++14)
                     Można stworzyć nową zmienną tylko dla lambdy.
                 */
-                auto moved_lambda = [ptr = std::make_unique<int>(10)](){
+                auto moved_lambda = [ptr = std::make_unique<int>(10)]() {
                     logger.debug() 
                         << "I own a unique_ptr inside lambda: " 
                         << *ptr << ENDL;
@@ -2233,7 +2238,7 @@ namespace Knowledge{
         /*---------------------------------------------------------------------------------------*/
         #pragma region UTILITY_PLAGROUND_CLASS
 
-            void UtilityPlayground::char_operations(){    
+            void UtilityPlayground::char_operations() {    
                 logger.info() << "[UTILS] CHAR CHECKS " << ENDL;
                 /*
                     isdigit(int char)

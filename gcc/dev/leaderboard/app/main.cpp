@@ -16,13 +16,13 @@ const std::string BOARD_DUMMY_DATA =
     "Alice:10\n"
     " coup er: 83\n";
 
-int main(){
+int main() {
     Leaderboard board;
     LeaderboardResults results = parse_name_score_lines(BOARD_DUMMY_DATA);
     std::string score_results = load_text("scores.txt");
 
     bp::LeaderboardResults results = bp::parse_name_score_lines(score_results);
-    for(bp::BoardResult result: results){
+    for(bp::BoardResult result: results) {
         logger.info() 
             << "[BOARD RESULT]: t" 
             << result.first << ", " << result.second << "\n";
@@ -33,10 +33,10 @@ int main(){
     board.print(std::cout, 5);
     auto mediana = board.mediana();
     auto average = board.average();
-    if (mediana != std::nullopt){
+    if (mediana != std::nullopt) {
         std::cout << "Mediana: " << *mediana << std::endl;
     }
-    if (average != std::nullopt){
+    if (average != std::nullopt) {
         std::cout << "Srednia: " << *average << std::endl;
     }
 

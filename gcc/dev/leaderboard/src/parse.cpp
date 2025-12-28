@@ -5,14 +5,14 @@ namespace bp = board::parser;
 //--------------------------------------------
 bp::LeaderboardResults bp::parse_name_score_lines(
     std::string scores_input
-){
+) {
     bp::LeaderboardResults results;
     std::istringstream scores_buffor(scores_input);
     std::string buffor_line;
     while(std::getline(scores_buffor, buffor_line)) {
         try {
             auto items = bp::retrieve_scores_items(buffor_line);
-            if (!items){
+            if (!items) {
                 logger.error() << "Buffor line is not compatible\n"; 
                 continue;
             } 
@@ -21,7 +21,7 @@ bp::LeaderboardResults bp::parse_name_score_lines(
             
             if(!std::holds_alternative<std::string>(name_value)
                 || !std::holds_alternative<int>(score_value)
-            ){
+            ) {
                 logger.error() << "Type missmatch after cleanbp\n";
                 continue;
             }

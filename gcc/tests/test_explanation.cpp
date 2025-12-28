@@ -44,7 +44,7 @@ Podstawowe:
         porównania float/double
 
 */
-TEST_CASE("add: simple addition"){
+TEST_CASE("add: simple addition") {
     CHECK(
         add(2,2) == 4
     );
@@ -154,26 +154,26 @@ struct DbFixture {
     DbFixture() {
         // setup, otwarcie połączenia, załadowanie danych, plików
     }
-    ~DbFixture(){
+    ~DbFixture() {
         // teardown, zamkniecie połlączenie, usuniecie danych
     }
 };
 
-TEST_CASE_FIXTURE(DbFixture, "db: simple connection"){
+TEST_CASE_FIXTURE(DbFixture, "db: simple connection") {
     bump(); // można używać metod z fixtury bez prefixu
     CHECK(counter == 1);
 }
 
-TEST_CASE_FIXTURE(DbFixture, "db: callculate value, subcases"){
-    SUBCASE("add"){
+TEST_CASE_FIXTURE(DbFixture, "db: callculate value, subcases") {
+    SUBCASE("add") {
         value += 5; 
         CHECK(value == 15);
     }
-    SUBCASE("multiple"){
+    SUBCASE("multiple") {
         value *= 3;
         CHECK(value == 30);
     }
-    SUBCASE("reset"){
+    SUBCASE("reset") {
         value = 0;
         CHECK(value == 0);
     }

@@ -25,7 +25,7 @@ inline static fs::path resource_path(const fs::path& relative) {
     return project_root() / "resources" / relative;
 }
 
-inline std::string load_text(const fs::path& rel){
+inline std::string load_text(const fs::path& rel) {
     auto path = resource_path(rel);
     std::ifstream input(
         path, std::ios::binary

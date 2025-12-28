@@ -6,7 +6,7 @@
 void Leaderboard::set_score(
     std::string name, int score
 ) {
-    if (!name.empty() && score > 0){
+    if (!name.empty() && score > 0) {
         _data.insert_or_assign(name, score);
     }
     else {
@@ -43,7 +43,7 @@ bp::LeaderboardResults Leaderboard::top(std::size_t amount) const {
     ); // kopia
 
     std::sort(results_copy.begin(),results_copy.end(),
-        [](bp::BoardResult prev, bp::BoardResult next){
+        [](bp::BoardResult prev, bp::BoardResult next) {
             return prev.second > next.second;
         }
     );
@@ -57,7 +57,7 @@ void Leaderboard::print(std::ostream& os, std::size_t n) const {
     std::string line;
     int index = 1;
     bp::LeaderboardResults results = top(n);
-    for (const auto&[name, score]: results){
+    for (const auto&[name, score]: results) {
         os << index++ << ") " << name << " " << score << "\n";
     }
 }

@@ -35,7 +35,7 @@ Api do parsowania: parse.hpp / parse.cpp
             {
                 {"Alice",10},{"Bob",7}
             }
-    */
+    */"
 
 Klasa LeaderBoard:
     Przechowuj wyniki w:

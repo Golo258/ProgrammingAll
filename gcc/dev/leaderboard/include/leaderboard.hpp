@@ -48,7 +48,6 @@ class Leaderboard {
             return _data.end();
         }
 
-
         //  wypisanie w formacie 1) Alice 4\n2) Bob 7\n...
         void print(std::ostream& os, std::size_t best_players_nr) const;
     

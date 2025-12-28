@@ -59,8 +59,8 @@ TEST_CASE("Trim single string, BOTH SIDE") {
 }
 
 /*utils*/
-static const char* side_to_string(u_parser::Trim side){
-    switch(side){
+static const char* side_to_string(u_parser::Trim side) {
+    switch(side) {
         case u_parser::Trim::LEFT:  return "LEFT";
         case u_parser::Trim::RIGHT: return "RIGHT";
         case u_parser::Trim::BOTH:  return "BOTH";
@@ -83,7 +83,7 @@ static const char* side_to_string(u_parser::Trim side){
             
         
 */
-TEST_CASE("Tim string: Testcase table"){
+TEST_CASE("Tim string: Testcase table") {
     struct Case {
         std::string input;
         u_parser::Trim side;
@@ -99,7 +99,7 @@ TEST_CASE("Tim string: Testcase table"){
         {"\n\t X \r",  u_parser::Trim::BOTH,  "X"     },
     };
 
-    for (const auto& t_case: cases){
+    for (const auto& t_case: cases) {
         std::string cur_input = t_case.input;
         u_parser::trim_string(cur_input, t_case.side);
 
@@ -115,12 +115,12 @@ TEST_CASE("Tim string: Testcase table"){
     SUBCASE - każdy wariant w osobny SUBCASE
 */
 
-TEST_CASE("Trim string: SUBCASES"){
+TEST_CASE("Trim string: SUBCASES") {
     auto check = [](
         std::string input,
         u_parser::Trim side,
         std::string expected
-    ){
+    ) {
         u_parser::trim_string(input, side);
         CHECK_EQ(input, expected);
     };
