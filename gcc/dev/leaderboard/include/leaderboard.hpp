@@ -1,5 +1,5 @@
 
-// include/apps/board_app/leadersboard.hpp
+// include/leadersboard.hpp
 
 #pragma once
 #include <iostream>
@@ -8,17 +8,14 @@
 #include <map>
 #include <vector>
 #include "utility" // std::pair
-#include <utils/variables.hpp>
-#include <apps/board_app/parse.hpp>
+#include <utils/include/variables.hpp>
+#include <parse.hpp>
 #include <numeric> // acumulate
 
 class Leaderboard {
 
     public:
-        /*
-            Dodaje nowego albo aktualizuje istniejącego użytkownika
-                - sumuje wyniki
-        */
+        /* Dodaje nowego albo aktualizuje istniejącego użytkownika  - sumuje wyniki*/
         void add_or_update(std::string name, int delta);
 
         /*Ustawia wynik na sztywno  -- nadpisuje aktualny */
@@ -29,11 +26,9 @@ class Leaderboard {
 
         /*Usuwa graczy poniżej danego progu; zwraa ile usunieto */
         std::size_t remove_below(int threshold);
-
         
-        /* 
-            zwraca @amount graczy posortowanych malejaco po wyniku
-                remis: alfabetycznie po nazwie
+        /*  zwraca @amount graczy posortowanych malejaco po wyniku
+            remis: alfabetycznie po nazwie
         */
         std::vector<std::pair<std::string, int>> top(std::size_t  amount) const;
         
@@ -41,14 +36,11 @@ class Leaderboard {
         std::optional<double> average() const;
         std::optional<double> mediana() const;
 
-        
-        /*
-           Iteracja - read-only po wszytstkich parach
-            do range for  
-        */
+        /* Iteracja - read-only po wszytstkich parach do range for   */
         using container_t = std::unordered_map<
             std::string, int
         >;
+        
         inline container_t::const_iterator begin() const noexcept{
             return _data.begin();
         }

@@ -1,8 +1,9 @@
 
 
-#include "doctest.h"
+#include <third_party/doctest/doctest.h>
+#include <dev/leaderboard/include/parse.hpp>
+
 #include <stdexcept>
-#include <apps/board_app/parse.hpp>
 #include <vector>
 #include <string>
 

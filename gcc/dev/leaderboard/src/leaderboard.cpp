@@ -1,12 +1,11 @@
 
 // modules/apps/leadersboard.cpp
-#include <apps/board_app/leaderboard.hpp>
+#include <include/leaderboard.hpp>
 
 //--------------------------------------------
 void Leaderboard::set_score(
     std::string name, int score
-)
-{
+) {
     if (!name.empty() && score > 0){
         _data.insert_or_assign(name, score);
     }
@@ -17,9 +16,8 @@ void Leaderboard::set_score(
 //--------------------------------------------
 void Leaderboard::add_or_update(
     std::string name, int score
-)
-{
-    if (!name.empty() && score > 0){
+) {
+    if (!name.empty() && score > 0) {
         _data[name] = score;
     }
     else {
@@ -27,10 +25,9 @@ void Leaderboard::add_or_update(
     }
 }
 //--------------------------------------------
-std::optional<int> Leaderboard::score_of(const std::string& name) const
-{
+std::optional<int> Leaderboard::score_of(const std::string& name) const {
     auto it = _data.find(name);
-    if (it != _data.end()){
+    if (it != _data.end()) {
         return it->second;
     }
     else {
@@ -74,7 +71,7 @@ std::optional<double> Leaderboard::mediana() const {
 
     std::sort(scores.begin(), scores.end());
     std::size_t amount = scores.size();
-    if (amount % 2 == 1){
+    if (amount % 2 == 1) {
         return static_cast<double>(scores[amount / 2]);
     }
     else{

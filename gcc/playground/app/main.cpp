@@ -1,18 +1,9 @@
 // ---------EXTERNAL----------------
 #include <string>
 //----------INTERNAL----------------
-#include <docs/knowledge.hpp>
-#include <utils/variables.hpp>
+#include <include/knowledge.hpp>
+#include <utils/include/variables.hpp>
 // ----------------------------
-#include <apps/board_app/parse.hpp>
-#include <apps/board_app/leaderboard.hpp>
-
-void logger_example(){
-    logger.debug() << "Start aplikacji\n";
-    logger.info()  << "Siema, działa loggerowanie\n";
-    logger.warn()  << "Uwaga  to tylko demo\n";
-    logger.error() << "Błąd testowy\n";
-}
 
 class KnowleadgeIntroduction{
     std::string dots = "\n----------------------------------------------\n";
@@ -211,45 +202,6 @@ class KnowleadgeIntroduction{
             utiliy_playground.numeric_operations();
         }
 };
-
-void parser_task(){
-    namespace bp = board::parser;
-    const std::string EXAMPLE_INPUT_RESULT = 
-    " marcin===  12\n"
-    "# kobi= 52\n"
-    "  Math         =   61\n"
-    " kasztan = bialy\n"
-    " 51: bialy\n"
-    " 51: 21\n"
-    "Alice:10\n"
-    " kasz anka: 83\n";
-    // LeaderboardResults results = parse_name_score_lines(EXAMPLE_INPUT_RESULT);
-    // with_usage of file
-    std::string score_results = load_text("scores.txt");
-    bp::LeaderboardResults results = bp::parse_name_score_lines(score_results);
-    Leaderboard board;
-    for(bp::BoardResult result: results){
-        logger.info() << "Current result " 
-            << result.first << ", "
-            << result.second << "\n";
-        board.set_score(
-            result.first,
-            result.second
-        );
-    }
-    board.print(std::cout, 5);
-    board.add_or_update("Kamil", 2000);
-    board.print(std::cout, 5);
-    auto mediana = board.mediana();
-    auto average = board.average();
-    if (mediana != std::nullopt){
-        std::cout << "Mediana: " << *mediana << std::endl;
-    }
-    if (average != std::nullopt){
-        std::cout << "Srednia: " << *average << std::endl;
-    }
-
-}
 
 int main() {
     KnowleadgeIntroduction introduction = KnowleadgeIntroduction();

@@ -1,6 +1,6 @@
 // utils/variables.hpp
 #pragma once
-#include <utils/logger.hpp>
+#include <logger.hpp>
 #include <filesystem>
 #include <fstream>
 #include <stdexcept>
