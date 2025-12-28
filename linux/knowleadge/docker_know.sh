@@ -346,9 +346,7 @@
 wejście na dockera i sprawdwzenie co sie tam dzieje
     docker ps - bierzesz sobie id contenera
     docker exec -it <id_contenera> /bin/bash
-        wejdzie ci do powłoki szelowej i możesz jechać z kurwami
-
-
+        wejdzie ci do powłoki szelowej i można lecieć
 
 #-------------------------------------
 Inna wersja podsumowania
