@@ -1,5 +1,5 @@
 
-#include <third_party/doctest/doctest.h>
+#include <doctest.h>
 #include <stdexcept>
 
 // kod startowy, zazwyczaj z biblioteki

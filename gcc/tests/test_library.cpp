@@ -1,7 +1,7 @@
 
 
-#include <third_party/doctest/doctest.h>
-#include <dev/leaderboard/include/parse.hpp>
+#include <doctest.h>
+#include <parse.hpp>
 
 #include <stdexcept>
 #include <vector>

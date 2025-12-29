@@ -1,5 +1,5 @@
 
-// include/apps/leaderboard/parse.hpp
+// leaderboard/include/apps/leaderboard/parse.hpp
 
 #pragma once
 #include <iostream>
@@ -9,7 +9,7 @@
 #include <sstream>
 #include <optional>
 #include <variant>
-#include <utils/include/variables.hpp>
+#include <variables.hpp>
 #include <string>
 #include <regex>
 

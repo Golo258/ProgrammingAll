@@ -1,5 +1,5 @@
 
-// include/leadersboard.hpp
+// leaderboard/include/leadersboard.hpp
 
 #pragma once
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <map>
 #include <vector>
 #include "utility" // std::pair
-#include <utils/include/variables.hpp>
+#include <variables.hpp>
 #include <parse.hpp>
 #include <numeric> // acumulate
 

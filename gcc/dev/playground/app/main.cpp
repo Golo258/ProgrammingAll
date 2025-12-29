@@ -1,8 +1,8 @@
 // ---------EXTERNAL----------------
 #include <string>
 //----------INTERNAL----------------
-#include <include/knowledge.hpp>
-#include <utils/include/variables.hpp>
+#include <knowledge.hpp>
+#include <variables.hpp>
 // ----------------------------
 
 class KnowleadgeIntroduction{

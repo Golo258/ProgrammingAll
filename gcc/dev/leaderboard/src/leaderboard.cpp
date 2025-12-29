@@ -1,6 +1,6 @@
 
 // modules/apps/leadersboard.cpp
-#include <include/leaderboard.hpp>
+#include <leaderboard.hpp>
 
 //--------------------------------------------
 void Leaderboard::set_score(

@@ -1,5 +1,5 @@
 // ------------------------
-#include <include/knowledge.hpp>
+#include <knowledge.hpp>
 
 #pragma region KNOWLEDGE
 namespace Knowledge{
@@ -729,7 +729,7 @@ namespace Knowledge{
                     GLOBAL_COUNTER++;
                     logger.debug()
                         << "Po zmianie: "
-                        << global_counter << ENDL;
+                        << GLOBAL_COUNTER << ENDL;
                 #endif
             }
             

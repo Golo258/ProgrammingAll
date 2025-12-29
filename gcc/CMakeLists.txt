@@ -1,89 +1,80 @@
-# ------------------------------
 
+
+# PROJECT SETTINGS
 cmake_minimum_required(VERSION 3.20)
-project(cpp_min LANGUAGES CXX)
+project(ProgrammingAll LANGUAGES CXX)
+#-----------------------------------------
 
-# ------------------------------
+# C++ STANDARD SETTINGS 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+#-----------------------------------------
 
-# ------------------------------
-
-# Library to all modules files 
-file(GLOB_RECURSE MODULE_SOURCES CONFIGURE_DEPENDS
-     ${CMAKE_SOURCE_DIR}/modules/*.cpp)
-
-# === RESOURCES (konfiguracja globalna) ===
-# Katalog z zasobami; możesz zmienić przez -DRES_DIR=... przy konfiguracji
-set(RES_DIR "${CMAKE_SOURCE_DIR}/resources" CACHE PATH "Directory with runtime resources")
-
-# Helper: podpięcie resources/ do dowolnego targetu wykonywalnego
-function(attach_resources tgt res_dir)
-  if (EXISTS "${res_dir}")
-    # Wszystkie pliki zasobów – jako zależność, aby zmiany triggerowały kopiowanie
-    file(GLOB_RECURSE RES_FILES CONFIGURE_DEPENDS "${res_dir}/*")
-    if (RES_FILES)
-      add_custom_target(${tgt}_resources_stamp DEPENDS ${RES_FILES})
-      add_dependencies(${tgt} ${tgt}_resources_stamp)
+#  RESORUCES FOLDER 
+set(RES_DIR "${CMAKE_SOURCE_DIR}/resources" CACHE PATH "Directory with resources")
+function(attach_resources target resource_dir)
+    if (EXISTS "${resource_dir}")
+        file(GLOB_RECURSE RES_FILES CONFIGURE_DEPENDS "${resource_dir}/*")
+        if (RES_FILES)
+            add_custom_target(${target}_resources_stamp DEPENDS ${RES_FILES})
+            add_dependencies(${target} ${target}_resources_stamp)
+        endif()
+        add_custom_command(
+            TARGET ${target} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+                    "${resource_dir}" "$<TARGET_FILE_DIR:${target}>/resources"
+            COMMENT "Kopiowanie zasobów do binarki: ${target}"
+        )
     endif()
-
-    # Kopiowanie całego katalogu obok binarki
-    add_custom_command(
-      TARGET ${tgt} POST_BUILD
-      COMMAND ${CMAKE_COMMAND} -E copy_directory
-              "${res_dir}" "$<TARGET_FILE_DIR:${tgt}>/resources"
-      COMMENT "Copying resources/ for target '${tgt}'"
-    )
-
-    # Sprzątanie skopiowanych zasobów przy 'cmake --build . --target clean'
-    set_property(TARGET ${tgt} APPEND PROPERTY
-      ADDITIONAL_CLEAN_FILES "$<TARGET_FILE_DIR:${tgt}>/resources")
-  else()
-    message(STATUS "attach_resources: directory '${res_dir}' does not exist; skipping for ${tgt}")
-  endif()
 endfunction()
+#-----------------------------------------
+
+#  UTILS LIBRARY SETTINGS
+add_library(
+    utils_lib STATIC 
+    utils/src/logger.cpp
+)
+target_include_directories(utils_lib PUBLIC utils/include)
+#-----------------------------------------
+
+# LEADERBOARD LIBRARY SETTINGS
+add_library(
+    leaderboard_lib STATIC
+    dev/leaderboard/src/leaderboard.cpp
+    dev/leaderboard/src/parse.cpp
+)
+target_include_directories(leaderboard_lib PUBLIC dev/leaderboard/include)
+target_link_libraries(leaderboard_lib PUBLIC utils_lib)
+
+#  MAIN APP FOR LEADERBAORD SETTINGS
+add_executable(leaderboard_app dev/leaderboard/app/main.cpp)
+target_link_libraries(leaderboard_app PRIVATE leaderboard_lib)
+attach_resources(leaderboard_app "${RES_DIR}")
+
+#-----------------------------------------
+
+# PLAYGROUND LIBRARY SETTINGS
+add_library(playground_lib STATIC
+    dev/playground/src/knowledge.cpp
+)
+target_include_directories(playground_lib PUBLIC dev/playground/include)
+target_link_libraries(playground_lib PUBLIC utils_lib)
+
+# MAIN APP FOR PLAYGROUND
+add_executable(playground_app dev/playground/app/main.cpp)
+target_link_libraries(playground_app PRIVATE playground_lib)
+attach_resources(playground_app "${RES_DIR}")
+#-----------------------------------------
 
 
-add_library(core ${MODULE_SOURCES})
-target_include_directories(core PUBLIC ${CMAKE_SOURCE_DIR}/include)
-target_compile_options(core PRIVATE ${WARNINGS})
+# TESTS SETTINGS 
+enable_testing()
+include_directories(third_party/doctest)
 
-# ── Helpers to create application
-function(add_app name)
-  add_executable(${name} ${ARGN})
-  target_link_libraries(${name} PRIVATE core)
-  target_include_directories(${name} PRIVATE ${CMAKE_SOURCE_DIR}/include)
-  target_compile_options(${name} PRIVATE ${WARNINGS})
-  attach_resources(${name} "${RES_DIR}")
-endfunction()
-
-# to get resources path
-add_compile_definitions(PROJECT_ROOT_DIR="${CMAKE_SOURCE_DIR}")
-
-#   Dodajemy po prostu add  add_app dla każdego apps/<nazwa>/main.cpp
-add_app(playground ${CMAKE_SOURCE_DIR}/apps/playground/main.cpp)
-# add_app(mytool     ${CMAKE_SOURCE_DIR}/apps/mytool/main.cpp)
-
-# ================== TESTS ==================
-# UNCOMMENT AFTER TESTS
-# include(CTest)
-# enable_testing()
-
-# # doctest header
-# include_directories(${CMAKE_SOURCE_DIR}/third_party/doctest)
-
-# # [A] Zbierz wszystkie pliki tests/*.cpp automatycznie
-# file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS
-#      ${CMAKE_SOURCE_DIR}/tests/*.cpp)
-
-# add_executable(tests ${TEST_SOURCES})
-
-# target_link_libraries(tests PRIVATE core)
-# target_include_directories(tests PRIVATE ${CMAKE_SOURCE_DIR}/include)
-
-# # [B] Jeśli testy potrzebują resources/, skopiuj je obok binarki testów
-# attach_resources(tests "${RES_DIR}")
-
-# # add_test(NAME unit COMMAND tests)
-# add_test(NAME unit COMMAND tests --order-by=name --success=1)
+file(GLOB_RECURSE TEST_SOURCES tests/*.cpp)
+add_executable(unit_tests ${TEST_SOURCES})
+# link all to test 
+target_link_libraries(unit_tests PRIVATE leaderboard_lib playground_lib utils_lib)
+add_test(NAME AllTests COMMAND unit_tests)
+#-----------------------------------------

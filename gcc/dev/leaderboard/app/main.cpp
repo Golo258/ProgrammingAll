@@ -1,8 +1,8 @@
 
 
-#include <include/parse.hpp>
-#include <include/leaderboard.hpp>
-#include <utils/include/variables.hpp>
+#include <parse.hpp>
+#include <leaderboard.hpp>
+#include <variables.hpp>
 
 namespace bp = board::parser;
 
@@ -18,11 +18,11 @@ const std::string BOARD_DUMMY_DATA =
 
 int main() {
     Leaderboard board;
-    LeaderboardResults results = parse_name_score_lines(BOARD_DUMMY_DATA);
-    std::string score_results = load_text("scores.txt");
+    bp::LeaderboardResults dummy_data_results = bp::parse_name_score_lines(BOARD_DUMMY_DATA);
 
-    bp::LeaderboardResults results = bp::parse_name_score_lines(score_results);
-    for(bp::BoardResult result: results) {
+    std::string score_results = load_text("scores.txt");
+    bp::LeaderboardResults scores_file_results = bp::parse_name_score_lines(score_results);
+    for(bp::BoardResult result: scores_file_results) {
         logger.info() 
             << "[BOARD RESULT]: t" 
             << result.first << ", " << result.second << "\n";
