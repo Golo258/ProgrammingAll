@@ -51,8 +51,6 @@ target_include_directories(                                     #
 )                                                               #
 target_link_libraries(leaderboard_lib PUBLIC utils_lib)         #
 # --------------------------------------------------------------#
-
-
 # ---------------- MAIN APP FOR LEADERBAORD  -------------------#
 add_executable(leaderboard_app dev/leaderboard/app/main.cpp)    #
 target_link_libraries(leaderboard_app PRIVATE leaderboard_lib)  #
@@ -68,13 +66,28 @@ target_include_directories(                                     #
 )                                                               #
 target_link_libraries(playground_lib PUBLIC utils_lib)          #
 # --------------------------------------------------------------#
-
-# MAIN APP FOR PLAYGROUND
 # ---------------- MAIN APP FOR PLAYGROUND  --------------------#
 add_executable(playground_app dev/playground/app/main.cpp)      #
 target_link_libraries(playground_app PRIVATE playground_lib)    #
 attach_resources(playground_app "${RES_DIR}")                   #
 # --------------------------------------------------------------#
+
+
+# --------------- TRACKER LIBRARY SETTINGS  -----------------#
+add_library(tracker_lib STATIC                               # 
+    dev/tracker/src/tracker.cpp                            #
+)                                                               #
+target_include_directories(                                     #
+    tracker_lib PUBLIC dev/tracker/include                #
+)                                                               #
+target_link_libraries(tracker_lib PUBLIC utils_lib)          #
+# --------------------------------------------------------------#
+# ---------------- MAIN APP FOR TRACKER  --------------------#
+add_executable(tracker_app dev/tracker/app/main.cpp)      #
+target_link_libraries(tracker_app PRIVATE tracker_lib)    #
+attach_resources(tracker_app "${RES_DIR}")                   #
+# --------------------------------------------------------------#
+
 
 # -------------------- TESTS SETTINGS  -------------------------#
 enable_testing()                                                #
