@@ -3,6 +3,6 @@
 
 
 int main(){
-    log_some();
+    example_curl();
     return 0;
 }

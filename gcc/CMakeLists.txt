@@ -24,7 +24,7 @@ function(attach_resources target resource_dir)                                  
             TARGET ${target} POST_BUILD                                             #
             COMMAND ${CMAKE_COMMAND} -E copy_directory                              #
                     "${resource_dir}" "$<TARGET_FILE_DIR:${target}>/resources"      #
-            COMMENT "Kopiowanie zasobów do binarki: ${target}"                      #
+            COMMENT "Coping resources to binary: ${target}"                      #
         )                                                                           #
     endif()                                                                         #
 endfunction()                                                                       #       
@@ -73,19 +73,29 @@ attach_resources(playground_app "${RES_DIR}")                   #
 # --------------------------------------------------------------#
 
 
-# --------------- TRACKER LIBRARY SETTINGS  -----------------#
-add_library(tracker_lib STATIC                               # 
-    dev/tracker/src/tracker.cpp                            #
-)                                                               #
+# ----------------- TRACKER LIBRARY SETTINGS  ------------------#
+find_package(OpenSSL REQUIRED)                                  #
+add_library(tracker_lib STATIC dev/tracker/src/tracker.cpp)     #                                                               #
 target_include_directories(                                     #
-    tracker_lib PUBLIC dev/tracker/include                #
+    tracker_lib PUBLIC dev/tracker/include                      #
 )                                                               #
-target_link_libraries(tracker_lib PUBLIC utils_lib)          #
+target_link_libraries(tracker_lib PUBLIC utils_lib)             #
 # --------------------------------------------------------------#
-# ---------------- MAIN APP FOR TRACKER  --------------------#
-add_executable(tracker_app dev/tracker/app/main.cpp)      #
-target_link_libraries(tracker_app PRIVATE tracker_lib)    #
-attach_resources(tracker_app "${RES_DIR}")                   #
+# ------------------ MAIN APP FOR TRACKER  ---------------------#
+add_executable(tracker_app dev/tracker/app/main.cpp)            #
+target_include_directories(                                     #
+    tracker_app PRIVATE third_party/httplib                     #
+)                                                               #
+target_compile_definitions(                                     #
+    tracker_app PRIVATE CPPHTTPLIB_OPENSSL_SUPPORT              #
+)                                                               #
+target_link_libraries(tracker_app PRIVATE                       #
+    tracker_lib                                                 #
+    OpenSSL::SSL                                                #
+    OpenSSL::Crypto                                             #
+)                                                               #
+attach_resources(tracker_app "${RES_DIR}")                      #
+include_directories(third_party/nlohmann)                       #
 # --------------------------------------------------------------#
 
 

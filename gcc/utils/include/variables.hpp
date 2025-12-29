@@ -10,6 +10,7 @@
 inline Logger logger{std::clog, LogLevel::Debug, true};
 inline constexpr const char* APP_NAME = "playground";
 inline constexpr bool DEBUG_MODE = true;
+inline constexpr char ENDL = '\n';
 
 //----------------------------------
 namespace fs = std::filesystem;

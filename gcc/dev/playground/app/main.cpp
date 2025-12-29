@@ -7,7 +7,6 @@
 
 class KnowleadgeIntroduction{
     std::string dots = "\n----------------------------------------------\n";
-    const char ENDL = '\n';
 
     public:
         void show_stream_management() {
