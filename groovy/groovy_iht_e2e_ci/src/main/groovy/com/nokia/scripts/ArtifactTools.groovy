@@ -1,10 +1,12 @@
 package com.nokia.scripts
 
+import com.nokia.models.Artifact
 import com.nokia.scripts.Log as log
 import com.nokia.scripts.jenkins_local.NodeRegistry
 import com.nokia.scripts.jenkins_local.NodeSessionManager
 import com.nokia.scripts.jenkins_local.ShResult
 import groovy.json.JsonOutput
+import groovy.json.JsonSlurperClassic
 
 class ArtifactTools {
 
@@ -174,4 +176,15 @@ class ArtifactTools {
         }
     }
 
+    void debugCreatingArtifactObjects() {
+        URL dummyJsonPath = ArtifactTools.class.getResource("/artifacts/dummy_artifacts.json")
+        def rawJsonData = new JsonSlurperClassic().parseText(dummyJsonPath.getText())
+        List<Artifact> artifacts = rawJsonData?.items.collect { artifactData ->
+            new Artifact(artifactData)
+        }
+        artifacts.each {
+            log.debug(it)
+        }
+
+    }
 }

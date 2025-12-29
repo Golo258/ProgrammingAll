@@ -69,7 +69,8 @@ class Main {
 
     static void debugArtifactsTools() {
         ArtifactTools tools = new ArtifactTools("10.84.158.242")
-        tools.debugSshResultVersion();
+//        tools.debugSshResultVersion();
+        tools.debugCreatingArtifactObjects();
     }
 
     static void main(String[] args) {
