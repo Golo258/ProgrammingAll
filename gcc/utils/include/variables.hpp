@@ -37,4 +37,9 @@ inline std::string load_text(const fs::path& rel) {
         std::istreambuf_iterator<char>{input}, {}
     };
 }
+
+inline std::string other_way_to_launch(std::string resource_name){
+    return std::string(PROJECT_ROOT_DIR) + "/resources/" + resource_name;
+}
+
 //----------------------------------

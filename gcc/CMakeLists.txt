@@ -1,80 +1,90 @@
 
 
-# PROJECT SETTINGS
-cmake_minimum_required(VERSION 3.20)
-project(ProgrammingAll LANGUAGES CXX)
-#-----------------------------------------
+# ----------------------  PROJECT SETTINGS  ------------------- #
+cmake_minimum_required(VERSION 3.20)                            #
+project(ProgrammingAll LANGUAGES CXX)                           #
+# ------------------------------------------------------------- #
 
-# C++ STANDARD SETTINGS 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-#-----------------------------------------
+# ------------------- C++ STANDARD SETTINGS  -------------------#
+set(CMAKE_CXX_STANDARD 20)                                      #
+set(CMAKE_CXX_STANDARD_REQUIRED ON)                             #
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)                           #
+# ------------------------------------------------------------- #
 
-#  RESORUCES FOLDER 
-set(RES_DIR "${CMAKE_SOURCE_DIR}/resources" CACHE PATH "Directory with resources")
-function(attach_resources target resource_dir)
-    if (EXISTS "${resource_dir}")
-        file(GLOB_RECURSE RES_FILES CONFIGURE_DEPENDS "${resource_dir}/*")
-        if (RES_FILES)
-            add_custom_target(${target}_resources_stamp DEPENDS ${RES_FILES})
-            add_dependencies(${target} ${target}_resources_stamp)
-        endif()
-        add_custom_command(
-            TARGET ${target} POST_BUILD
-            COMMAND ${CMAKE_COMMAND} -E copy_directory
-                    "${resource_dir}" "$<TARGET_FILE_DIR:${target}>/resources"
-            COMMENT "Kopiowanie zasobów do binarki: ${target}"
-        )
-    endif()
-endfunction()
-#-----------------------------------------
+# --------------------------  RESORUCES FOLDER  SETTINGS  --------------------------#
+set(RES_DIR "${CMAKE_SOURCE_DIR}/resources" CACHE PATH "Directory with resources")  #
+function(attach_resources target resource_dir)                                      #
+    if (EXISTS "${resource_dir}")                                                   #
+        file(GLOB_RECURSE RES_FILES CONFIGURE_DEPENDS "${resource_dir}/*")          #
+        if (RES_FILES)                                                              #
+            add_custom_target(${target}_resources_stamp DEPENDS ${RES_FILES})       #
+            add_dependencies(${target} ${target}_resources_stamp)                   #
+        endif()                                                                     #
+        add_custom_command(                                                         #
+            TARGET ${target} POST_BUILD                                             #
+            COMMAND ${CMAKE_COMMAND} -E copy_directory                              #
+                    "${resource_dir}" "$<TARGET_FILE_DIR:${target}>/resources"      #
+            COMMENT "Kopiowanie zasobów do binarki: ${target}"                      #
+        )                                                                           #
+    endif()                                                                         #
+endfunction()                                                                       #       
+# ----------------------------------------------------------------------------------#
 
-#  UTILS LIBRARY SETTINGS
-add_library(
-    utils_lib STATIC 
-    utils/src/logger.cpp
-)
-target_include_directories(utils_lib PUBLIC utils/include)
-#-----------------------------------------
 
-# LEADERBOARD LIBRARY SETTINGS
-add_library(
-    leaderboard_lib STATIC
-    dev/leaderboard/src/leaderboard.cpp
-    dev/leaderboard/src/parse.cpp
-)
-target_include_directories(leaderboard_lib PUBLIC dev/leaderboard/include)
-target_link_libraries(leaderboard_lib PUBLIC utils_lib)
+# ------------------- UTILS LIBRARY SETTINGS  ------------------#
+add_library(                                                    #
+    utils_lib STATIC                                            #
+    utils/src/logger.cpp                                        #
+)                                                               #
+target_include_directories(utils_lib PUBLIC utils/include)      #
+# --------------------------------------------------------------#
 
-#  MAIN APP FOR LEADERBAORD SETTINGS
-add_executable(leaderboard_app dev/leaderboard/app/main.cpp)
-target_link_libraries(leaderboard_app PRIVATE leaderboard_lib)
-attach_resources(leaderboard_app "${RES_DIR}")
 
-#-----------------------------------------
+# -------------- LEADERBOARD LIBRARY SETTINGS  -----------------#
+add_library(                                                    #
+    leaderboard_lib STATIC                                      #
+    dev/leaderboard/src/leaderboard.cpp                         #    
+    dev/leaderboard/src/parse.cpp                               #
+)                                                               #
+target_include_directories(                                     #
+    leaderboard_lib PUBLIC dev/leaderboard/include              #
+)                                                               #
+target_link_libraries(leaderboard_lib PUBLIC utils_lib)         #
+# --------------------------------------------------------------#
 
-# PLAYGROUND LIBRARY SETTINGS
-add_library(playground_lib STATIC
-    dev/playground/src/knowledge.cpp
-)
-target_include_directories(playground_lib PUBLIC dev/playground/include)
-target_link_libraries(playground_lib PUBLIC utils_lib)
+
+# ---------------- MAIN APP FOR LEADERBAORD  -------------------#
+add_executable(leaderboard_app dev/leaderboard/app/main.cpp)    #
+target_link_libraries(leaderboard_app PRIVATE leaderboard_lib)  #
+attach_resources(leaderboard_app "${RES_DIR}")                  #
+# --------------------------------------------------------------#
+
+# --------------- PLAYGROUND LIBRARY SETTINGS  -----------------#
+add_library(playground_lib STATIC                               # 
+    dev/playground/src/knowledge.cpp                            #
+)                                                               #
+target_include_directories(                                     #
+    playground_lib PUBLIC dev/playground/include                #
+)                                                               #
+target_link_libraries(playground_lib PUBLIC utils_lib)          #
+# --------------------------------------------------------------#
 
 # MAIN APP FOR PLAYGROUND
-add_executable(playground_app dev/playground/app/main.cpp)
-target_link_libraries(playground_app PRIVATE playground_lib)
-attach_resources(playground_app "${RES_DIR}")
-#-----------------------------------------
+# ---------------- MAIN APP FOR PLAYGROUND  --------------------#
+add_executable(playground_app dev/playground/app/main.cpp)      #
+target_link_libraries(playground_app PRIVATE playground_lib)    #
+attach_resources(playground_app "${RES_DIR}")                   #
+# --------------------------------------------------------------#
 
+# -------------------- TESTS SETTINGS  -------------------------#
+enable_testing()                                                #
+include_directories(third_party/doctest)                        #
+                                                                #
+file(GLOB_RECURSE TEST_SOURCES tests/*.cpp)                     #
+add_executable(unit_tests ${TEST_SOURCES})                      #
+target_link_libraries(                                          #
+    unit_tests PRIVATE leaderboard_lib playground_lib utils_lib #
+)                                                               #
+add_test(NAME AllTests COMMAND unit_tests)                      #
+# --------------------------------------------------------------#
 
-# TESTS SETTINGS 
-enable_testing()
-include_directories(third_party/doctest)
-
-file(GLOB_RECURSE TEST_SOURCES tests/*.cpp)
-add_executable(unit_tests ${TEST_SOURCES})
-# link all to test 
-target_link_libraries(unit_tests PRIVATE leaderboard_lib playground_lib utils_lib)
-add_test(NAME AllTests COMMAND unit_tests)
-#-----------------------------------------
