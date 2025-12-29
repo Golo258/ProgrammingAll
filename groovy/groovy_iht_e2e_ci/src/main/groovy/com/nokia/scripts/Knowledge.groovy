@@ -41,7 +41,11 @@ class Knowledge {
 
         class ListPlayground {
 
-            List<Integer> baseList = new ArrayList<>(1, 2)
+            Map<Integer, Integer> baseList;
+
+            ListPlayground(HashMap<Integer, Integer> inputMap = [1: 2, 3: 4]) {
+                this.baseList = inputMap
+            }
 
             void log_list_state(String label, Iterable collection) {
                 log.info("-----------------------------------")

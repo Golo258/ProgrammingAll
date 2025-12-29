@@ -14,7 +14,7 @@ class ArtifactTools {
         this.hostname = hostname
     }
 
-    List<String> receiveInstalledBuildsOnCtrl() {
+    def getSh() {
         def manager = new NodeSessionManager()
         def shell = manager.getShell("linux-vm") {
             new PersistentShellSession(
@@ -25,21 +25,23 @@ class ArtifactTools {
                 null
             )
         }
-        def cusUtilResultOutput = shell.run(
-            '/opt/cus/bin/cus-util.py ver | grep -oP \"RUN = \\K[^ ]+\"'
-        )
-//        def cusUtilResultOutput = "SOME_OTHER\nfampsofmapsfom"
+        return shell
+    }
+
+    List<String> receiveInstalledBuildsOnCtrl() {
+        def shell = this.getSh()
+        def cusUtilResultOutput = shell
+            .run('/opt/cus/bin/cus-util.py ver | grep -oP \"RUN = \\K[^ ]+\"')
         def collectedBuildVersions = cusUtilResultOutput
             .trim()
             .readLines()
             .findAll { cusBuildOnCtrl ->
                 log.debug("CTRL Build Check: ${cusBuildOnCtrl}")
-                return cusBuildOnCtrl ==~ /SOMETHING)?/
+                return cusBuildOnCtrl ==~ /SOMETHING/
             }
         if (!collectedBuildVersions || cusUtilResultOutput.readLines().size() != collectedBuildVersions.size()) {
             throw new IllegalArgumentException("CUS version on CTRLs and requested does not match.")
         }
-        log.debug("Collected bbuilds: ${collectedBuildVersions}")
         return collectedBuildVersions
     }
 
@@ -76,7 +78,6 @@ class ArtifactTools {
             manager.close()
         }
     }
-
 
     static Map getjsonApiHeaders(Map headers, String WFT_TOKEN) {
         return [
@@ -153,6 +154,24 @@ class ArtifactTools {
         return params
             .collect { k, v -> "${k}=${v}" }
             .join('&')
+    }
+
+    String debugSshResultVersion() {
+        PersistentShellSession sh = this.getSh()
+        ShResult result = sh.run(
+            'echo "version" | nc -d 0.2 localhost 1234'
+        )
+        def (_exitCode, output, err) = result;
+        log.debug(output);
+        def versionLine = output.readLines().find {
+            it.contains("Version")
+        }
+        if (versionLine) {
+            def version = versionLine.split(" ")[2]
+            return version.trim()
+        } else {
+            return "Unknown Version"
+        }
     }
 
 }

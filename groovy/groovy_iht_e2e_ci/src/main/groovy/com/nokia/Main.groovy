@@ -67,12 +67,16 @@ class Main {
 
     }
 
+    static void debugArtifactsTools() {
+        ArtifactTools tools = new ArtifactTools("10.84.158.242")
+        tools.debugSshResultVersion();
+    }
+
     static void main(String[] args) {
         log.setLevel("SUCCESS")
-//        show_base();
-//        debugCusUpdate()
-//        debugRequiredEnvParameters();
-        jsonPlayground.from_string_to_json()
+
+        this.debugArtifactsTools();
 
     }
+
 }
