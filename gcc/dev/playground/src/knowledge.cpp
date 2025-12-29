@@ -236,9 +236,9 @@ namespace Knowledge{
 
             void FileSystemManagment::get_file_from_resources() {
                 try {
-                    auto path = resource_path("scores.txt");
+                    auto path = resource_path("dummy_scores.txt");
                     logger.info() << "Config path: " << path << ENDL; 
-                    std::string loaded_text = load_text("scores.txt");
+                    std::string loaded_text = load_text("dummy_scores.txt");
                     logger.info() << "Config path text: " << loaded_text<< ENDL; 
                 }
                 catch (const std::exception& ex) {

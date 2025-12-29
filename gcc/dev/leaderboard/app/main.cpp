@@ -20,7 +20,7 @@ int main() {
     Leaderboard board;
     bp::LeaderboardResults dummy_data_results = bp::parse_name_score_lines(BOARD_DUMMY_DATA);
 
-    std::string score_results = load_text("scores.txt");
+    std::string score_results = load_text("dummy_scores.txt");
     bp::LeaderboardResults scores_file_results = bp::parse_name_score_lines(score_results);
     for(bp::BoardResult result: scores_file_results) {
         logger.info() 
