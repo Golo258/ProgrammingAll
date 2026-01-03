@@ -3,6 +3,6 @@
 
 
 int main(){
-    example_curl();
+    example_curl_get();
     return 0;
 }
