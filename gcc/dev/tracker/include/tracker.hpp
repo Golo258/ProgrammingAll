@@ -7,31 +7,28 @@
 
 using json = nlohmann::json;
 
-void example_curl() {
-    std::string base_url = "http://api.nbp.pl";
-    httplib::Client client(base_url);
+inline void example_curl() {
+    httplib::Client client("api.nbp.pl");
+    client.set_proxy("", 0);
 
-    auto response = client.Get("/api/exchangerates/rates/c/usd/2016-04-04/?format=json");
-    if (response != NULL){
-       
-        if (response->status == 200){
-            logger.info() 
-                << "[RESPONSE DATA]"
-                << "STATUS: " << response->status << ENDL
-                << "BODY: "   << response->body   << ENDL; 
-            
-            auto json_body = json::parse(response->body);
-            logger.debug() << "JSON BODY: " << json_body  << ENDL; 
-
+    if (auto res = client.Get("/api/exchangerates/rates/a/usd/?format=json")) {
+        if (res->status == 200) {
+            logger.debug() 
+                << "Kurs dolara: " 
+                << res->body << std::endl;
+        } else {
+            logger.debug() 
+                << "Serwer odpowiedział, ale kodem: "
+                << res->status << std::endl;
         }
-        else {
-            logger.error() << "INCORRECT STATUS CODE" << ENDL;
-        }
-    }
+    } 
     else {
-        logger.error() 
-            << "Error occured while getting response " << ENDL
-            << "RETURN CODE" << response.error()       << ENDL;
-    }  
-
+        auto err = res.error();
+        logger.debug() 
+            << "Błąd połączenia! Kod błędu httplib: " 
+            << (int)err << std::endl;
+    }
+    client.Delete()
 }
+
+void example_curl2();

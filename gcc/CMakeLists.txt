@@ -77,27 +77,28 @@ attach_resources(playground_app "${RES_DIR}")                   #
 find_package(OpenSSL REQUIRED)                                  #
 add_library(tracker_lib STATIC dev/tracker/src/tracker.cpp)     #                                                               #
 target_include_directories(                                     #
-    tracker_lib PUBLIC dev/tracker/include                      #
+    tracker_lib PUBLIC                                          #
+    dev/tracker/include                                         #
+    third_party/httplib                                         #
+    third_party/nlohmann                                        #
 )                                                               #
 target_link_libraries(tracker_lib PUBLIC utils_lib)             #
 # --------------------------------------------------------------#
 # ------------------ MAIN APP FOR TRACKER  ---------------------#
 add_executable(tracker_app dev/tracker/app/main.cpp)            #
 target_include_directories(                                     #
-    tracker_app PRIVATE third_party/httplib                     #
+    tracker_app PUBLIC third_party/httplib                      #
 )                                                               #
 target_compile_definitions(                                     #
-    tracker_app PRIVATE CPPHTTPLIB_OPENSSL_SUPPORT              #
+    tracker_app PUBLIC CPPHTTPLIB_OPENSSL_SUPPORT               #
 )                                                               #
-target_link_libraries(tracker_app PRIVATE                       #
+target_link_libraries(tracker_app PUBLIC                       #
     tracker_lib                                                 #
     OpenSSL::SSL                                                #
     OpenSSL::Crypto                                             #
 )                                                               #
 attach_resources(tracker_app "${RES_DIR}")                      #
-include_directories(third_party/nlohmann)                       #
 # --------------------------------------------------------------#
-
 
 # -------------------- TESTS SETTINGS  -------------------------#
 enable_testing()                                                #
