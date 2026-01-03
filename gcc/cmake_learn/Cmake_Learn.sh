@@ -137,6 +137,31 @@ function():
         przeszukaj ten dany folder i stwórz liste plików które pasują do danego wzroca
         np:
             file(GLOB MY_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+
+    add_custom_command()
+        - oprócz kompilowania kodu, wykona daną komende w terminalu
+            POST_BUILD - wykona ją po zbudowaniu programu
+
+        syntax:
+            add_custom_command(
+                TARGET my_app  # dla jakiego programu to robimy
+                POST_BUILD                  # kiedy to robimy, zaraz po zbudowaniu
+                COMMAND ${CMAKE_COMMAND} -E echo "PROGRAM ZBUDOWANY! GRATULACJE!"
+            )
+            # -E - env indenpednent command - czyli działą i na linuxie i na windowsie itp
+            # tłumaczy daną komende na dany jezyk terminala
+        inne komendy:
+            echo - wypisuje 
+            copy <source> <target> kopiuje plik
+            copy_directory <source> <TargeT> - cały folder
+            remove <files> - usuwa pliku - albo rm - nowsza werja
+            make_directory <folder> - tworzy folder
+            touch <plik> tworzy pusty plik
+
+        $<TARGET_FILE_DIR:moja_apka> - to jest generator expression
+            czyli czeka aż do samego końca - do momentu generowania przez Cmaka instrukcji do kompilatora
+                ogólnie chodzi o to żeby dać coś w miejsce gdzie będzie binarka_targetu
+                
             
 #--------------------------------------------
 Komendy Linuxowe Cmake:

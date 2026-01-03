@@ -117,3 +117,34 @@ endfunction()
 
 search_global_matching_files()
 space()
+
+add_custom_command(
+    TARGET ${target_app_alias}  # dla jakiego programu to robimy
+    POST_BUILD                  # kiedy to robimy, zaraz po zbudowaniu
+    COMMAND ${CMAKE_COMMAND} -E echo "---------------------------------------"
+    COMMAND ${CMAKE_COMMAND} -E echo "PROGRAM ZBUDOWANY! GRATULACJE!"
+    COMMAND ${CMAKE_COMMAND} -E echo "---------------------------------------"
+)
+# -E - env indenpednent command - czyli działą i na linuxie i na windowsie itp
+# tłumaczy daną komende na dany jezyk terminala
+
+
+space()
+
+function(move_folder_to_target app_target source_folder)
+    if (NOT EXISTS ${source_folder})
+        message (WARNING "Achtung: folder ${source_folder} does not exists")
+        return() # konczymy od razu
+    endif()
+    add_custom_command(
+        TARGET ${app_target}
+        POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+                "${source_folder}"
+                "$<TARGET_FILE_DIR:${app_target}>/resources"
+        COMMENT "Coppying ${source_folder}/ to build/ folder..."
+    )
+endfunction()
+
+
+move_folder_to_target("${target_app_alias}" "${CMAKE_SOURCE_DIR}/my_resources")
