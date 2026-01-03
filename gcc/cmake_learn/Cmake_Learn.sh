@@ -162,7 +162,15 @@ function():
             czyli czeka aż do samego końca - do momentu generowania przez Cmaka instrukcji do kompilatora
                 ogólnie chodzi o to żeby dać coś w miejsce gdzie będzie binarka_targetu
                 
-            
+#--------------------------------------------
+target_compile_definitions()
+    to jest po prostu definowanie zmiennych dla danego targetu
+    zamiast w .cpp #define MOJA_STALA 1
+    to robimy
+    syntax:
+        target_compile_definitions(nazwa_targetu PRIVATE(scope) DEBUG_MODE=1)
+        
+
 #--------------------------------------------
 Komendy Linuxowe Cmake:
     Czysty folder build/ - wchodzimy do niego 

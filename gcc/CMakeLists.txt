@@ -74,28 +74,27 @@ attach_resources(playground_app "${RES_DIR}")                   #
 
 
 # ----------------- TRACKER LIBRARY SETTINGS  ------------------#
-find_package(OpenSSL REQUIRED)                                  #
+find_package(CURL REQUIRED)                                     #
 add_library(tracker_lib STATIC dev/tracker/src/tracker.cpp)     #                                                               #
 target_include_directories(                                     #
     tracker_lib PUBLIC                                          #
     dev/tracker/include                                         #
-    third_party/httplib                                         #
     third_party/nlohmann                                        #
 )                                                               #
-target_link_libraries(tracker_lib PUBLIC utils_lib)             #
+target_link_libraries(                                          #
+    tracker_lib PUBLIC                                          #
+    utils_lib                                                   #
+    CURL::libcurl                                               #
+)                                                               #
 # --------------------------------------------------------------#
 # ------------------ MAIN APP FOR TRACKER  ---------------------#
 add_executable(tracker_app dev/tracker/app/main.cpp)            #
 target_include_directories(                                     #
-    tracker_app PUBLIC third_party/httplib                      #
+    tracker_app PUBLIC                                          #
 )                                                               #
-target_compile_definitions(                                     #
-    tracker_app PUBLIC CPPHTTPLIB_OPENSSL_SUPPORT               #
-)                                                               #
-target_link_libraries(tracker_app PUBLIC                       #
+target_link_libraries(                                          #
+    tracker_app PUBLIC                                          #
     tracker_lib                                                 #
-    OpenSSL::SSL                                                #
-    OpenSSL::Crypto                                             #
 )                                                               #
 attach_resources(tracker_app "${RES_DIR}")                      #
 # --------------------------------------------------------------#

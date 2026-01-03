@@ -1,28 +1,64 @@
 
 
 #include <tracker.hpp>
-#include <httplib.h>
 
-void example_curl2() {
-    httplib::Client client("api.nbp.pl");
-    client.set_proxy("", 0);
-    auto res = client.Get("/api/exchangerates/rates/a/usd/?format=json");
-    if (res) {
-        if (res->status == 200) {
-            logger.debug() 
-                << "Kurs dolara: " 
-                << res->body << std::endl;
+size_t WriteCallback(
+    void* contents,
+    size_t size,
+    size_t nmemb,
+     std::string* userp
+) {
+    size_t totalSize = size * nmemb;
+    userp->append(
+        (char*)contents, 
+        totalSize
+    );
+    return totalSize;
+}
+
+void example_curl() {
+    CURL* curl;
+    CURLcode response;
+    std::string read_buffer;
+    long int curl_timeout = 100L;
+    curl = curl_easy_init();
+    if (curl){
+        curl_easy_setopt(
+            curl,
+            CURLOPT_URL,
+            "https://jsonplaceholder.typicode.com/posts/1"
+        );
+        curl_easy_setopt(
+            curl,
+            CURLOPT_WRITEFUNCTION,
+            WriteCallback
+        );
+        curl_easy_setopt(
+            curl,
+            CURLOPT_WRITEDATA,
+            &read_buffer
+        );
+        curl_easy_setopt(
+            curl,
+            CURLOPT_TIMEOUT,
+            curl_timeout
+        );
+        response = curl_easy_perform(curl);
+
+        if (response != CURLE_OK){
+            logger.error()
+                << "Error during curl: " 
+                << curl_easy_strerror(response) << ENDL;
         }
         else {
-            logger.debug() 
-                << "Serwer odpowiedział, ale kodem: "
-                << res->status << std::endl;
+            logger.info()
+                << "Received data: "
+                << read_buffer << ENDL;
         }
+
+        curl_easy_cleanup(curl);
     }
-    // else {
-    //     auto err = res.error();
-    //     logger.debug() 
-    //         << "Błąd połączenia! Kod błędu httplib: " 
-    //         << (int)err << std::endl;
-    // }
+    else {
+        logger.error() << "Cannot initalize CURL" << ENDL;
+    }
 }

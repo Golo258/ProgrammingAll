@@ -29,6 +29,26 @@ target_include_directories(
 
 # dodawanie bibliotek
 add_library(math_lib STATIC my_libraries/math_lib.cpp)
+    - static
+        -- kopmilator bierze kod z plików .cpp
+         i wkleja go bezpośrednio do pliku wykonywalnego -- binaryki
+         podczas linkowania
+            - rozszerzenie .a w linux
+        pakujemy wszystko do jednego plecaka, program staje sie wiekszy
+
+    - shared
+        biblioteka współdzielona / dynamiczna
+            biblioteka nie jest wklejana do środka programu
+            powstaje osobny plik, progarm dostaje tylko info że jeśli 
+            bedzie potrzebopwał biblioteki to moze jej poszukać obok
+            rozszerzenia .so (linux) - .dll - include(windows)
+        
+            nie bierzemy narzedzi z plecaka, tylko liczymy ze w 
+            nadrzedzia beda gdzie indziej w danym miejscu
+
+            - jest mniejszy i szybszy 
+            find_package - zazwyczaj są bibliotekami SHARED
+            
 target_include_directories(
     math_lib
     PUBLIC
