@@ -125,6 +125,20 @@ Używanie external libraries:
                 Target encapsulating the curl usage requirements, available if curl is found.
 
 #--------------------------------------------
+function():
+    to po prostu funkcja, nazwany blolk kodu, który można wykonywać wielokrotnie
+    syntax:
+        function(nazwa_funkcji parametr1 parametr2)
+            //.. ciało
+        endfunction()
+
+    file(GLOB)
+        global - polecenie które mówi cmakowi
+        przeszukaj ten dany folder i stwórz liste plików które pasują do danego wzroca
+        np:
+            file(GLOB MY_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
+            
+#--------------------------------------------
 Komendy Linuxowe Cmake:
     Czysty folder build/ - wchodzimy do niego 
     cmake ..
@@ -149,15 +163,11 @@ Komendy Linuxowe Cmake:
 
 #--------------------------------------------
 function() - jak tego używać 
-    jak dwać parametry ify fory czy inne chuje muje 
 
-add_library() - co to jest 
-target_include_directories() - co to jest 
-    jakie mają parametry jak to działa
-
-target_link_libraries() - to samo
-target_include_directories() - to samo
-target_compile_definitions()
-add_executable() - to samo
+find_package() - DONE
+add_library() - DONE 
+target_include_directories() - DONE  
+target_link_libraries() - DONE
+target_compile_definitions() # todo
+add_executable() - DONE 
 attach_resources() - co to jest 
-find_package() - co to robi
